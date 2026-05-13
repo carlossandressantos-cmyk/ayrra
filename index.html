@@ -14,7 +14,7 @@
             --holo-purple: #e1bee7;
             --silver-base: #f8fafc;
             --charcoal: #0f172a;
-            --transition-speed: 3s; 
+            --transition-speed: 2.5s; 
         }
 
         body {
@@ -63,16 +63,6 @@
             filter: drop-shadow(0 1px 1px rgba(255,255,255,0.8));
         }
 
-        .neon-glow {
-            text-shadow: 0 0 15px rgba(179, 229, 252, 0.4), 0 0 30px rgba(248, 187, 208, 0.2);
-            animation: flicker 4s infinite alternate;
-        }
-
-        @keyframes flicker {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.96; }
-        }
-
         .reveal {
             opacity: 0;
             transform: translateY(60px);
@@ -88,10 +78,9 @@
         .stagger-container.visible > * { opacity: 1; transform: translateY(0); }
 
         .grid-line-v { width: 1px; background: rgba(0,0,0,0.06); height: 100%; position: absolute; top: 0; }
-        .grid-line-h { height: 1px; background: rgba(0,0,0,0.06); width: 100%; position: absolute; left: 0; }
-
+        
         .neon-ribbon {
-            position: fixed; top: 0; width: 3px; height: 100vh;
+            position: fixed; top: 0; width: 2px; height: 100vh;
             background: linear-gradient(to bottom, transparent, var(--holo-blue), var(--holo-pink), transparent);
             z-index: 50; opacity: 0; transition: opacity 2s ease;
             filter: drop-shadow(0 0 10px var(--holo-blue));
@@ -113,12 +102,11 @@
             overflow: hidden;
             background: white;
             padding: 8px;
-            box-shadow: 0 40px 80px -20px rgba(0,0,0,0.1);
+            box-shadow: 0 40px 80px -20px rgba(0,0,0,0.08);
             border: 1px solid rgba(0,0,0,0.04);
             transition: transform 1.5s cubic-bezier(0.2, 1, 0.2, 1);
         }
         .img-container:hover { transform: scale(1.02); }
-        .img-container img { width: 100%; height: auto; display: block; }
 
         @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
         .marquee-container { animation: marquee 40s linear infinite; }
@@ -156,7 +144,6 @@
         <div class="blob" style="width: 500px; height: 500px; top: 40%; left: 30%; animation-delay: -10s;"></div>
     </div>
 
-    <!-- Filtro SVG para efeito "gooey" nítido -->
     <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
         <defs>
             <filter id="gooey-filter">
@@ -167,24 +154,22 @@
         </defs>
     </svg>
 
-    <!-- Overlay de entrada -->
     <div id="start-overlay">
         <button onclick="startExperience()" class="serif text-xl tracking-[0.6em] uppercase border border-black/10 px-16 py-10 hover:bg-black hover:text-white transition-all duration-[1.5s] backdrop-blur-xl bg-white/40">
-            Inicializar_Fragrância
+            Inicializar Experiência
         </button>
     </div>
 
-    <!-- Fitas Neon Laterais -->
     <div class="neon-ribbon neon-left" id="neon-l"></div>
     <div class="neon-ribbon neon-right" id="neon-r"></div>
 
-    <audio id="bg-music" loop crossorigin="anonymous">
+    <audio id="bg-music" loop crossorigin="anonymous" preload="auto">
         <source src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Driftline.mp3" type="audio/mpeg">
     </audio>
 
     <nav class="fixed top-0 w-full z-[100] border-b border-black/5 bg-white/10 backdrop-blur-3xl">
         <div class="max-w-[1800px] mx-auto flex justify-between items-center px-6 md:px-12 py-6 md:py-8">
-            <a href="#" class="serif text-2xl md:text-3xl tracking-[0.4em] uppercase font-light neon-glow chrome-text">AYRA</a>
+            <a href="#" class="serif text-2xl md:text-3xl tracking-[0.4em] uppercase font-light chrome-text">AYRA</a>
             <div class="flex gap-4 md:gap-12 items-center">
                 <button onclick="openCart()" class="mono text-[9px] border border-black/10 px-4 py-2 hover:bg-black hover:text-white transition-all">
                     Carrinho(<span id="cart-count">0</span>)
@@ -202,7 +187,7 @@
         
         <div class="max-w-[1800px] mx-auto w-full px-6 md:px-12 pb-16 md:pb-24 grid md:grid-cols-2 items-end z-10">
             <div class="stagger-container">
-                <h1 class="serif text-[22vw] md:text-[11vw] leading-[0.8] mb-8 md:mb-12 font-light italic chrome-text neon-glow">
+                <h1 class="serif text-[22vw] md:text-[11vw] leading-[0.8] mb-8 md:mb-12 font-light italic chrome-text">
                     AYRA
                 </h1>
                 <p class="mono max-w-sm opacity-60 leading-relaxed mb-8 md:mb-12 text-[10px] md:text-[11px]">
@@ -225,8 +210,8 @@
         <div class="grid-line-v left-1/2 hidden md:block"></div>
         
         <div class="p-8 md:p-32 flex flex-col justify-center stagger-container">
-            <span class="mono opacity-30 mb-6 md:mb-8 text-[9px] md:text-[10px]">Spec_001_AURUM</span>
-            <h2 class="serif text-7xl md:text-[9rem] mb-12 md:mb-16 italic font-light chrome-text">Aurum</h2>
+            <span class="mono opacity-30 mb-6 md:mb-8 text-[9px] md:text-[10px]">Spec_001_Argentum</span>
+            <h2 class="serif text-7xl md:text-[9rem] mb-12 md:mb-16 italic font-light chrome-text">Argentum</h2>
             
             <div class="grid grid-cols-3 gap-4 md:gap-8 mb-12 md:mb-16 border-y border-black/5 py-8 md:py-10 opacity-80">
                 <div class="mono text-[8px] md:text-[9px]">
@@ -252,29 +237,73 @@
                     <span class="mono block opacity-30 mb-2 text-[9px]">Preço_Unitário</span>
                     <span class="serif text-4xl md:text-5xl font-light">R$ 189</span>
                 </div>
-                <button onclick="addToCart('Aurum 25ml', 189)" class="w-full md:w-auto border border-black/10 px-8 md:px-12 py-4 md:py-6 mono hover:bg-black hover:text-white transition-all duration-[1s] text-[10px]">Fazer seu pedido</button>
+                <button onclick="addToCart('Argentum 25ml', 189)" class="w-full md:w-auto border border-black/10 px-8 md:px-12 py-4 md:py-6 mono hover:bg-black hover:text-white transition-all duration-[1s] text-[10px]">Fazer seu pedido</button>
             </div>
         </div>
 
         <div class="reveal flex items-center justify-center p-8 md:p-24">
             <div class="img-container w-full max-w-sm">
-                <img src="https://github.com/umvelhonoob/ayrra/blob/main/img11.png?raw=true" alt="Aurum Parfum">
+                <!-- Usando formato RAW para garantir exibição -->
+                <img src="https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img11.png" alt="Argentum Parfum" onerror="this.src='https://placehold.co/600x800/EEE/AAA?text=Argentum'">
+            </div>
+        </div>
+    </section>
+
+    <section class="relative max-w-[1800px] mx-auto grid md:grid-cols-2 border-b border-black/5 bg-black/[0.01]">
+        <div class="grid-line-v left-1/2 hidden md:block"></div>
+        
+        <div class="reveal flex items-center justify-center p-8 md:p-24 order-2 md:order-1">
+            <div class="img-container w-full max-w-sm">
+                <!-- Replicando imagem conforme solicitado, usando formato RAW -->
+                <img src="https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img11.png" alt="Assiral Parfum" onerror="this.src='https://placehold.co/600x800/EEE/AAA?text=Assiral'">
+            </div>
+        </div>
+
+        <div class="p-8 md:p-32 flex flex-col justify-center stagger-container order-1 md:order-2">
+            <span class="mono opacity-30 mb-6 md:mb-8 text-[9px] md:text-[10px]">Spec_002_Assiral</span>
+            <h2 class="serif text-7xl md:text-[9rem] mb-12 md:mb-16 italic font-light chrome-text">Assiral</h2>
+            
+            <div class="grid grid-cols-3 gap-4 md:gap-8 mb-12 md:mb-16 border-y border-black/5 py-8 md:py-10 opacity-80">
+                <div class="mono text-[8px] md:text-[9px]">
+                    <span class="block opacity-40 mb-3">Topo</span>
+                    Pimenta Rosa<br>Cardamomo
+                </div>
+                <div class="mono text-[8px] md:text-[9px]">
+                    <span class="block opacity-40 mb-3">Corpo</span>
+                    Íris Branca<br>Cedro Atlas
+                </div>
+                <div class="mono text-[8px] md:text-[9px]">
+                    <span class="block opacity-40 mb-3">Fundo</span>
+                    Sândalo<br>Âmbar Cinza
+                </div>
+            </div>
+
+            <p class="mono text-[10px] md:text-[11px] leading-[2.2] opacity-50 mb-12 md:mb-16 max-w-md">
+                A antítese do calor. Uma fragrância mineral e gélida que utiliza especiarias frias e madeiras nobres para criar uma aura de mistério e precisão absoluta.
+            </p>
+            
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 md:gap-0">
+                <div>
+                    <span class="mono block opacity-30 mb-2 text-[9px]">Preço_Unitário</span>
+                    <span class="serif text-4xl md:text-5xl font-light">R$ 189</span>
+                </div>
+                <button onclick="addToCart('Assiral 25ml', 189)" class="w-full md:w-auto border border-black/10 px-8 md:px-12 py-4 md:py-6 mono hover:bg-black hover:text-white transition-all duration-[1s] text-[10px]">Fazer seu pedido</button>
             </div>
         </div>
     </section>
 
     <div class="grid grid-cols-2 md:grid-cols-4 gap-0 border-b border-black/5">
         <div class="reveal border-r border-black/5 aspect-[4/5] overflow-hidden">
-            <img src="https://github.com/umvelhonoob/ayrra/blob/main/img15.png?raw=true" class="w-full h-full object-cover">
+            <img src="https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img15.png" class="w-full h-full object-cover">
         </div>
         <div class="reveal border-r border-black/5 aspect-[4/5] overflow-hidden" style="transition-delay: 0.2s;">
-            <img src="https://github.com/umvelhonoob/ayrra/blob/main/img17.png?raw=true" class="w-full h-full object-cover">
+            <img src="https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img17.png" class="w-full h-full object-cover">
         </div>
         <div class="reveal border-r border-black/5 aspect-[4/5] overflow-hidden" style="transition-delay: 0.4s;">
-            <img src="https://github.com/umvelhonoob/ayrra/blob/main/img16.png?raw=true" class="w-full h-full object-cover">
+            <img src="https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img16.png" class="w-full h-full object-cover">
         </div>
         <div class="reveal aspect-[4/5] overflow-hidden" style="transition-delay: 0.6s;">
-            <img src="https://github.com/umvelhonoob/ayrra/blob/main/img12.png?raw=true" class="w-full h-full object-cover">
+            <img src="https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img12.png" class="w-full h-full object-cover">
         </div>
     </div>
 
@@ -298,7 +327,7 @@
 
         <div class="reveal flex justify-center">
             <div class="img-container w-full max-w-[280px]">
-                <img src="https://github.com/umvelhonoob/ayrra/blob/main/img13.png?raw=true" class="w-full h-auto">
+                <img src="https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img13.png" class="w-full h-auto">
             </div>
         </div>
     </section>
@@ -327,21 +356,11 @@
         </div>
     </section>
 
-    <section class="py-24 md:py-40 max-w-[1800px] mx-auto px-6 md:px-12 border-b border-black/5 reveal">
-        <div class="grid md:grid-cols-2 gap-16 md:gap-24 items-center">
-            <h2 class="serif text-4xl md:text-6xl italic chrome-text">Descubra <br>o Futuro</h2>
-            <div class="space-y-8 md:space-y-10">
-                <input type="email" placeholder="Endereço_Email_Protocolo" class="w-full bg-transparent border-b border-black/10 py-4 mono outline-none focus:border-black transition-colors text-[10px] md:text-[11px]">
-                <button class="w-full md:w-auto mono border border-black/10 px-8 md:px-12 py-4 md:py-6 hover:bg-black hover:text-white transition-all duration-[1s] text-[10px]">Unir-se_ao_Protocolo</button>
-            </div>
-        </div>
-    </section>
-
     <footer class="py-24 md:py-40 max-w-[1800px] mx-auto px-6 md:px-12 opacity-40">
         <div class="flex flex-col md:flex-row justify-between items-start gap-12 md:gap-20">
             <div>
-                <h2 class="serif text-3xl md:text-4xl mb-6 md:mb-8 tracking-[0.5em] chrome-text neon-glow">AYRA</h2>
-                <p class="mono text-[8px] md:text-[9px]">© 2026. Arquitetura do Olfato. Interface_Holográfica.</p>
+                <h2 class="serif text-3xl md:text-4xl mb-6 md:mb-8 tracking-[0.5em] chrome-text">AYRA</h2>
+                <p class="mono text-[8px] md:text-[9px]">© 2026. Todos os direitos reservados </p>
             </div>
             <div class="mono space-y-4 text-[8px] md:text-[9px]">
                 <a href="https://www.instagram.com/use.ayra/" target="_blank" class="block hover:text-blue-400 transition">Instagram @use.ayra</a>
@@ -350,6 +369,7 @@
         </div>
     </footer>
 
+    <!-- Interface Carrinho -->
     <div id="cart-overlay" class="cart-overlay" onclick="closeCart()"></div>
     <div id="cart-panel" class="cart-panel">
         <div class="p-8 border-b border-black/5 flex justify-between items-center">
@@ -388,13 +408,24 @@
 
         let cart = [];
 
+        // Função robusta para iniciar áudio
         async function startExperience() {
             document.getElementById('start-overlay').style.opacity = '0';
             setTimeout(async () => {
                 document.getElementById('start-overlay').style.display = 'none';
+                
+                // Tenta tocar o áudio. Browsers exigem interação do usuário (clique)
+                music.volume = 0.5;
                 try {
-                    await music.play();
-                    updateAudioUI(true);
+                    const playPromise = music.play();
+                    if (playPromise !== undefined) {
+                        playPromise.then(() => {
+                            updateAudioUI(true);
+                        }).catch(error => {
+                            console.log("Auto-play impedido:", error);
+                            updateAudioUI(false);
+                        });
+                    }
                 } catch (e) { 
                     updateAudioUI(false);
                 }
