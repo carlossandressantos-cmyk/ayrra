@@ -3,318 +3,333 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AYRA — Architecture of Scent</title>
+    <title>AYRA — Holographic Liquid Architecture</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Space+Grotesk:wght@300;400;500&family=Space+Mono&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
-            --silver: #e2e2e2;
-            --dark: #030303;
-            --neon: #00f2ff;
-            --border: rgba(255, 255, 255, 0.08);
-            --transition-speed: 3s; /* Animação Vita Architecture: majestosa e lenta */
+            /* Paleta holográfica extraída da image_46fca1.png */
+            --holo-blue: #b3e5fc;
+            --holo-pink: #f8bbd0;
+            --holo-purple: #e1bee7;
+            --silver-base: #f1f5f9;
+            --transition-speed: 3s; /* Velocidade monumental Vita Architecture */
         }
 
         body {
-            background-color: var(--dark);
-            color: var(--silver);
+            background-color: var(--silver-base);
+            color: #1a1a1a;
             font-family: 'Space Grotesk', sans-serif;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
         }
 
-        .mono { font-family: 'Space Mono', monospace; }
-        .serif { font-family: 'Cormorant Garamond', serif; }
-
-        .grid-line-v { width: 1px; background: var(--border); height: 100%; position: absolute; top: 0; }
-        .grid-line-h { height: 1px; background: var(--border); width: 100%; position: absolute; left: 0; }
-
-        /* Fitas Neon Laterais */
-        .neon-ribbon {
+        .liquid-container {
             position: fixed;
-            top: 0;
-            width: 1px;
-            height: 100vh;
-            background: linear-gradient(to bottom, transparent, var(--neon), #ff00ea, transparent);
-            z-index: 50;
-            opacity: 0.1;
-            box-shadow: 0 0 20px var(--neon);
-            pointer-events: none;
-            transition: opacity 1.5s ease;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, #ffffff 0%, #cbd5e1 100%);
+            overflow: hidden;
+            filter: url('#sharp-goo'); 
         }
-        .neon-left { left: 15px; }
-        .neon-right { right: 15px; }
-        .neon-active { opacity: 0.5; animation: neon-pulse 3s infinite ease-in-out; }
 
-        @keyframes neon-pulse {
-            0%, 100% { filter: brightness(1) blur(1px); transform: scaleY(1); }
-            50% { filter: brightness(1.8) blur(3px); transform: scaleY(1.02); }
+        .blob {
+            position: absolute;
+            background: linear-gradient(135deg, 
+                var(--holo-blue) 0%, 
+                var(--holo-pink) 40%, 
+                var(--holo-purple) 70%, 
+                #ffffff 100%
+            );
+            border-radius: 50%;
+            filter: blur(15px);
+            opacity: 0.8;
+            animation: move-blobs 40s infinite alternate ease-in-out;
+            box-shadow: inset -10px -10px 30px rgba(255,255,255,0.6);
+        }
+
+        @keyframes move-blobs {
+            0% { transform: translate(-10%, -10%) scale(1) rotate(0deg); }
+            33% { transform: translate(25%, 15%) scale(1.4) rotate(120deg); }
+            66% { transform: translate(-10%, 30%) scale(0.8) rotate(240deg); }
+            100% { transform: translate(15%, -10%) scale(1.3) rotate(360deg); }
+        }
+
+        .chrome-text {
+            background: linear-gradient(to bottom, #555 0%, #111 45%, #888 50%, #222 55%, #666 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 1px 1px rgba(255,255,255,0.8));
+        }
+
+        .neon-glow {
+            text-shadow: 0 0 15px rgba(179, 229, 252, 0.4), 0 0 30px rgba(248, 187, 208, 0.2);
+            animation: flicker 4s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.95; }
         }
 
         .reveal {
             opacity: 0;
-            transform: translateY(80px);
-            transition: opacity var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1), 
-                        transform var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1);
-            will-change: transform, opacity;
+            transform: translateY(60px);
+            transition: all var(--transition-speed) cubic-bezier(0.2, 1, 0.2, 1);
         }
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
 
         .stagger-container > * {
             opacity: 0;
-            transform: translateY(50px);
-            transition: opacity var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1), 
-                        transform var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(40px);
+            transition: all var(--transition-speed) cubic-bezier(0.2, 1, 0.2, 1);
         }
-        .stagger-container.visible > * {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .stagger-container.visible > *:nth-child(1) { transition-delay: 0.2s; }
-        .stagger-container.visible > *:nth-child(2) { transition-delay: 0.5s; }
-        .stagger-container.visible > *:nth-child(3) { transition-delay: 0.8s; }
+        .stagger-container.visible > * { opacity: 1; transform: translateY(0); }
 
-        .neon-text {
-            color: #fff;
-            text-shadow: 0 0 15px var(--neon), 0 0 30px rgba(0, 242, 255, 0.4);
-            animation: flicker 5s infinite alternate;
-        }
-        @keyframes flicker {
-            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
-            20%, 24%, 55% { opacity: 0.8; }
-        }
+        .grid-line-v { width: 1px; background: rgba(0,0,0,0.06); height: 100%; position: absolute; top: 0; }
+        .grid-line-h { height: 1px; background: rgba(0,0,0,0.06); width: 100%; position: absolute; left: 0; }
 
-        .chrome-text {
-            background: linear-gradient(to bottom, #ffffff 30%, #888 60%, #ffffff 90%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .neon-ribbon {
+            position: fixed; top: 0; width: 3px; height: 100vh;
+            background: linear-gradient(to bottom, transparent, var(--holo-blue), var(--holo-pink), transparent);
+            z-index: 50; opacity: 0; transition: opacity 2s ease;
+            filter: drop-shadow(0 0 10px var(--holo-blue));
         }
+        .neon-left { left: 12px; } .neon-right { right: 12px; }
+        .neon-active { opacity: 0.6; }
 
-        /* Letreiro Marquee */
-        @keyframes marquee {
-            from { transform: translateX(0); }
-            to { transform: translateX(-50%); }
-        }
+        .mono { font-family: 'Space Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5em; }
+        .serif { font-family: 'Cormorant Garamond', serif; }
 
         #start-overlay {
-            position: fixed;
-            inset: 0;
-            background: #000;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            position: fixed; inset: 0; background: var(--silver-base); z-index: 1000;
+            display: flex; align-items: center; justify-content: center;
             transition: opacity 2s ease;
         }
 
-        .img-minimalist {
-            transition: transform 4s cubic-bezier(0.16, 1, 0.3, 1);
-            filter: saturate(1.2);
+        .img-container {
+            position: relative;
+            overflow: hidden;
+            background: white;
+            padding: 12px;
+            box-shadow: 0 40px 80px -20px rgba(0,0,0,0.1);
+            border: 1px solid rgba(0,0,0,0.03);
         }
-        .img-minimalist:hover { transform: scale(1.05); }
+        
+        .img-container img {
+            transition: transform 5s cubic-bezier(0.2, 1, 0.2, 1);
+            filter: saturate(1.1);
+        }
+        .img-container:hover img { transform: scale(1.05); }
 
-        .cursor-custom {
-            position: fixed; width: 10px; height: 10px; background: var(--neon);
-            border-radius: 50%; pointer-events: none; z-index: 9999;
-            mix-blend-mode: difference; transition: transform 0.1s;
-        }
+        @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        .marquee-container { animation: marquee 30s linear infinite; }
     </style>
 </head>
 <body>
 
-    <div class="cursor-custom hidden md:block" id="cursor"></div>
+    <div class="liquid-container">
+        <div class="blob" style="width: 800px; height: 800px; top: -10%; left: -10%; animation-delay: 0s;"></div>
+        <div class="blob" style="width: 600px; height: 600px; bottom: -5%; right: -5%; animation-delay: -5s;"></div>
+        <div class="blob" style="width: 500px; height: 500px; top: 40%; left: 30%; animation-delay: -10s;"></div>
+    </div>
+
+    <!-- Filtro SVG para Nitidez Superior do Metal Líquido -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+        <defs>
+            <filter id="sharp-goo">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="blur" />
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 40 -18" result="goo" />
+                <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+            </filter>
+        </defs>
+    </svg>
 
     <div id="start-overlay">
-        <button onclick="startExperience()" class="serif text-xl tracking-[0.5em] uppercase border border-white/10 px-20 py-10 hover:bg-white hover:text-black transition-all duration-[1.5s]">
-            Enter Experience
+        <button onclick="startExperience()" class="serif text-xl tracking-[0.6em] uppercase border border-black/10 px-24 py-12 hover:bg-black hover:text-white transition-all duration-[1.5s] backdrop-blur-xl bg-white/40">
+            Initialize_Interface
         </button>
     </div>
 
     <div class="neon-ribbon neon-left" id="neon-l"></div>
     <div class="neon-ribbon neon-right" id="neon-r"></div>
 
-    <!-- Audio Original com URL Corrigida (Raw) -->
+    <!-- ÁUDIO CORRIGIDO (Link Raw GitHub) -->
     <audio id="bg-music" loop crossorigin="anonymous">
         <source src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Driftline.mp3" type="audio/mpeg">
     </audio>
 
-    <button id="audio-toggle" onclick="toggleAudio()" class="fixed bottom-10 right-10 z-[100] mono text-[9px] uppercase tracking-widest border border-white/10 px-4 py-2 bg-black/80 backdrop-blur-xl hover:border-white transition-all opacity-0">
-        <span id="audio-status">Audio: Off</span>
-    </button>
-
-    <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-[100] border-b border-white/5 bg-black/40 backdrop-blur-2xl">
+    <nav class="fixed top-0 w-full z-[100] border-b border-black/5 bg-white/10 backdrop-blur-3xl">
         <div class="max-w-[1800px] mx-auto flex justify-between items-center px-6 md:px-12 py-8">
-            <a href="#" class="serif text-3xl tracking-[0.4em] uppercase font-light neon-text">AYRA</a>
-            <div class="hidden md:flex gap-16 items-center mono text-[10px] tracking-[0.5em] uppercase opacity-40">
-                <a href="#collection" class="hover:opacity-100 transition-all">Collection</a>
-                <a href="#protocol" class="hover:opacity-100 transition-all">Protocol</a>
-                <a href="#history" class="hover:opacity-100 transition-all">History</a>
+            <a href="#" class="serif text-3xl tracking-[0.4em] uppercase font-light neon-glow chrome-text">AYRA</a>
+            <div class="hidden md:flex gap-16 items-center mono opacity-60">
+                <a href="#collection" class="hover:opacity-100 transition-opacity">Collection</a>
+                <a href="#protocol" class="hover:opacity-100 transition-opacity">Protocol</a>
+                <a href="#history" class="hover:opacity-100 transition-opacity">History</a>
             </div>
-            <button onclick="openCart()" class="mono text-[10px] uppercase tracking-widest border border-white/10 px-6 py-3 hover:bg-white hover:text-black transition">
-                INV (<span id="cart-count">0</span>)
+            <button id="audio-toggle" onclick="toggleAudio()" class="mono border border-black/10 px-6 py-3 hover:bg-black hover:text-white transition-all text-[9px]">
+                Audio_OFF
             </button>
         </div>
     </nav>
 
-    <header class="relative min-h-screen flex flex-col justify-end pt-32 overflow-hidden border-b border-white/5">
+    <header class="relative min-h-screen flex flex-col justify-end pt-32 overflow-hidden">
         <div class="grid-line-v left-1/4 hidden md:block"></div>
         <div class="grid-line-v right-1/4 hidden md:block"></div>
         
-        <div class="max-w-[1800px] mx-auto w-full px-6 md:px-12 pb-32 grid md:grid-cols-2 items-end z-10">
+        <div class="max-w-[1800px] mx-auto w-full px-6 md:px-12 pb-24 grid md:grid-cols-2 items-end z-10">
             <div class="stagger-container">
-                <h1 class="serif text-[18vw] md:text-[11vw] leading-[0.8] mb-12 font-light italic chrome-text neon-text">
+                <h1 class="serif text-[18vw] md:text-[11vw] leading-[0.8] mb-12 font-light italic chrome-text neon-glow">
                     AYRA
                 </h1>
-                <p class="mono text-[11px] uppercase tracking-[0.6em] max-w-sm opacity-40 leading-relaxed mb-12">
-                    Brazilian Architecture of Scent. <br>Molecular precision. Kinetic energy.
+                <p class="mono max-w-sm opacity-60 leading-relaxed mb-12 text-[11px]">
+                    Architectural Scent.<br>Holographic Iridescence.<br>Molecular Essence_Brazil.
                 </p>
-                <a href="#collection" class="inline-block border border-white/10 px-12 py-6 mono text-[11px] uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-[2s]">Explore</a>
+                <div class="flex gap-4">
+                    <a href="#collection" class="inline-block border border-black/10 px-16 py-6 mono hover:bg-black hover:text-white transition-all duration-[1s]">Portfolio.Explore</a>
+                </div>
             </div>
-            <div class="reveal hidden md:flex justify-end opacity-20">
-                <div class="mono text-[10px] text-right space-y-4 tracking-[0.5em] uppercase">
-                    <div>System: Active_v2.0</div>
-                    <div>Location: Brasil</div>
+            <div class="reveal hidden md:flex justify-end pb-4">
+                <div class="mono text-right space-y-3 opacity-30 text-[9px]">
+                    <div>Interface: V.2.0.LIQUID</div>
+                    <div>Ref: image_46fca1.png</div>
+                    <div>State: Stable_Chrome</div>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Marquee -->
-    <div class="border-b border-white/5 py-10 overflow-hidden bg-white/[0.02]">
-        <div class="flex animate-[marquee_50s_linear_infinite] whitespace-nowrap mono text-[10px] uppercase tracking-[1em] opacity-40 text-cyan-400">
-            Architecture of Scent ◆ Noble Essences ◆ Made in Brazil ◆ Molecular Extraction ◆ Chrome Edition ◆ 25ml Precision ◆ Architecture of Scent ◆ Noble Essences ◆ Made in Brazil ◆ Molecular Extraction ◆ Chrome Edition ◆ 25ml Precision
+    <div class="border-y border-black/5 py-12 overflow-hidden bg-white/20 backdrop-blur-sm">
+        <div class="flex marquee-container whitespace-nowrap mono opacity-40 text-[10px]">
+            Architecture of Scent ◆ Noble Essences ◆ Made in Brazil ◆ Molecular Extraction ◆ Chrome Edition ◆ 25ml Precision ◆ Architecture of Scent ◆ Noble Essences ◆ Made in Brazil ◆ Molecular Extraction ◆ Chrome Edition ◆ 25ml Precision ◆ Architecture of Scent ◆ Noble Essences ◆ Made in Brazil
         </div>
     </div>
 
-    <section id="collection" class="relative max-w-[1800px] mx-auto grid md:grid-cols-2 border-b border-white/5">
+    <section id="collection" class="relative max-w-[1800px] mx-auto grid md:grid-cols-2 border-b border-black/5">
         <div class="grid-line-v left-1/2 hidden md:block"></div>
         
-        <div class="p-12 md:p-32 flex flex-col justify-center border-b md:border-b-0 border-white/5 stagger-container">
-            <span class="mono text-[10px] uppercase tracking-[0.7em] opacity-20 mb-12">001_AURUM</span>
-            <h2 class="serif text-7xl md:text-[8rem] mb-16 italic font-light chrome-text">Aurum</h2>
+        <div class="p-12 md:p-32 flex flex-col justify-center stagger-container">
+            <span class="mono opacity-30 mb-8 text-[10px]">Spec_001_AURUM</span>
+            <h2 class="serif text-8xl md:text-[9rem] mb-16 italic font-light chrome-text">Aurum</h2>
             
-            <div class="grid grid-cols-3 gap-8 mb-16 border-y border-white/5 py-8 opacity-60">
-                <div class="mono text-[8px] tracking-widest uppercase">
-                    <span class="block opacity-40 mb-2">Topo</span>
-                    Bergamota<br>Jabuticaba
+            <div class="grid grid-cols-3 gap-8 mb-16 border-y border-black/5 py-10 opacity-80">
+                <div class="mono text-[9px]">
+                    <span class="block opacity-40 mb-3">Topo</span>
+                    Bergamota<br>Laranja Doce
                 </div>
-                <div class="mono text-[8px] tracking-widest uppercase">
-                    <span class="block opacity-40 mb-2">Corpo</span>
-                    Cereja<br>Avelã
+                <div class="mono text-[9px]">
+                    <span class="block opacity-40 mb-3">Corpo</span>
+                    Jabuticaba<br>Cereja / Avelã
                 </div>
-                <div class="mono text-[8px] tracking-widest uppercase">
-                    <span class="block opacity-40 mb-2">Fundo</span>
+                <div class="mono text-[9px]">
+                    <span class="block opacity-40 mb-3">Fundo</span>
                     Patchouli<br>Amêndoa
                 </div>
             </div>
 
-            <p class="mono text-[13px] uppercase leading-[2.2] tracking-widest opacity-40 mb-16 max-w-md">
-                Uma construção arquitetônica líquida. Abertura cítrica tropical evoluindo para um núcleo denso e sofisticado.
+            <p class="mono text-[11px] leading-[2.2] opacity-50 mb-16 max-w-md">
+                Uma construção arquitetônica líquida. Notas cítricas que evoluem para um núcleo denso de frutas brasileiras e um fundo amendoado.
             </p>
+            
             <div class="flex justify-between items-end">
                 <div>
-                    <span class="mono text-[10px] block opacity-20 uppercase tracking-widest mb-4">Unit Price</span>
+                    <span class="mono block opacity-30 mb-2 text-[9px]">Unit_Price</span>
                     <span class="serif text-5xl font-light">R$ 189</span>
                 </div>
-                <button onclick="addToCart('Aurum 25mL', 189)" class="border border-white/10 px-12 py-6 mono text-[11px] uppercase tracking-[0.3em] hover:bg-white hover:text-black transition-all duration-1000">Acquire</button>
+                <button class="border border-black/10 px-12 py-6 mono hover:bg-black hover:text-white transition-all duration-[1s]">Acquire_Scent</button>
             </div>
         </div>
 
-        <!-- IMAGEM DO PRODUTO AURUM -->
-        <div class="reveal flex items-center justify-center p-12 md:p-32 bg-[#050505] overflow-hidden">
-            <img src="https://github.com/umvelhonoob/ayrra/blob/main/img11.png?raw=true" class="w-full max-w-sm drop-shadow-[0_0_100px_rgba(0,242,255,0.15)] img-minimalist" alt="Aurum Product">
+        <div class="reveal flex items-center justify-center p-12 md:p-24">
+            <div class="img-container w-full max-w-sm">
+                <img src="https://github.com/umvelhonoob/ayrra/blob/main/img11.png?raw=true" class="w-full" alt="Aurum Parfum">
+            </div>
         </div>
     </section>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 border-b border-white/5 bg-white/5">
-        <div class="reveal aspect-[4/5] overflow-hidden">
-            <img src="https://github.com/umvelhonoob/ayrra/blob/main/img15.png?raw=true" class="w-full h-full object-cover img-minimalist" alt="Gallery 1">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-0 border-b border-black/5">
+        <div class="reveal border-r border-black/5 aspect-[4/5] overflow-hidden">
+            <img src="https://github.com/umvelhonoob/ayrra/blob/main/img15.png?raw=true" class="w-full h-full object-cover">
         </div>
-        <div class="reveal aspect-[4/5] overflow-hidden" style="transition-delay: 0.2s;">
-            <img src="https://github.com/umvelhonoob/ayrra/blob/main/img17.png?raw=true" class="w-full h-full object-cover img-minimalist" alt="Gallery 2">
+        <div class="reveal border-r border-black/5 aspect-[4/5] overflow-hidden" style="transition-delay: 0.2s;">
+            <img src="https://github.com/umvelhonoob/ayrra/blob/main/img17.png?raw=true" class="w-full h-full object-cover">
         </div>
-        <div class="reveal aspect-[4/5] overflow-hidden" style="transition-delay: 0.4s;">
-            <img src="https://github.com/umvelhonoob/ayrra/blob/main/img16.png?raw=true" class="w-full h-full object-cover img-minimalist" alt="Gallery 3">
+        <div class="reveal border-r border-black/5 aspect-[4/5] overflow-hidden" style="transition-delay: 0.4s;">
+            <img src="https://github.com/umvelhonoob/ayrra/blob/main/img16.png?raw=true" class="w-full h-full object-cover">
         </div>
         <div class="reveal aspect-[4/5] overflow-hidden" style="transition-delay: 0.6s;">
-            <img src="https://github.com/umvelhonoob/ayrra/blob/main/img12.png?raw=true" class="w-full h-full object-cover img-minimalist" alt="Gallery 4">
+            <img src="https://github.com/umvelhonoob/ayrra/blob/main/img12.png?raw=true" class="w-full h-full object-cover">
         </div>
     </div>
 
-    <section id="protocol" class="relative py-32 max-w-[1800px] mx-auto px-6 md:px-12 border-b border-white/5">
-        <div class="grid md:grid-cols-12 gap-12 items-start mb-24 stagger-container">
+    <section id="protocol" class="relative py-48 max-w-[1800px] mx-auto px-6 md:px-12 border-b border-black/5">
+        <div class="grid md:grid-cols-12 gap-12 items-start mb-32 stagger-container">
             <div class="md:col-span-5">
-                <span class="mono text-[10px] uppercase tracking-[0.7em] opacity-20 mb-8 block">Protocolo de Uso</span>
-                <h3 class="serif text-6xl md:text-7xl italic leading-[0.9] mb-12">O Ritual <br>da Forma</h3>
+                <span class="mono opacity-30 mb-8 block text-[10px]">Protocol_V.01</span>
+                <h3 class="serif text-7xl italic leading-[0.9] mb-12 chrome-text">Ritual <br>da Forma</h3>
             </div>
-            <div class="md:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-12 pt-4">
-                <div class="border-l border-white/5 pl-10">
-                    <h4 class="serif text-3xl italic mb-4">Projeção</h4>
-                    <p class="mono text-[11px] opacity-30 uppercase tracking-widest">Vaporize a 15cm. Não friccione a essência.</p>
+            <div class="md:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="border-l border-black/10 pl-10">
+                    <h4 class="serif text-3xl italic mb-6">01 Projeção</h4>
+                    <p class="mono opacity-40 leading-relaxed text-[10px]">Vaporize a 15cm dos pontos de pulso. Permita a ativação sob a luz solar.</p>
                 </div>
-                <div class="border-l border-white/5 pl-10">
-                    <h4 class="serif text-3xl italic mb-4">Fixação</h4>
-                    <p class="mono text-[11px] opacity-30 uppercase tracking-widest">Permita que o Patchouli ancore na derme.</p>
+                <div class="border-l border-black/10 pl-10">
+                    <h4 class="serif text-3xl italic mb-6">02 Evolução</h4>
+                    <p class="mono opacity-40 leading-relaxed text-[10px]">Não friccione. Deixe que a arquitetura das notas decante organicamente.</p>
                 </div>
             </div>
         </div>
 
-        <!-- IMAGEM DO RITUAL (Reduzida e Centralizada) -->
-        <div class="reveal flex justify-center py-12">
-            <div class="w-full max-w-xs border border-white/10 shadow-2xl overflow-hidden bg-zinc-900">
-                <img src="https://github.com/umvelhonoob/ayrra/blob/main/img13.png?raw=true" class="w-full h-auto object-cover img-minimalist" alt="Protocol Full Image">
+        <div class="reveal flex justify-center">
+            <div class="img-container w-full max-w-xs">
+                <img src="https://github.com/umvelhonoob/ayrra/blob/main/img13.png?raw=true" class="w-full h-auto">
             </div>
         </div>
     </section>
 
-    <section id="history" class="relative py-48 max-w-[1800px] mx-auto px-6 md:px-12 border-b border-white/5 stagger-container">
+    <section id="history" class="relative py-48 max-w-[1800px] mx-auto px-6 md:px-12 border-b border-black/5 stagger-container">
         <div class="max-w-4xl">
-            <span class="mono text-[10px] uppercase tracking-[0.7em] opacity-20 mb-12 block">Nossa História</span>
-            <h2 class="serif text-5xl md:text-8xl italic mb-16 chrome-text">Nascida no Brasil</h2>
-            <p class="mono text-[14px] uppercase leading-[2.5] tracking-widest opacity-40 mb-20">
-                A AYRA nasceu do desejo de unir o talento nacional às mais nobres essências mundiais. Parfums que encantam os sentidos com notas cítricas e luminosas.
+            <span class="mono opacity-30 mb-10 block text-[10px]">Legacy_Log_Brasil</span>
+            <h2 class="serif text-8xl italic mb-16 chrome-text">Origem</h2>
+            <p class="mono text-[14px] leading-[2.6] opacity-50 mb-20">
+                Nascida do desejo de unir o talento nacional às mais nobres essências mundiais. Parfums encapsulados em um design de metal líquido holográfico.
             </p>
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-16">
                 <div class="reveal">
-                    <div class="serif text-6xl mb-4 font-light">100%</div>
-                    <div class="mono text-[9px] uppercase tracking-widest opacity-20">Essências Nobres</div>
+                    <div class="serif text-7xl mb-4 font-light">100%</div>
+                    <div class="mono opacity-30 text-[9px]">Essências Nobres</div>
                 </div>
-                <div class="reveal">
-                    <div class="serif text-6xl mb-4 font-light">03</div>
-                    <div class="mono text-[9px] uppercase tracking-widest opacity-20">Anos de Pesquisa</div>
+                <div class="reveal" style="transition-delay: 0.3s;">
+                    <div class="serif text-7xl mb-4 font-light">03</div>
+                    <div class="mono opacity-30 text-[9px]">Anos de Pesquisa</div>
                 </div>
-                <div class="reveal">
-                    <div class="serif text-6xl mb-4 font-light">BR</div>
-                    <div class="mono text-[9px] uppercase tracking-widest opacity-20">Origem</div>
+                <div class="reveal" style="transition-delay: 0.6s;">
+                    <div class="serif text-7xl mb-4 font-light">BR</div>
+                    <div class="mono opacity-30 text-[9px]">Molecular Origin</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Newsletter -->
-    <section class="reveal py-40 bg-white/[0.01]">
-        <div class="max-w-4xl mx-auto px-6 text-center stagger-container">
-            <h2 class="serif text-4xl md:text-6xl italic mb-12">Seja a primeira a descobrir</h2>
-            <div class="flex flex-col md:flex-row gap-4 justify-center">
-                <input type="email" placeholder="ENTER_EMAIL_ADDR" class="bg-transparent border border-white/10 px-8 py-5 mono text-[10px] tracking-widest w-full md:w-96 focus:outline-none focus:border-cyan-400 transition-all">
-                <button class="bg-white text-black px-12 py-5 mono text-[10px] uppercase tracking-[0.3em] hover:bg-cyan-400 transition-all">Submit</button>
+    <section class="py-40 max-w-[1800px] mx-auto px-6 md:px-12 border-b border-black/5 reveal">
+        <div class="grid md:grid-cols-2 gap-24 items-center">
+            <h2 class="serif text-6xl italic chrome-text">Discover <br>the Future</h2>
+            <div class="space-y-10">
+                <input type="email" placeholder="Email_Protocol_Address" class="w-full bg-transparent border-b border-black/10 py-4 mono outline-none focus:border-black transition-colors text-[11px]">
+                <button class="mono border border-black/10 px-12 py-6 hover:bg-black hover:text-white transition-all duration-[1s]">Join_Protocol</button>
             </div>
         </div>
     </section>
 
-    <footer class="py-32 max-w-[1800px] mx-auto px-6 md:px-12 opacity-20">
-        <div class="flex flex-col md:flex-row justify-between items-start gap-24 border-t border-white/5 pt-12">
+    <footer class="py-40 max-w-[1800px] mx-auto px-6 md:px-12 opacity-40">
+        <div class="flex flex-col md:flex-row justify-between items-start gap-20">
             <div>
-                <h2 class="serif text-4xl mb-8 font-light tracking-[0.5em] neon-text">AYRA</h2>
-                <p class="mono text-[10px] uppercase tracking-[0.3em]">© 2025. Futurismo Olfativo.</p>
+                <h2 class="serif text-4xl mb-8 tracking-[0.5em] chrome-text neon-glow">AYRA</h2>
+                <p class="mono text-[9px]">© 2025. Scent Architecture. Holographic_Interface.</p>
             </div>
-            <div class="mono text-[10px] space-y-4 uppercase tracking-widest">
-                <a href="https://www.instagram.com/use.ayra/" class="block hover:text-cyan-400 transition">Instagram @use.ayra</a>
+            <div class="mono space-y-4 text-[9px]">
+                <a href="https://www.instagram.com/use.ayra/" target="_blank" class="block hover:text-blue-400 transition">Instagram @use.ayra</a>
                 <span class="block">WhatsApp +55 62 99354 0281</span>
             </div>
         </div>
@@ -323,28 +338,19 @@
     <script>
         const music = document.getElementById('bg-music');
         const audioBtn = document.getElementById('audio-toggle');
-        const audioStatus = document.getElementById('audio-status');
         const neonL = document.getElementById('neon-l');
         const neonR = document.getElementById('neon-r');
-        const cursor = document.getElementById('cursor');
         
-        let cart = [];
-
-        // Custom Cursor Logic
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
-        });
-
         async function startExperience() {
             document.getElementById('start-overlay').style.opacity = '0';
             setTimeout(async () => {
                 document.getElementById('start-overlay').style.display = 'none';
-                audioBtn.style.opacity = '1';
                 try {
+                    // Inicia o áudio após interação do usuário
                     await music.play();
                     updateAudioUI(true);
                 } catch (e) { 
-                    console.warn("Autoplay blocked. User must interact."); 
+                    console.log("Audio play blocked by browser", e);
                     updateAudioUI(false);
                 }
             }, 2000);
@@ -352,10 +358,10 @@
 
         async function toggleAudio() {
             if (music.paused) {
-                try {
-                    await music.play();
-                    updateAudioUI(true);
-                } catch (err) { console.error(err); }
+                try { 
+                    await music.play(); 
+                    updateAudioUI(true); 
+                } catch (err) { console.log(err); }
             } else {
                 music.pause();
                 updateAudioUI(false);
@@ -363,18 +369,18 @@
         }
 
         function updateAudioUI(isPlaying) {
+            audioBtn.innerText = isPlaying ? "Audio_ON" : "Audio_OFF";
             if(isPlaying) {
-                audioStatus.innerText = "Audio: On";
                 neonL.classList.add('neon-active');
                 neonR.classList.add('neon-active');
             } else {
-                audioStatus.innerText = "Audio: Off";
                 neonL.classList.remove('neon-active');
                 neonR.classList.remove('neon-active');
             }
         }
 
-        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -100px 0px' };
+        // Configuração do Scroll Reveal lento (3s)
+        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -15% 0px' };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -384,17 +390,6 @@
         }, observerOptions);
 
         document.querySelectorAll('.reveal, .stagger-container').forEach(el => observer.observe(el));
-
-        function addToCart(name, price) {
-            cart.push({ name, price });
-            document.getElementById('cart-count').innerText = cart.length;
-        }
-
-        function openCart() {
-            if(cart.length === 0) return;
-            const msg = `Olá! Gostaria de processar meu pedido AYRA:\n\n${cart.map(i => `• ${i.name}`).join('\n')}`;
-            window.open(`https://wa.me/5562993540281?text=${encodeURIComponent(msg)}`, '_blank');
-        }
     </script>
 </body>
 </html>
