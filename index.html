@@ -1,433 +1,400 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AYRA Parfum — Brasil</title>
+    <title>AYRA — Architecture of Scent</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Space+Grotesk:wght@300;400;500&family=Space+Mono&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
-            --cream: #f5f0e8;
-            --warm-white: #faf8f4;
-            --charcoal: #1a1917;
-            --mid: #6b6560;
-            --light-mid: #9e9890;
-            --gold: #c9a96e;
-            --border: rgba(26,25,23,0.12);
+            --silver: #e2e2e2;
+            --dark: #030303;
+            --neon: #00f2ff;
+            --border: rgba(255, 255, 255, 0.08);
+            --transition-speed: 3s; /* Animação Vita Architecture: majestosa e lenta */
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        html { scroll-behavior: smooth; overflow-x: hidden; }
         body {
-            font-family: 'Jost', sans-serif;
-            background: var(--warm-white);
-            color: var(--charcoal);
-            font-weight: 300;
-            letter-spacing: 0.02em;
-            width: 100%;
+            background-color: var(--dark);
+            color: var(--silver);
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
-        @media (hover: hover) {
-            body { cursor: none; }
-            .cursor {
-                position: fixed; width: 8px; height: 8px; background: var(--charcoal);
-                border-radius: 50%; pointer-events: none; z-index: 9999;
-                transition: transform 0.1s ease; transform: translate(-50%, -50%);
-            }
-            .cursor-ring {
-                position: fixed; width: 32px; height: 32px; border: 1px solid var(--charcoal);
-                border-radius: 50%; pointer-events: none; z-index: 9998;
-                transition: transform 0.3s ease; transform: translate(-50%, -50%);
-                opacity: 0.4;
-            }
-        }
-        @media (hover: none) { .cursor, .cursor-ring { display: none; } }
+        .mono { font-family: 'Space Mono', monospace; }
+        .serif { font-family: 'Cormorant Garamond', serif; }
 
-        nav {
-            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-            padding: 20px 5%; display: flex; align-items: center; justify-content: space-between;
-            transition: all 0.4s ease;
-        }
-        nav.scrolled {
-            background: rgba(250,248,244,0.95);
-            backdrop-filter: blur(12px);
-            padding: 12px 5%;
-            border-bottom: 0.5px solid var(--border);
-        }
+        .grid-line-v { width: 1px; background: var(--border); height: 100%; position: absolute; top: 0; }
+        .grid-line-h { height: 1px; background: var(--border); width: 100%; position: absolute; left: 0; }
 
-        .nav-logo {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 20px; font-weight: 400; letter-spacing: 0.2em;
-            text-transform: uppercase; text-decoration: none; color: var(--charcoal);
+        /* Fitas Neon Laterais */
+        .neon-ribbon {
+            position: fixed;
+            top: 0;
+            width: 1px;
+            height: 100vh;
+            background: linear-gradient(to bottom, transparent, var(--neon), #ff00ea, transparent);
+            z-index: 50;
+            opacity: 0.1;
+            box-shadow: 0 0 20px var(--neon);
+            pointer-events: none;
+            transition: opacity 1.5s ease;
         }
-        .nav-logo span { font-weight: 300; font-size: 10px; letter-spacing: 0.3em; display: block; color: var(--mid); }
+        .neon-left { left: 15px; }
+        .neon-right { right: 15px; }
+        .neon-active { opacity: 0.5; animation: neon-pulse 3s infinite ease-in-out; }
 
-        .mobile-drawer {
-            position: fixed; inset: 0; background: var(--warm-white); z-index: 200;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
-        }
-        .mobile-drawer.open { transform: translateX(0); }
-        .mobile-drawer a {
-            font-size: 24px; font-family: 'Cormorant Garamond', serif; margin: 15px 0;
-            text-decoration: none; color: var(--charcoal); text-transform: uppercase; letter-spacing: 0.1em;
+        @keyframes neon-pulse {
+            0%, 100% { filter: brightness(1) blur(1px); transform: scaleY(1); }
+            50% { filter: brightness(1.8) blur(3px); transform: scaleY(1.02); }
         }
 
-        .hero { min-height: 100vh; display: flex; flex-direction: column; }
-        @media (min-width: 1024px) { .hero { flex-direction: row; } }
-
-        .hero-left {
-            background: var(--cream); padding: 120px 8% 60px;
-            display: flex; flex-direction: column; justify-content: center; flex: 1;
+        .reveal {
+            opacity: 0;
+            transform: translateY(80px);
+            transition: opacity var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1), 
+                        transform var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform, opacity;
         }
-        .hero-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: clamp(48px, 10vw, 100px);
-            line-height: 0.9; margin-bottom: 20px;
-        }
-        .hero-title em { font-style: italic; color: var(--mid); }
-
-        .hero-right { background: var(--charcoal); height: 40vh; flex: 1; position: relative; overflow: hidden; }
-        @media (min-width: 1024px) { .hero-right { height: auto; } }
-        .hero-right img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
-
-        .btn-primary {
-            background: var(--charcoal); color: var(--warm-white);
-            padding: 14px 30px; font-size: 10px; text-transform: uppercase;
-            letter-spacing: 0.2em; display: inline-block; transition: 0.3s;
-        }
-        .btn-outline {
-            border: 1px solid var(--charcoal); padding: 13px 30px;
-            font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em;
-            display: inline-block; transition: 0.3s;
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        .marquee-container { border-y: 0.5px solid var(--border); padding: 15px 0; overflow: hidden; white-space: nowrap; }
-        .marquee-track { display: inline-block; animation: scroll 30s linear infinite; }
-        @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-
-        .product-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        @media (min-width: 768px) { .product-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (min-width: 1024px) { .product-grid { grid-template-columns: repeat(3, 1fr); } }
-
-        .cart-panel {
-            position: fixed; top: 0; right: 0; bottom: 0;
-            width: 100%; max-width: 440px; background: var(--warm-white);
-            z-index: 1000; transform: translateX(100%);
-            transition: transform 0.4s ease; display: flex; flex-direction: column;
+        .stagger-container > * {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1), 
+                        transform var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .cart-panel.open { transform: translateX(0); }
-        .cart-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.4);
-            z-index: 999; opacity: 0; pointer-events: none; transition: 0.4s;
+        .stagger-container.visible > * {
+            opacity: 1;
+            transform: translateY(0);
         }
-        .cart-overlay.open { opacity: 1; pointer-events: auto; }
+        .stagger-container.visible > *:nth-child(1) { transition-delay: 0.2s; }
+        .stagger-container.visible > *:nth-child(2) { transition-delay: 0.5s; }
+        .stagger-container.visible > *:nth-child(3) { transition-delay: 0.8s; }
 
-        .reveal { opacity: 0; transform: translateY(20px); transition: 0.8s ease; }
-        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .neon-text {
+            color: #fff;
+            text-shadow: 0 0 15px var(--neon), 0 0 30px rgba(0, 242, 255, 0.4);
+            animation: flicker 5s infinite alternate;
+        }
+        @keyframes flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+            20%, 24%, 55% { opacity: 0.8; }
+        }
+
+        .chrome-text {
+            background: linear-gradient(to bottom, #ffffff 30%, #888 60%, #ffffff 90%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Letreiro Marquee */
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        #start-overlay {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 2s ease;
+        }
+
+        .img-minimalist {
+            transition: transform 4s cubic-bezier(0.16, 1, 0.3, 1);
+            filter: saturate(1.2);
+        }
+        .img-minimalist:hover { transform: scale(1.05); }
+
+        .cursor-custom {
+            position: fixed; width: 10px; height: 10px; background: var(--neon);
+            border-radius: 50%; pointer-events: none; z-index: 9999;
+            mix-blend-mode: difference; transition: transform 0.1s;
+        }
     </style>
 </head>
 <body>
 
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursor-ring"></div>
+    <div class="cursor-custom hidden md:block" id="cursor"></div>
 
-<nav id="nav">
-    <a href="#" class="nav-logo">AYRA <span>parfum</span></a>
-    
-    <div class="hidden lg:flex gap-10 items-center">
-        <a href="#colecao" class="text-[10px] uppercase tracking-[0.2em] hover:text-[#6b6560] transition-colors">Coleção</a>
-        <a href="#historia" class="text-[10px] uppercase tracking-[0.2em] hover:text-[#6b6560] transition-colors">História</a>
-        <a href="#ritual" class="text-[10px] uppercase tracking-[0.2em] hover:text-[#6b6560] transition-colors">Ritual</a>
-    </div>
-
-    <div class="flex items-center gap-6">
-        <button onclick="openCart()" class="text-[10px] uppercase tracking-[0.2em]" id="nav-cart-btn">Carrinho (1)</button>
-        <button class="flex flex-col gap-1.5 lg:hidden" onclick="toggleMenu()">
-            <span class="w-6 h-0.5 bg-black"></span>
-            <span class="w-6 h-0.5 bg-black"></span>
+    <div id="start-overlay">
+        <button onclick="startExperience()" class="serif text-xl tracking-[0.5em] uppercase border border-white/10 px-20 py-10 hover:bg-white hover:text-black transition-all duration-[1.5s]">
+            Enter Experience
         </button>
     </div>
-</nav>
 
-<div class="mobile-drawer" id="mobileDrawer">
-    <button class="absolute top-8 right-8 text-3xl font-light" onclick="toggleMenu()">&times;</button>
-    <a href="#colecao" onclick="toggleMenu()">Coleção</a>
-    <a href="#brasil" onclick="toggleMenu()">Brasil</a>
-    <a href="#historia" onclick="toggleMenu()">História</a>
-    <a href="#ritual" onclick="toggleMenu()">Ritual</a>
-</div>
+    <div class="neon-ribbon neon-left" id="neon-l"></div>
+    <div class="neon-ribbon neon-right" id="neon-r"></div>
 
-<section class="hero">
-    <div class="hero-left">
-        <span class="text-[9px] tracking-[0.4em] uppercase text-[#6b6560] mb-6 block">Parfum Brasileiro — 2025</span>
-        <h1 class="hero-title">AYRA<br><em>Brasil</em></h1>
-        <p class="text-[10px] tracking-[0.3em] uppercase text-[#9e9890] mb-10">Experiência Olfativa de Luxo</p>
-        <p class="text-sm text-[#6b6560] leading-relaxed mb-10 max-w-sm">Notas cítricas e sofisticadas que encantam os sentidos. Uma assinatura de luxo transformada em arte líquida.</p>
-        <div class="flex flex-wrap gap-4">
-            <a href="#colecao" class="btn-primary">Descobrir</a>
-            <a href="#Aurum" class="btn-outline">Ver Aurum</a>
-        </div>
-    </div>
-    <div class="hero-right">
-        <img src="https://github.com/umvelhonoob/ayrra/blob/main/img18.png?raw=true" alt="Hero Image">
-    </div>
-</section>
+    <!-- Audio Original com URL Corrigida (Raw) -->
+    <audio id="bg-music" loop crossorigin="anonymous">
+        <source src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Driftline.mp3" type="audio/mpeg">
+    </audio>
 
-<div class="marquee-container border-b border-t">
-    <div class="marquee-track">
-        <span class="px-10 text-[9px] uppercase tracking-[0.3em] text-[#9e9890]">Luxo Brasileiro ◆ Notas Tropicais ◆ Artesanal ◆ Fragrância Radiante ◆ Holographic Edition ◆</span>
-        <span class="px-10 text-[9px] uppercase tracking-[0.3em] text-[#9e9890]">Luxo Brasileiro ◆ Notas Tropicais ◆ Artesanal ◆ Fragrância Radiante ◆ Holographic Edition ◆</span>
-    </div>
-</div>
+    <button id="audio-toggle" onclick="toggleAudio()" class="fixed bottom-10 right-10 z-[100] mono text-[9px] uppercase tracking-widest border border-white/10 px-4 py-2 bg-black/80 backdrop-blur-xl hover:border-white transition-all opacity-0">
+        <span id="audio-status">Audio: Off</span>
+    </button>
 
-<section class="py-20 px-[5%]" id="colecao">
-    <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
-        <div class="reveal">
-            <span class="text-[9px] uppercase tracking-[0.4em] text-[#c9a96e] mb-4 block">Nossa Seleção</span>
-            <h2 class="font-serif text-4xl md:text-6xl font-light">O perfume como<br><em>ritual diário</em></h2>
-        </div>
-        <a href="#" class="text-[10px] uppercase tracking-[0.2em] border-b border-black pb-1 reveal">Ver coleção completa →</a>
-    </div>
-
-    <div class="product-grid">
-        <div class="reveal bg-[#f5f0e8] p-8 group transition-colors hover:bg-[#ede8de]" onclick="addToCart('Aurum 25mL', 189)">
-            <div class="relative overflow-hidden mb-8 aspect-[3/4]">
-                <img src="https://github.com/umvelhonoob/ayrra/blob/main/img11.png?raw=true" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                <span class="absolute top-4 right-4 bg-white/90 px-3 py-1 text-[8px] tracking-widest uppercase">Bestseller</span>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-[100] border-b border-white/5 bg-black/40 backdrop-blur-2xl">
+        <div class="max-w-[1800px] mx-auto flex justify-between items-center px-6 md:px-12 py-8">
+            <a href="#" class="serif text-3xl tracking-[0.4em] uppercase font-light neon-text">AYRA</a>
+            <div class="hidden md:flex gap-16 items-center mono text-[10px] tracking-[0.5em] uppercase opacity-40">
+                <a href="#collection" class="hover:opacity-100 transition-all">Collection</a>
+                <a href="#protocol" class="hover:opacity-100 transition-all">Protocol</a>
+                <a href="#history" class="hover:opacity-100 transition-all">History</a>
             </div>
-            <h3 class="font-serif text-3xl mb-2">Aurum</h3>
-            <p class="text-[11px] text-[#9e9890] leading-relaxed mb-6">Bergamota · Jabuticaba · Patchouli<br>25mL — Eau de Parfum</p>
-            <div class="flex justify-between items-center">
-                <span class="font-serif text-2xl">R$ 189</span>
-                <button class="w-10 h-10 border border-black flex items-center justify-center text-xl font-light hover:bg-black hover:text-white transition-all">+</button>
-            </div>
+            <button onclick="openCart()" class="mono text-[10px] uppercase tracking-widest border border-white/10 px-6 py-3 hover:bg-white hover:text-black transition">
+                INV (<span id="cart-count">0</span>)
+            </button>
         </div>
-    </div>
-</section>
+    </nav>
 
-<section class="flex flex-col lg:flex-row bg-[#1a1917]" id="Aurum">
-    <div class="lg:w-1/2 h-[50vh] lg:h-auto overflow-hidden">
-        <img src="https://github.com/umvelhonoob/ayrra/blob/main/img13.png?raw=true" class="w-full h-full object-cover opacity-70">
-    </div>
-    <div class="lg:w-1/2 p-[10%] text-white flex flex-col justify-center">
-        <span class="text-[9px] tracking-[0.4em] text-[#c9a96e] mb-8 uppercase">Fragrance Profile</span>
-        <h2 class="font-serif text-4xl lg:text-6xl font-light mb-8 leading-tight">A essência da<br><em>sofisticação</em></h2>
-        <p class="text-sm text-[#9e9890] leading-relaxed mb-12 max-w-md">Uma composição luminosa e cítrica que evolui para um coração encorpado, revelando uma assinatura de luxo inesquecível.</p>
+    <header class="relative min-h-screen flex flex-col justify-end pt-32 overflow-hidden border-b border-white/5">
+        <div class="grid-line-v left-1/4 hidden md:block"></div>
+        <div class="grid-line-v right-1/4 hidden md:block"></div>
         
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-12">
-            <div><span class="text-[8px] text-[#c9a96e] block mb-2 uppercase tracking-widest">Topo</span><p class="font-serif text-sm">Bergamota, Laranja, Limão</p></div>
-            <div><span class="text-[8px] text-[#c9a96e] block mb-2 uppercase tracking-widest">Coração</span><p class="font-serif text-sm">Jabuticaba, Cereja, Avelã</p></div>
-            <div><span class="text-[8px] text-[#c9a96e] block mb-2 uppercase tracking-widest">Fundo</span><p class="font-serif text-sm">Patchouli, Amêndoa</p></div>
-        </div>
-
-        <div class="flex items-center gap-8">
-            <span class="font-serif text-3xl">R$ 189</span>
-            <button onclick="addToCart('Brasil 25mL', 189); openCart()" class="bg-white text-black px-8 py-4 text-[9px] uppercase tracking-widest hover:bg-gray-200 transition-colors">Comprar agora</button>
-        </div>
-    </div>
-</section>
-
-<section class="grid grid-cols-2 lg:grid-cols-4 gap-0.5 bg-[#1a1917] border-y border-[#1a1917]">
-    <div class="aspect-square overflow-hidden"><img src="https://github.com/umvelhonoob/ayrra/blob/main/img15.png?raw=true" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"></div>
-    <div class="aspect-square overflow-hidden"><img src="https://github.com/umvelhonoob/ayrra/blob/main/img17.png?raw=true" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"></div>
-    <div class="aspect-square overflow-hidden"><img src="https://github.com/umvelhonoob/ayrra/blob/main/img16.png?raw=true" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"></div>
-    <div class="aspect-square overflow-hidden"><img src="https://github.com/umvelhonoob/ayrra/blob/main/img12.png?raw=true" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"></div>
-</section>
-
-<section class="py-20 px-[5%] bg-white" id="historia">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-        <div class="reveal">
-            <span class="text-[9px] uppercase tracking-[0.4em] text-[#c9a96e] mb-4 block">Nossa Origem</span>
-            <h2 class="font-serif text-5xl font-light mb-8">Nascida no <em>Brasil</em></h2>
-            <p class="text-sm text-[#6b6560] leading-relaxed mb-6">A AYRA nasceu do desejo de unir o talento nacional às mais nobres essências mundiais. Criamos perfumes que encantam os sentidos com notas luminosas e sofisticadas.</p>
-            <div class="grid grid-cols-3 gap-6 pt-10 border-t border-black/5">
-                <div><p class="font-serif text-3xl">100%</p><p class="text-[9px] uppercase text-[#9e9890] tracking-widest">Nobres</p></div>
-                <div><p class="font-serif text-3xl">3 anos</p><p class="text-[9px] uppercase text-[#9e9890] tracking-widest">Pesquisa</p></div>
-                <div><p class="font-serif text-3xl">Brasil</p><p class="text-[9px] uppercase text-[#9e9890] tracking-widest">Origem</p></div>
+        <div class="max-w-[1800px] mx-auto w-full px-6 md:px-12 pb-32 grid md:grid-cols-2 items-end z-10">
+            <div class="stagger-container">
+                <h1 class="serif text-[18vw] md:text-[11vw] leading-[0.8] mb-12 font-light italic chrome-text neon-text">
+                    AYRA
+                </h1>
+                <p class="mono text-[11px] uppercase tracking-[0.6em] max-w-sm opacity-40 leading-relaxed mb-12">
+                    Brazilian Architecture of Scent. <br>Molecular precision. Kinetic energy.
+                </p>
+                <a href="#collection" class="inline-block border border-white/10 px-12 py-6 mono text-[11px] uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-[2s]">Explore</a>
+            </div>
+            <div class="reveal hidden md:flex justify-end opacity-20">
+                <div class="mono text-[10px] text-right space-y-4 tracking-[0.5em] uppercase">
+                    <div>System: Active_v2.0</div>
+                    <div>Location: Brasil</div>
+                </div>
             </div>
         </div>
-        <div class="reveal grid grid-cols-2 gap-4">
-            <img src="https://github.com/umvelhonoob/ayrra/blob/main/logo.png?raw=true" class="w-full aspect-[4/5] object-cover bg-gray-50">
-            <img src="https://github.com/umvelhonoob/ayrra/blob/main/img13.png?raw=true" class="w-full aspect-[4/5] object-cover bg-gray-50 mt-12">
+    </header>
+
+    <!-- Marquee -->
+    <div class="border-b border-white/5 py-10 overflow-hidden bg-white/[0.02]">
+        <div class="flex animate-[marquee_50s_linear_infinite] whitespace-nowrap mono text-[10px] uppercase tracking-[1em] opacity-40 text-cyan-400">
+            Architecture of Scent ◆ Noble Essences ◆ Made in Brazil ◆ Molecular Extraction ◆ Chrome Edition ◆ 25ml Precision ◆ Architecture of Scent ◆ Noble Essences ◆ Made in Brazil ◆ Molecular Extraction ◆ Chrome Edition ◆ 25ml Precision
         </div>
     </div>
-</section>
 
-<section class="py-24 px-[5%] bg-[#1a1917] text-white text-center" id="ritual">
-    <span class="text-[10px] tracking-[0.4em] text-[#c9a96e] mb-6 block uppercase">The Ritual</span>
-    <h2 class="font-serif text-5xl md:text-7xl font-light mb-12">O ritual da <em>fragrância</em></h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-5xl mx-auto text-left">
-        <div class="reveal">
-            <p class="font-serif text-7xl opacity-10 mb-[-30px]">01</p>
-            <h3 class="font-serif text-xl mb-4">Preparação</h3>
-            <p class="text-xs text-[#9e9890] leading-relaxed">Aplique sobre pele limpa e hidratada. Os pontos de pulso amplificam a fixação.</p>
-        </div>
-        <div class="reveal">
-            <p class="font-serif text-7xl opacity-10 mb-[-30px]">02</p>
-            <h3 class="font-serif text-xl mb-4">Aplicação</h3>
-            <p class="text-xs text-[#9e9890] leading-relaxed">Vaporize a 15cm. Não esfregue para não quebrar a estrutura das notas.</p>
-        </div>
-        <div class="reveal">
-            <p class="font-serif text-7xl opacity-10 mb-[-30px]">03</p>
-            <h3 class="font-serif text-xl mb-4">Evolução</h3>
-            <p class="text-xs text-[#9e9890] leading-relaxed">Deixe as notas de topo assentarem para revelar o coração encorpado do parfum.</p>
-        </div>
-    </div>
-</section>
+    <section id="collection" class="relative max-w-[1800px] mx-auto grid md:grid-cols-2 border-b border-white/5">
+        <div class="grid-line-v left-1/2 hidden md:block"></div>
+        
+        <div class="p-12 md:p-32 flex flex-col justify-center border-b md:border-b-0 border-white/5 stagger-container">
+            <span class="mono text-[10px] uppercase tracking-[0.7em] opacity-20 mb-12">001_AURUM</span>
+            <h2 class="serif text-7xl md:text-[8rem] mb-16 italic font-light chrome-text">Aurum</h2>
+            
+            <div class="grid grid-cols-3 gap-8 mb-16 border-y border-white/5 py-8 opacity-60">
+                <div class="mono text-[8px] tracking-widest uppercase">
+                    <span class="block opacity-40 mb-2">Topo</span>
+                    Bergamota<br>Jabuticaba
+                </div>
+                <div class="mono text-[8px] tracking-widest uppercase">
+                    <span class="block opacity-40 mb-2">Corpo</span>
+                    Cereja<br>Avelã
+                </div>
+                <div class="mono text-[8px] tracking-widest uppercase">
+                    <span class="block opacity-40 mb-2">Fundo</span>
+                    Patchouli<br>Amêndoa
+                </div>
+            </div>
 
-<section class="py-24 px-[5%] bg-[#f5f0e8] text-center">
-    <div class="max-w-3xl mx-auto reveal">
-        <p class="font-serif text-2xl lg:text-3xl italic text-[#1a1917] mb-8 leading-relaxed">"AYRA Brasil não é apenas um perfume. É uma experiência radiante e sofisticada. Tornou-se minha assinatura."</p>
-        <span class="text-[10px] uppercase tracking-[0.3em] text-[#9e9890]">— Marina S., São Paulo</span>
-    </div>
-</section>
+            <p class="mono text-[13px] uppercase leading-[2.2] tracking-widest opacity-40 mb-16 max-w-md">
+                Uma construção arquitetônica líquida. Abertura cítrica tropical evoluindo para um núcleo denso e sofisticado.
+            </p>
+            <div class="flex justify-between items-end">
+                <div>
+                    <span class="mono text-[10px] block opacity-20 uppercase tracking-widest mb-4">Unit Price</span>
+                    <span class="serif text-5xl font-light">R$ 189</span>
+                </div>
+                <button onclick="addToCart('Aurum 25mL', 189)" class="border border-white/10 px-12 py-6 mono text-[11px] uppercase tracking-[0.3em] hover:bg-white hover:text-black transition-all duration-1000">Acquire</button>
+            </div>
+        </div>
 
-<section class="py-20 px-[5%] bg-white border-t border-black/5">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        <div class="reveal">
-            <h2 class="font-serif text-4xl font-light mb-4">Seja a primeira a <em>descobrir</em></h2>
-            <p class="text-sm text-[#9e9890]">Lançamentos exclusivos e acesso antecipado.</p>
+        <!-- IMAGEM DO PRODUTO AURUM -->
+        <div class="reveal flex items-center justify-center p-12 md:p-32 bg-[#050505] overflow-hidden">
+            <img src="https://github.com/umvelhonoob/ayrra/blob/main/img11.png?raw=true" class="w-full max-w-sm drop-shadow-[0_0_100px_rgba(0,242,255,0.15)] img-minimalist" alt="Aurum Product">
         </div>
-        <div class="reveal flex flex-col sm:flex-row gap-4">
-            <input type="email" placeholder="Seu e-mail" class="flex-1 bg-transparent border border-black/10 px-6 py-4 text-xs focus:border-black outline-none transition-all">
-            <button class="bg-black text-white px-8 py-4 text-[10px] uppercase tracking-widest hover:bg-[#6b6560] transition-colors">Cadastrar</button>
-        </div>
-    </div>
-</section>
+    </section>
 
-<footer class="bg-[#1a1917] py-20 px-[5%] text-white/50 text-[10px] uppercase tracking-widest">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
-        <div class="md:col-span-2">
-            <h2 class="text-white text-3xl font-serif tracking-normal mb-6">AYRA</h2>
-            <p class="max-w-xs leading-relaxed lowercase text-xs">Parfum brasileiro de luxo. Experiência olfativa que celebra a riqueza do Brasil.</p>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 border-b border-white/5 bg-white/5">
+        <div class="reveal aspect-[4/5] overflow-hidden">
+            <img src="https://github.com/umvelhonoob/ayrra/blob/main/img15.png?raw=true" class="w-full h-full object-cover img-minimalist" alt="Gallery 1">
         </div>
-        <div>
-            <h4 class="text-white mb-6">Empresa</h4>
-            <ul class="space-y-4 lowercase text-xs">
-                <li><a href="#" class="hover:text-white transition-colors">História</a></li>
-                <li><a href="#" class="hover:text-white transition-colors">Sustentabilidade</a></li>
-            </ul>
+        <div class="reveal aspect-[4/5] overflow-hidden" style="transition-delay: 0.2s;">
+            <img src="https://github.com/umvelhonoob/ayrra/blob/main/img17.png?raw=true" class="w-full h-full object-cover img-minimalist" alt="Gallery 2">
         </div>
-        <div>
-            <h4 class="text-white mb-6">Redes Sociais</h4>
-            <ul class="space-y-4 lowercase text-xs">
-                <li><a href="https://www.instagram.com/use.ayra/" class="hover:text-white transition-colors">Instagram</a></li>
-                <li><a href="#" class="hover:text-white transition-colors">TikTok</a></li>
-            </ul>
+        <div class="reveal aspect-[4/5] overflow-hidden" style="transition-delay: 0.4s;">
+            <img src="https://github.com/umvelhonoob/ayrra/blob/main/img16.png?raw=true" class="w-full h-full object-cover img-minimalist" alt="Gallery 3">
+        </div>
+        <div class="reveal aspect-[4/5] overflow-hidden" style="transition-delay: 0.6s;">
+            <img src="https://github.com/umvelhonoob/ayrra/blob/main/img12.png?raw=true" class="w-full h-full object-cover img-minimalist" alt="Gallery 4">
         </div>
     </div>
-    <div class="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between gap-6">
-        <span>© 2025 AYRA Parfum Brasil.</span>
-        <div class="flex gap-8">
-            <a href="#">Privacidade</a>
-            <a href="#">Termos</a>
+
+    <section id="protocol" class="relative py-32 max-w-[1800px] mx-auto px-6 md:px-12 border-b border-white/5">
+        <div class="grid md:grid-cols-12 gap-12 items-start mb-24 stagger-container">
+            <div class="md:col-span-5">
+                <span class="mono text-[10px] uppercase tracking-[0.7em] opacity-20 mb-8 block">Protocolo de Uso</span>
+                <h3 class="serif text-6xl md:text-7xl italic leading-[0.9] mb-12">O Ritual <br>da Forma</h3>
+            </div>
+            <div class="md:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-12 pt-4">
+                <div class="border-l border-white/5 pl-10">
+                    <h4 class="serif text-3xl italic mb-4">Projeção</h4>
+                    <p class="mono text-[11px] opacity-30 uppercase tracking-widest">Vaporize a 15cm. Não friccione a essência.</p>
+                </div>
+                <div class="border-l border-white/5 pl-10">
+                    <h4 class="serif text-3xl italic mb-4">Fixação</h4>
+                    <p class="mono text-[11px] opacity-30 uppercase tracking-widest">Permita que o Patchouli ancore na derme.</p>
+                </div>
+            </div>
         </div>
-    </div>
-</footer>
 
-<div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
-<div class="cart-panel" id="cart-panel">
-    <div class="p-8 border-b border-black/5 flex justify-between items-center">
-        <h2 class="font-serif text-2xl">Carrinho</h2>
-        <button onclick="closeCart()" class="text-3xl font-light">&times;</button>
-    </div>
-    <div class="flex-1 overflow-y-auto p-8" id="cart-items-container"></div>
-    <div class="p-8 border-t border-black/5">
-        <div class="flex justify-between mb-6">
-            <span class="text-[10px] uppercase tracking-widest text-[#9e9890]">Total</span>
-            <span class="font-serif text-2xl" id="cart-total-display">R$ 0</span>
+        <!-- IMAGEM DO RITUAL (Reduzida e Centralizada) -->
+        <div class="reveal flex justify-center py-12">
+            <div class="w-full max-w-xs border border-white/10 shadow-2xl overflow-hidden bg-zinc-900">
+                <img src="https://github.com/umvelhonoob/ayrra/blob/main/img13.png?raw=true" class="w-full h-auto object-cover img-minimalist" alt="Protocol Full Image">
+            </div>
         </div>
-        <button onclick="checkoutWhatsApp()" class="w-full bg-black text-white py-5 text-[10px] uppercase tracking-[0.3em]">Finalizar pelo WhatsApp</button>
-    </div>
-</div>
+    </section>
 
-<div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-black text-white px-8 py-4 text-[10px] uppercase tracking-widest opacity-0 pointer-events-none transition-all duration-500 z-[9999]">Adicionado</div>
+    <section id="history" class="relative py-48 max-w-[1800px] mx-auto px-6 md:px-12 border-b border-white/5 stagger-container">
+        <div class="max-w-4xl">
+            <span class="mono text-[10px] uppercase tracking-[0.7em] opacity-20 mb-12 block">Nossa História</span>
+            <h2 class="serif text-5xl md:text-8xl italic mb-16 chrome-text">Nascida no Brasil</h2>
+            <p class="mono text-[14px] uppercase leading-[2.5] tracking-widest opacity-40 mb-20">
+                A AYRA nasceu do desejo de unir o talento nacional às mais nobres essências mundiais. Parfums que encantam os sentidos com notas cítricas e luminosas.
+            </p>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-12">
+                <div class="reveal">
+                    <div class="serif text-6xl mb-4 font-light">100%</div>
+                    <div class="mono text-[9px] uppercase tracking-widest opacity-20">Essências Nobres</div>
+                </div>
+                <div class="reveal">
+                    <div class="serif text-6xl mb-4 font-light">03</div>
+                    <div class="mono text-[9px] uppercase tracking-widest opacity-20">Anos de Pesquisa</div>
+                </div>
+                <div class="reveal">
+                    <div class="serif text-6xl mb-4 font-light">BR</div>
+                    <div class="mono text-[9px] uppercase tracking-widest opacity-20">Origem</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<script>
-    const nav = document.getElementById('nav');
-    const drawer = document.getElementById('mobileDrawer');
-    let cart = [{ id: 'aurum', name: 'Aurum (25mL)', price: 189, qty: 1 }];
+    <!-- Newsletter -->
+    <section class="reveal py-40 bg-white/[0.01]">
+        <div class="max-w-4xl mx-auto px-6 text-center stagger-container">
+            <h2 class="serif text-4xl md:text-6xl italic mb-12">Seja a primeira a descobrir</h2>
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+                <input type="email" placeholder="ENTER_EMAIL_ADDR" class="bg-transparent border border-white/10 px-8 py-5 mono text-[10px] tracking-widest w-full md:w-96 focus:outline-none focus:border-cyan-400 transition-all">
+                <button class="bg-white text-black px-12 py-5 mono text-[10px] uppercase tracking-[0.3em] hover:bg-cyan-400 transition-all">Submit</button>
+            </div>
+        </div>
+    </section>
 
-    window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 50));
+    <footer class="py-32 max-w-[1800px] mx-auto px-6 md:px-12 opacity-20">
+        <div class="flex flex-col md:flex-row justify-between items-start gap-24 border-t border-white/5 pt-12">
+            <div>
+                <h2 class="serif text-4xl mb-8 font-light tracking-[0.5em] neon-text">AYRA</h2>
+                <p class="mono text-[10px] uppercase tracking-[0.3em]">© 2025. Futurismo Olfativo.</p>
+            </div>
+            <div class="mono text-[10px] space-y-4 uppercase tracking-widest">
+                <a href="https://www.instagram.com/use.ayra/" class="block hover:text-cyan-400 transition">Instagram @use.ayra</a>
+                <span class="block">WhatsApp +55 62 99354 0281</span>
+            </div>
+        </div>
+    </footer>
 
-    function toggleMenu() { drawer.classList.toggle('open'); }
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-    if (window.matchMedia("(hover: hover)").matches) {
+    <script>
+        const music = document.getElementById('bg-music');
+        const audioBtn = document.getElementById('audio-toggle');
+        const audioStatus = document.getElementById('audio-status');
+        const neonL = document.getElementById('neon-l');
+        const neonR = document.getElementById('neon-r');
         const cursor = document.getElementById('cursor');
-        const ring = document.getElementById('cursor-ring');
+        
+        let cart = [];
+
+        // Custom Cursor Logic
         document.addEventListener('mousemove', (e) => {
             cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
-            setTimeout(() => { ring.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`; }, 50);
         });
-    }
 
-    function openCart() { renderCart(); document.getElementById('cart-overlay').classList.add('open'); document.getElementById('cart-panel').classList.add('open'); }
-    function closeCart() { document.getElementById('cart-overlay').classList.remove('open'); document.getElementById('cart-panel').classList.remove('open'); }
+        async function startExperience() {
+            document.getElementById('start-overlay').style.opacity = '0';
+            setTimeout(async () => {
+                document.getElementById('start-overlay').style.display = 'none';
+                audioBtn.style.opacity = '1';
+                try {
+                    await music.play();
+                    updateAudioUI(true);
+                } catch (e) { 
+                    console.warn("Autoplay blocked. User must interact."); 
+                    updateAudioUI(false);
+                }
+            }, 2000);
+        }
 
-    function addToCart(name, price) {
-        const item = cart.find(i => i.name === name);
-        if(item) item.qty++;
-        else cart.push({ id: Date.now(), name, price, qty: 1 });
-        showToast();
-        updateNavCart();
-    }
+        async function toggleAudio() {
+            if (music.paused) {
+                try {
+                    await music.play();
+                    updateAudioUI(true);
+                } catch (err) { console.error(err); }
+            } else {
+                music.pause();
+                updateAudioUI(false);
+            }
+        }
 
-    function renderCart() {
-        const container = document.getElementById('cart-items-container');
-        container.innerHTML = cart.length === 0 ? '<p class="text-center py-20 text-xs">Vazio.</p>' : '';
-        let total = 0;
-        cart.forEach((item, idx) => {
-            total += item.price * item.qty;
-            container.innerHTML += `
-                <div class="flex gap-4 mb-6 pb-6 border-b border-black/5">
-                    <div class="w-16 h-20 bg-[#f5f0e8] flex-shrink-0 flex items-center justify-center"><img src="https://github.com/umvelhonoob/ayrra/blob/main/img15.png?raw=true" class="w-10"></div>
-                    <div class="flex-1">
-                        <div class="flex justify-between mb-2">
-                            <h4 class="font-serif text-lg">${item.name}</h4>
-                            <button onclick="removeItem(${idx})" class="text-[9px] underline text-gray-400">Remover</button>
-                        </div>
-                        <div class="flex justify-between items-center mt-2">
-                            <div class="flex items-center border border-black/10 px-2 py-1 gap-4">
-                                <button onclick="updateQty(${idx}, -1)">-</button><span>${item.qty}</span><button onclick="updateQty(${idx}, 1)">+</button>
-                            </div>
-                            <span class="font-serif">R$ ${item.price * item.qty}</span>
-                        </div>
-                    </div>
-                </div>`;
-        });
-        document.getElementById('cart-total-display').innerText = `R$ ${total}`;
-        updateNavCart();
-    }
+        function updateAudioUI(isPlaying) {
+            if(isPlaying) {
+                audioStatus.innerText = "Audio: On";
+                neonL.classList.add('neon-active');
+                neonR.classList.add('neon-active');
+            } else {
+                audioStatus.innerText = "Audio: Off";
+                neonL.classList.remove('neon-active');
+                neonR.classList.remove('neon-active');
+            }
+        }
 
-    function updateQty(idx, d) { cart[idx].qty = Math.max(1, cart[idx].qty + d); renderCart(); }
-    function removeItem(idx) { cart.splice(idx, 1); renderCart(); }
-    function updateNavCart() {
-        const count = cart.reduce((acc, curr) => acc + curr.qty, 0);
-        document.getElementById('nav-cart-btn').innerText = `Carrinho (${count})`;
-    }
+        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -100px 0px' };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
 
-    function showToast() {
-        const t = document.getElementById('toast');
-        t.style.opacity = '1';
-        setTimeout(() => { t.style.opacity = '0'; }, 2000);
-    }
+        document.querySelectorAll('.reveal, .stagger-container').forEach(el => observer.observe(el));
 
-    function checkoutWhatsApp() {
-        if(cart.length === 0) return;
-        const msg = `Olá! Gostaria de finalizar meu pedido AYRA:\n\n${cart.map(i => `${i.qty}x ${i.name}`).join('\n')}\n\n*Total:* R$ ${cart.reduce((a,c) => a+(c.price*c.qty), 0)},00`;
-        window.open(`https://wa.me/5562993540281?text=${encodeURIComponent(msg)}`, '_blank');
-    }
+        function addToCart(name, price) {
+            cart.push({ name, price });
+            document.getElementById('cart-count').innerText = cart.length;
+        }
 
-    updateNavCart();
-</script>
-
+        function openCart() {
+            if(cart.length === 0) return;
+            const msg = `Olá! Gostaria de processar meu pedido AYRA:\n\n${cart.map(i => `• ${i.name}`).join('\n')}`;
+            window.open(`https://wa.me/5562993540281?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+    </script>
 </body>
 </html>
