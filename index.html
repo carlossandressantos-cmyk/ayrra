@@ -1,545 +1,1019 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="scroll-smooth">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AYRA — Arquitetura de Metal Líquido</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Space+Grotesk:wght@300;400;500&family=Space+Mono&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        :root {
-            --holo-blue: #b3e5fc;
-            --holo-pink: #f8bbd0;
-            --holo-purple: #e1bee7;
-            --silver-base: #f8fafc;
-            --charcoal: #0f172a;
-            --transition-speed: 2.5s; 
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>AYRA — Arquitetura de Metal Líquido</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=Syne:wght@400;500;600;700;800&family=Syne+Mono&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#0a0a0a;
+  --paper:#f5f2ed;
+  --silver:#c8c8c8;
+  --chrome-1:#ffffff;
+  --chrome-2:#d4d4d4;
+  --chrome-3:#888;
+  --chrome-4:#333;
+  --chrome-5:#000;
+  --holo-1:#c9f0ff;
+  --holo-2:#ffd6f0;
+  --holo-3:#d6c9ff;
+  --holo-4:#c9ffd6;
+  --speed:3s;
+}
 
-        body {
-            background-color: var(--silver-base);
-            color: var(--charcoal);
-            font-family: 'Space Grotesk', sans-serif;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
+html{scroll-behavior:smooth}
 
-        .liquid-container {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at center, #ffffff 0%, #e2e8f0 100%);
-            overflow: hidden;
-            filter: url('#gooey-filter'); 
-        }
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Syne',sans-serif;
+  overflow-x:hidden;
+  cursor:none;
+}
 
-        .blob {
-            position: absolute;
-            background: linear-gradient(135deg, 
-                var(--holo-blue) 0%, 
-                var(--holo-pink) 40%, 
-                var(--holo-purple) 70%, 
-                #ffffff 100%
-            );
-            border-radius: 50%;
-            filter: blur(15px);
-            opacity: 0.85;
-            animation: fluid-motion 40s infinite alternate ease-in-out;
-            box-shadow: inset -15px -15px 40px rgba(255,255,255,0.7);
-        }
+/* CURSOR */
+#cursor{
+  width:12px;height:12px;
+  background:var(--ink);
+  border-radius:50%;
+  position:fixed;top:0;left:0;
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:transform 0.1s ease, width 0.3s ease, height 0.3s ease, background 0.3s ease;
+  mix-blend-mode:difference;
+}
+#cursor-ring{
+  width:40px;height:40px;
+  border:1px solid rgba(0,0,0,0.3);
+  border-radius:50%;
+  position:fixed;top:0;left:0;
+  pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:all 0.15s ease;
+}
+body:has(a:hover) #cursor,body:has(button:hover) #cursor{width:32px;height:32px;background:#fff}
+body:has(a:hover) #cursor-ring,body:has(button:hover) #cursor-ring{opacity:0}
 
-        @keyframes fluid-motion {
-            0% { transform: translate(-10%, -10%) scale(1) rotate(0deg); }
-            33% { transform: translate(30%, 15%) scale(1.5) rotate(120deg); }
-            66% { transform: translate(-15%, 35%) scale(0.9) rotate(240deg); }
-            100% { transform: translate(20%, -10%) scale(1.4) rotate(360deg); }
-        }
+/* LIQUID CANVAS */
+#liquid-canvas{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  z-index:-2;pointer-events:none;
+}
 
-        .chrome-text {
-            background: linear-gradient(to bottom, #777 0%, #000 45%, #999 50%, #111 55%, #888 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 1px 1px rgba(255,255,255,0.8));
-        }
+/* CHROME NOISE overlay */
+#chrome-noise{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  z-index:-1;pointer-events:none;
+  opacity:0.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat:repeat;background-size:256px;
+}
 
-        .reveal {
-            opacity: 0;
-            transform: translateY(60px);
-            transition: all var(--transition-speed) cubic-bezier(0.2, 1, 0.2, 1);
-        }
-        .reveal.visible { opacity: 1; transform: translateY(0); }
+/* CHROME TEXT */
+.chrome-text{
+  background:linear-gradient(
+    170deg,
+    #fff 0%,
+    #bbb 20%,
+    #111 40%,
+    #ddd 50%,
+    #333 60%,
+    #aaa 80%,
+    #000 100%
+  );
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
 
-        .stagger-container > * {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all var(--transition-speed) cubic-bezier(0.2, 1, 0.2, 1);
-        }
-        .stagger-container.visible > * { opacity: 1; transform: translateY(0); }
+.chrome-text-animated{
+  background-size:200% 200%;
+  animation:chrome-shift 8s ease infinite;
+}
+@keyframes chrome-shift{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
 
-        .grid-line-v { width: 1px; background: rgba(0,0,0,0.06); height: 100%; position: absolute; top: 0; }
-        
-        .neon-ribbon {
-            position: fixed; top: 0; width: 2px; height: 100vh;
-            background: linear-gradient(to bottom, transparent, var(--holo-blue), var(--holo-pink), transparent);
-            z-index: 50; opacity: 0; transition: opacity 2s ease;
-            filter: drop-shadow(0 0 10px var(--holo-blue));
-        }
-        .neon-left { left: 8px; } .neon-right { right: 8px; }
-        .neon-active { opacity: 0.6; }
+/* OVERLAY INTRO */
+#start-overlay{
+  position:fixed;inset:0;
+  background:var(--paper);
+  z-index:1000;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:24px;
+  transition:opacity 1.8s ease, visibility 1.8s ease;
+}
+#start-overlay.hidden{opacity:0;visibility:hidden;pointer-events:none}
 
-        .mono { font-family: 'Space Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5em; }
-        .serif { font-family: 'Cormorant Garamond', serif; }
+.start-logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(80px,20vw,200px);
+  line-height:1;
+  letter-spacing:0.05em;
+}
 
-        #start-overlay {
-            position: fixed; inset: 0; background: #ffffff; z-index: 1000;
-            display: flex; align-items: center; justify-content: center;
-            transition: opacity 2s ease;
-        }
+.start-btn{
+  font-family:'Syne Mono',monospace;
+  font-size:10px;letter-spacing:0.4em;
+  text-transform:uppercase;
+  border:1px solid rgba(0,0,0,0.15);
+  padding:18px 48px;
+  background:transparent;
+  cursor:none;
+  transition:all 1s ease;
+  position:relative;overflow:hidden;
+}
+.start-btn::before{
+  content:'';position:absolute;inset:0;
+  background:var(--ink);
+  transform:translateX(-101%);
+  transition:transform 0.8s cubic-bezier(0.77,0,0.18,1);
+}
+.start-btn:hover::before{transform:translateX(0)}
+.start-btn span{position:relative;transition:color 0.8s ease}
+.start-btn:hover span{color:#fff}
 
-        .img-container {
-            position: relative;
-            overflow: hidden;
-            background: white;
-            padding: 8px;
-            box-shadow: 0 40px 80px -20px rgba(0,0,0,0.08);
-            border: 1px solid rgba(0,0,0,0.04);
-            transition: transform 1.5s cubic-bezier(0.2, 1, 0.2, 1);
-        }
-        .img-container:hover { transform: scale(1.02); }
+/* NAV */
+nav{
+  position:fixed;top:0;width:100%;z-index:100;
+  padding:24px 48px;
+  display:flex;justify-content:space-between;align-items:center;
+  mix-blend-mode:multiply;
+}
+@media(max-width:768px){nav{padding:16px 20px}}
 
-        @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-        .marquee-container { animation: marquee 40s linear infinite; }
+.nav-logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:28px;letter-spacing:0.2em;
+  text-decoration:none;color:var(--ink);
+}
 
-        .cart-panel {
-            position: fixed; top: 0; right: 0; height: 100%; width: 100%; max-width: 440px;
-            background: white; z-index: 200; transform: translateX(100%);
-            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-            box-shadow: -20px 0 60px rgba(0,0,0,0.05);
-            display: flex; flex-direction: column;
-        }
-        .cart-panel.open { transform: translateX(0); }
-        .cart-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.1);
-            backdrop-filter: blur(5px); z-index: 199; opacity: 0; pointer-events: none;
-            transition: opacity 0.6s ease;
-        }
-        .cart-overlay.open { opacity: 1; pointer-events: all; }
+.nav-right{display:flex;gap:16px;align-items:center}
 
-        .toast {
-            position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(20px);
-            background: var(--charcoal); color: white; padding: 12px 24px;
-            border-radius: 4px; font-size: 11px; letter-spacing: 0.2em;
-            text-transform: uppercase; z-index: 300; opacity: 0; pointer-events: none;
-            transition: all 0.4s ease;
-        }
-        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-    </style>
+.nav-btn{
+  font-family:'Syne Mono',monospace;
+  font-size:9px;letter-spacing:0.35em;
+  text-transform:uppercase;
+  border:1px solid rgba(0,0,0,0.12);
+  padding:10px 20px;
+  background:rgba(245,242,237,0.6);
+  backdrop-filter:blur(20px);
+  cursor:none;
+  transition:all 0.4s ease;
+}
+.nav-btn:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+/* NEON RIBBONS */
+.neon-ribbon{
+  position:fixed;top:0;width:1px;height:100vh;
+  background:linear-gradient(to bottom,transparent,var(--holo-1),var(--holo-2),var(--holo-3),transparent);
+  z-index:50;opacity:0;
+  transition:opacity 2s ease;
+  filter:blur(0.5px);
+}
+.neon-left{left:6px}.neon-right{right:6px}
+.neon-active{opacity:0.7}
+
+/* HERO */
+header{
+  min-height:100svh;
+  display:grid;
+  grid-template-rows:1fr auto;
+  padding:0 48px 64px;
+  position:relative;overflow:hidden;
+}
+@media(max-width:768px){header{padding:0 20px 48px}}
+
+.hero-eyebrow{
+  font-family:'Syne Mono',monospace;
+  font-size:9px;letter-spacing:0.5em;
+  text-transform:uppercase;opacity:0.4;
+  padding-top:120px;
+  display:flex;justify-content:space-between;align-items:center;
+}
+
+.hero-main{
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding-bottom:24px;
+}
+
+.hero-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(100px,22vw,320px);
+  line-height:0.85;
+  letter-spacing:-0.01em;
+  margin-bottom:40px;
+}
+
+.hero-subtitle-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:24px;
+}
+@media(max-width:768px){.hero-subtitle-row{flex-direction:column;align-items:flex-start}}
+
+.hero-desc{
+  font-family:'Syne Mono',monospace;
+  font-size:9px;letter-spacing:0.3em;line-height:2.2;
+  text-transform:uppercase;opacity:0.45;max-width:280px;
+}
+
+.hero-cta{
+  font-family:'Syne Mono',monospace;
+  font-size:9px;letter-spacing:0.4em;
+  text-transform:uppercase;
+  border:1px solid rgba(0,0,0,0.12);
+  padding:18px 40px;
+  background:transparent;cursor:none;
+  text-decoration:none;color:var(--ink);
+  transition:all 0.8s ease;
+  white-space:nowrap;
+}
+.hero-cta:hover{background:var(--ink);color:var(--paper)}
+
+/* MARQUEE */
+.marquee-section{
+  border-top:1px solid rgba(0,0,0,0.06);
+  border-bottom:1px solid rgba(0,0,0,0.06);
+  padding:20px 0;overflow:hidden;
+  background:rgba(255,255,255,0.3);
+  backdrop-filter:blur(20px);
+}
+.marquee-inner{
+  display:flex;
+  animation:marquee 50s linear infinite;
+  white-space:nowrap;
+}
+.marquee-inner span{
+  font-family:'Syne Mono',monospace;
+  font-size:9px;letter-spacing:0.5em;
+  text-transform:uppercase;opacity:0.35;
+  padding:0 40px;
+}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* SECTION BASE */
+section{position:relative;overflow:hidden}
+
+/* PRODUCT SECTION */
+.product-section{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  min-height:100svh;
+  border-bottom:1px solid rgba(0,0,0,0.06);
+}
+@media(max-width:900px){.product-section{grid-template-columns:1fr}}
+
+.product-info{
+  padding:80px 64px;
+  display:flex;flex-direction:column;justify-content:center;
+}
+@media(max-width:768px){.product-info{padding:60px 20px}}
+
+.product-index{
+  font-family:'Syne Mono',monospace;
+  font-size:9px;letter-spacing:0.5em;opacity:0.25;
+  margin-bottom:40px;text-transform:uppercase;
+}
+
+.product-name{
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(64px,9vw,128px);
+  line-height:0.9;
+  font-style:italic;
+  margin-bottom:48px;
+}
+
+.notes-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:24px;margin-bottom:48px;
+  padding:32px 0;
+  border-top:1px solid rgba(0,0,0,0.06);
+  border-bottom:1px solid rgba(0,0,0,0.06);
+}
+.note-group{font-family:'Syne Mono',monospace;font-size:9px;line-height:2}
+.note-label{letter-spacing:0.3em;opacity:0.3;text-transform:uppercase;margin-bottom:8px}
+
+.product-desc{
+  font-family:'Syne',sans-serif;font-weight:400;
+  font-size:14px;line-height:2;opacity:0.5;
+  margin-bottom:48px;max-width:400px;
+}
+
+.product-footer{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  flex-wrap:wrap;gap:24px;
+}
+
+.product-price{
+  font-family:'DM Serif Display',serif;
+  font-size:48px;font-weight:400;
+}
+
+.add-btn{
+  font-family:'Syne Mono',monospace;
+  font-size:9px;letter-spacing:0.4em;
+  text-transform:uppercase;
+  border:1px solid rgba(0,0,0,0.12);
+  padding:18px 32px;
+  background:transparent;cursor:none;
+  transition:all 0.8s ease;
+  color:var(--ink);
+}
+.add-btn:hover{background:var(--ink);color:var(--paper)}
+
+/* PRODUCT IMAGE PANEL */
+.product-visual{
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,0.2);
+  overflow:hidden;
+  min-height:500px;
+}
+@media(max-width:900px){.product-visual{min-height:400px}}
+
+.product-visual-inner{
+  position:relative;
+  padding:40px;
+  width:100%;max-width:400px;
+}
+
+.product-img{
+  width:100%;height:auto;
+  display:block;
+  position:relative;z-index:2;
+  transition:transform 2s cubic-bezier(0.2,1,0.2,1);
+}
+.product-visual:hover .product-img{transform:scale(1.04) translateY(-8px)}
+
+/* GLARE effect on image */
+.product-visual::after{
+  content:'';
+  position:absolute;inset:0;
+  background:linear-gradient(
+    135deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.06) 40%,
+    rgba(255,255,255,0) 60%
+  );
+  pointer-events:none;z-index:3;
+}
+
+/* GALLERY STRIP */
+.gallery-strip{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  border-bottom:1px solid rgba(0,0,0,0.06);
+}
+@media(max-width:600px){.gallery-strip{grid-template-columns:repeat(2,1fr)}}
+
+.gallery-item{
+  aspect-ratio:4/5;overflow:hidden;
+  border-right:1px solid rgba(0,0,0,0.06);
+  position:relative;
+}
+.gallery-item:last-child{border-right:none}
+.gallery-item img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform 2.5s cubic-bezier(0.2,1,0.2,1);
+}
+.gallery-item:hover img{transform:scale(1.08)}
+
+/* RITUAL SECTION */
+.ritual-section{
+  padding:120px 64px;
+  display:grid;
+  grid-template-columns:5fr 7fr;
+  gap:80px;
+  border-bottom:1px solid rgba(0,0,0,0.06);
+  align-items:start;
+}
+@media(max-width:900px){.ritual-section{grid-template-columns:1fr;padding:80px 20px;gap:40px}}
+
+.ritual-eyebrow{
+  font-family:'Syne Mono',monospace;
+  font-size:9px;letter-spacing:0.5em;opacity:0.25;
+  text-transform:uppercase;margin-bottom:32px;
+}
+
+.ritual-title{
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(48px,6vw,96px);
+  line-height:0.9;font-style:italic;
+}
+
+.ritual-steps{
+  display:grid;grid-template-columns:1fr 1fr;gap:40px;
+}
+@media(max-width:600px){.ritual-steps{grid-template-columns:1fr}}
+
+.ritual-step{
+  border-left:1px solid rgba(0,0,0,0.08);
+  padding-left:24px;
+}
+.step-num{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:64px;line-height:1;opacity:0.08;margin-bottom:8px;
+}
+.step-title{
+  font-family:'DM Serif Display',serif;
+  font-size:24px;font-style:italic;margin-bottom:12px;
+}
+.step-desc{
+  font-family:'Syne Mono',monospace;
+  font-size:9px;line-height:2;opacity:0.4;text-transform:uppercase;letter-spacing:0.2em;
+}
+
+/* RITUAL IMAGE */
+.ritual-image-wrap{
+  display:flex;justify-content:center;margin-top:60px;
+}
+.ritual-img{
+  max-width:240px;width:100%;
+  box-shadow:40px 60px 80px -20px rgba(0,0,0,0.06);
+}
+
+/* ORIGIN SECTION */
+.origin-section{
+  padding:120px 64px;
+  border-bottom:1px solid rgba(0,0,0,0.06);
+}
+@media(max-width:768px){.origin-section{padding:80px 20px}}
+
+.origin-header{
+  max-width:800px;margin-bottom:80px;
+}
+.origin-eyebrow{
+  font-family:'Syne Mono',monospace;
+  font-size:9px;letter-spacing:0.5em;opacity:0.25;
+  text-transform:uppercase;margin-bottom:32px;
+}
+.origin-title{
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(56px,8vw,120px);
+  font-style:italic;line-height:0.9;
+  margin-bottom:40px;
+}
+.origin-body{
+  font-family:'Syne',sans-serif;font-weight:400;
+  font-size:15px;line-height:2.2;opacity:0.45;max-width:520px;
+}
+
+.stats-row{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1px;background:rgba(0,0,0,0.06);
+  border-top:1px solid rgba(0,0,0,0.06);
+  border-bottom:1px solid rgba(0,0,0,0.06);
+}
+@media(max-width:600px){.stats-row{grid-template-columns:1fr}}
+
+.stat-cell{
+  background:var(--paper);
+  padding:48px 40px;
+}
+@media(max-width:768px){.stat-cell{padding:32px 20px}}
+
+.stat-num{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(64px,8vw,112px);
+  line-height:0.9;margin-bottom:12px;
+}
+.stat-label{
+  font-family:'Syne Mono',monospace;
+  font-size:9px;letter-spacing:0.35em;opacity:0.3;text-transform:uppercase;
+}
+
+/* FOOTER */
+footer{
+  padding:80px 64px;
+  display:flex;justify-content:space-between;align-items:flex-end;
+  flex-wrap:wrap;gap:40px;
+}
+@media(max-width:768px){footer{padding:60px 20px;flex-direction:column;align-items:flex-start}}
+
+.footer-logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:56px;letter-spacing:0.1em;opacity:0.15;
+}
+.footer-links{
+  display:flex;flex-direction:column;gap:12px;
+  font-family:'Syne Mono',monospace;
+  font-size:9px;letter-spacing:0.35em;text-transform:uppercase;opacity:0.35;
+}
+.footer-links a{text-decoration:none;color:inherit;transition:opacity 0.3s}
+.footer-links a:hover{opacity:0.8}
+.footer-copy{
+  font-family:'Syne Mono',monospace;
+  font-size:9px;letter-spacing:0.3em;opacity:0.2;text-transform:uppercase;
+}
+
+/* CART */
+.cart-panel{
+  position:fixed;top:0;right:0;height:100%;
+  width:100%;max-width:440px;
+  background:var(--paper);
+  z-index:200;
+  transform:translateX(100%);
+  transition:transform 0.7s cubic-bezier(0.22,1,0.36,1);
+  box-shadow:-40px 0 80px rgba(0,0,0,0.04);
+  display:flex;flex-direction:column;
+  border-left:1px solid rgba(0,0,0,0.06);
+}
+.cart-panel.open{transform:translateX(0)}
+
+.cart-overlay{
+  position:fixed;inset:0;
+  background:rgba(10,10,10,0.08);
+  backdrop-filter:blur(8px);
+  z-index:199;opacity:0;pointer-events:none;
+  transition:opacity 0.7s ease;
+}
+.cart-overlay.open{opacity:1;pointer-events:all}
+
+.cart-head{
+  padding:32px 40px;
+  border-bottom:1px solid rgba(0,0,0,0.06);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.cart-title{
+  font-family:'DM Serif Display',serif;
+  font-size:32px;font-style:italic;
+}
+.cart-close{
+  font-family:'Syne Mono',monospace;
+  font-size:9px;letter-spacing:0.35em;opacity:0.35;
+  cursor:none;background:transparent;border:none;color:inherit;
+  text-transform:uppercase;
+  transition:opacity 0.3s;
+}
+.cart-close:hover{opacity:1}
+
+.cart-body{flex:1;overflow-y:auto;padding:32px 40px}
+
+.empty-msg{
+  height:100%;display:flex;align-items:center;justify-content:center;
+  font-family:'Syne Mono',monospace;
+  font-size:9px;letter-spacing:0.35em;opacity:0.2;text-transform:uppercase;
+}
+
+.cart-item{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:24px 0;
+  border-bottom:1px solid rgba(0,0,0,0.06);
+}
+.cart-item-name{font-family:'DM Serif Display',serif;font-size:20px;font-style:italic;margin-bottom:4px}
+.cart-item-qty{font-family:'Syne Mono',monospace;font-size:9px;letter-spacing:0.3em;opacity:0.35;text-transform:uppercase}
+.cart-item-price{font-family:'Syne Mono',monospace;font-size:10px;letter-spacing:0.2em;text-align:right}
+.remove-btn{
+  font-family:'Syne Mono',monospace;font-size:8px;letter-spacing:0.3em;
+  color:#c0392b;opacity:0.6;background:transparent;border:none;cursor:none;
+  text-transform:uppercase;margin-top:4px;display:block;
+  transition:opacity 0.3s;
+}
+.remove-btn:hover{opacity:1}
+
+.cart-foot{
+  padding:32px 40px;
+  border-top:1px solid rgba(0,0,0,0.06);
+}
+.cart-total-row{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:24px;
+}
+.cart-total-label{font-family:'Syne Mono',monospace;font-size:9px;letter-spacing:0.35em;opacity:0.35;text-transform:uppercase}
+.cart-total-val{font-family:'DM Serif Display',serif;font-size:28px;font-style:italic}
+.checkout-btn{
+  width:100%;background:var(--ink);color:var(--paper);
+  border:none;
+  font-family:'Syne Mono',monospace;
+  font-size:9px;letter-spacing:0.4em;
+  text-transform:uppercase;
+  padding:22px;cursor:none;
+  transition:background 0.5s ease;
+}
+.checkout-btn:hover{background:#333}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:48px;left:50%;
+  transform:translateX(-50%) translateY(16px);
+  background:var(--ink);color:var(--paper);
+  padding:14px 28px;
+  font-family:'Syne Mono',monospace;
+  font-size:9px;letter-spacing:0.35em;text-transform:uppercase;
+  z-index:300;opacity:0;pointer-events:none;
+  transition:all 0.4s ease;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* SCROLL REVEAL */
+.sr{
+  opacity:0;transform:translateY(60px);
+  transition:opacity 2.5s cubic-bezier(0.2,1,0.2,1),transform 2.5s cubic-bezier(0.2,1,0.2,1);
+}
+.sr.in{opacity:1;transform:translateY(0)}
+.sr-d1{transition-delay:0.1s}.sr-d2{transition-delay:0.25s}
+.sr-d3{transition-delay:0.4s}.sr-d4{transition-delay:0.6s}
+
+/* HORIZONTAL SCROLL TITLE */
+.h-scroll-title{
+  white-space:nowrap;
+  overflow:hidden;
+  border-bottom:1px solid rgba(0,0,0,0.06);
+  padding:32px 0;
+}
+.h-scroll-inner{
+  display:inline-flex;
+  gap:80px;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(80px,12vw,160px);
+  line-height:1;
+  letter-spacing:0.02em;
+  animation:h-scroll 20s linear infinite;
+}
+@keyframes h-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* AUDIO */
+#audio-toggle{display:none}
+@media(min-width:769px){#audio-toggle{display:block}}
+
+/* DIVIDER LINE */
+.divider-line{
+  height:1px;
+  background:linear-gradient(to right,transparent,rgba(0,0,0,0.08),transparent);
+  border:none;margin:0;
+}
+</style>
 </head>
 <body>
 
-    <div class="liquid-container">
-        <div class="blob" style="width: 800px; height: 800px; top: -10%; left: -10%; animation-delay: 0s;"></div>
-        <div class="blob" style="width: 600px; height: 600px; bottom: -5%; right: -5%; animation-delay: -5s;"></div>
-        <div class="blob" style="width: 500px; height: 500px; top: 40%; left: 30%; animation-delay: -10s;"></div>
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<canvas id="liquid-canvas"></canvas>
+<div id="chrome-noise"></div>
+
+<audio id="bg-music" loop crossorigin="anonymous" preload="auto">
+  <source src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Driftline.mp3" type="audio/mpeg">
+</audio>
+
+<!-- INTRO -->
+<div id="start-overlay">
+  <div class="start-logo chrome-text chrome-text-animated">AYRA</div>
+  <button class="start-btn" onclick="startExperience()"><span>Inicializar Experiência</span></button>
+</div>
+
+<!-- NEON RIBBONS -->
+<div class="neon-ribbon neon-left" id="neon-l"></div>
+<div class="neon-ribbon neon-right" id="neon-r"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo chrome-text">AYRA</a>
+  <div class="nav-right">
+    <button id="audio-toggle" class="nav-btn" onclick="toggleAudio()">Áudio_OFF</button>
+    <button class="nav-btn" onclick="openCart()">Carrinho(<span id="cart-count">0</span>)</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header>
+  <div class="hero-eyebrow">
+    <span>Brasil</span>
+    <span>Est. 2026</span>
+  </div>
+  <div class="hero-main">
+    <h1 class="hero-title chrome-text chrome-text-animated">AYRA</h1>
+    <div class="hero-subtitle-row">
+      <p class="hero-desc">
+        O melhor da perfumaria.<br>Feito no Brasil.<br>Perfumne design
+      </p>
+      <a href="#collection" class="hero-cta">Explorar.Portfólio →</a>
     </div>
+  </div>
+</header>
 
-    <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
-        <defs>
-            <filter id="gooey-filter">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
-                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 25 -12" result="goo" />
-                <feComposite in="SourceGraphic" in2="goo" operator="atop" />
-            </filter>
-        </defs>
-    </svg>
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-inner">
+    <span>Design</span><span>◆</span>
+    <span>Essências Nobres</span><span>◆</span>
+    <span>Feito no Brasil</span><span>◆</span>
+    <span>O melhor</span><span>◆</span>
+    <span>Edição Chrome</span><span>◆</span>
+    <span>25ml</span><span>◆</span>
+    <span>Ayra Brasil</span><span>◆</span>
+    <span>Essências Nobres</span><span>◆</span>
+    <span>Feito no Brasil</span><span>◆</span>
+    <span>o melhor</span><span>◆</span>
+    <span>Edição Chrome</span><span>◆</span>
+    <span>25ml</span><span>◆</span>
+  </div>
+</div>
 
-    <div id="start-overlay">
-        <button onclick="startExperience()" class="serif text-xl tracking-[0.6em] uppercase border border-black/10 px-16 py-10 hover:bg-black hover:text-white transition-all duration-[1.5s] backdrop-blur-xl bg-white/40">
-            Inicializar Experiência
-        </button>
+<!-- COLLECTION -->
+<section id="collection">
+
+  <!-- ARGENTUM -->
+  <div class="product-section">
+    <div class="product-info sr">
+      <p class="product-index">Spec_001 — Argentum</p>
+      <h2 class="product-name chrome-text chrome-text-animated">Argentum</h2>
+      <div class="notes-grid">
+        <div class="note-group"><div class="note-label">Topo</div>Bergamota<br>Laranja Doce</div>
+        <div class="note-group"><div class="note-label">Corpo</div>Jabuticaba<br>Cereja · Avelã</div>
+        <div class="note-group"><div class="note-label">Fundo</div>Patchouli<br>Amêndoa</div>
+      </div>
+      <p class="product-desc">Uma construção arquitetônica líquida. Notas cítricas que evoluem para um núcleo denso de frutas brasileiras e um fundo amendoado de alta fixação.</p>
+      <div class="product-footer">
+        <div class="product-price">R$ 189</div>
+        <button class="add-btn" onclick="addToCart('Argentum 25ml', 189)">Fazer seu pedido</button>
+      </div>
     </div>
-
-    <div class="neon-ribbon neon-left" id="neon-l"></div>
-    <div class="neon-ribbon neon-right" id="neon-r"></div>
-
-    <audio id="bg-music" loop crossorigin="anonymous" preload="auto">
-        <source src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Driftline.mp3" type="audio/mpeg">
-    </audio>
-
-    <nav class="fixed top-0 w-full z-[100] border-b border-black/5 bg-white/10 backdrop-blur-3xl">
-        <div class="max-w-[1800px] mx-auto flex justify-between items-center px-6 md:px-12 py-6 md:py-8">
-            <a href="#" class="serif text-2xl md:text-3xl tracking-[0.4em] uppercase font-light chrome-text">AYRA</a>
-            <div class="flex gap-4 md:gap-12 items-center">
-                <button onclick="openCart()" class="mono text-[9px] border border-black/10 px-4 py-2 hover:bg-black hover:text-white transition-all">
-                    Carrinho(<span id="cart-count">0</span>)
-                </button>
-                <button id="audio-toggle" onclick="toggleAudio()" class="mono border border-black/10 px-4 py-2 hover:bg-black hover:text-white transition-all text-[9px] hidden md:block">
-                    Áudio_OFF
-                </button>
-            </div>
-        </div>
-    </nav>
-
-    <header class="relative min-h-screen flex flex-col justify-end pt-32 overflow-hidden">
-        <div class="grid-line-v left-1/4 hidden md:block"></div>
-        <div class="grid-line-v right-1/4 hidden md:block"></div>
-        
-        <div class="max-w-[1800px] mx-auto w-full px-6 md:px-12 pb-16 md:pb-24 grid md:grid-cols-2 items-end z-10">
-            <div class="stagger-container">
-                <h1 class="serif text-[22vw] md:text-[11vw] leading-[0.8] mb-8 md:mb-12 font-light italic chrome-text">
-                    AYRA
-                </h1>
-                <p class="mono max-w-sm opacity-60 leading-relaxed mb-8 md:mb-12 text-[10px] md:text-[11px]">
-                    Arquitetura do Olfato.<br>Iridescência Holográfica.<br>Essência Molecular_Brasil.
-                </p>
-                <div class="flex gap-4">
-                    <a href="#collection" class="inline-block border border-black/10 px-8 md:px-16 py-4 md:py-6 mono hover:bg-black hover:text-white transition-all duration-[1s] text-[9px] md:text-[11px]">Explorar.Portfólio</a>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <div class="border-y border-black/5 py-8 md:py-12 overflow-hidden bg-white/20 backdrop-blur-sm">
-        <div class="flex marquee-container whitespace-nowrap mono opacity-40 text-[9px] md:text-[10px]">
-            Arquitetura do Olfato ◆ Essências Nobres ◆ Feito no Brasil ◆ Extração Molecular ◆ Edição Chrome ◆ Precisão 25ml ◆ Arquitetura do Olfato ◆ Essências Nobres ◆ Feito no Brasil ◆ Extração Molecular ◆ Edição Chrome ◆ Precisão 25ml
-        </div>
+    <div class="product-visual sr sr-d2">
+      <div class="product-visual-inner">
+        <img class="product-img" src="https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img11.png" alt="Argentum Parfum" onerror="this.src='https://placehold.co/600x800/EEE/999?text=Argentum'">
+      </div>
     </div>
+  </div>
 
-    <section id="collection" class="relative max-w-[1800px] mx-auto grid md:grid-cols-2 border-b border-black/5">
-        <div class="grid-line-v left-1/2 hidden md:block"></div>
-        
-        <div class="p-8 md:p-32 flex flex-col justify-center stagger-container">
-            <span class="mono opacity-30 mb-6 md:mb-8 text-[9px] md:text-[10px]">Spec_001_Argentum</span>
-            <h2 class="serif text-7xl md:text-[9rem] mb-12 md:mb-16 italic font-light chrome-text">Argentum</h2>
-            
-            <div class="grid grid-cols-3 gap-4 md:gap-8 mb-12 md:mb-16 border-y border-black/5 py-8 md:py-10 opacity-80">
-                <div class="mono text-[8px] md:text-[9px]">
-                    <span class="block opacity-40 mb-3">Topo</span>
-                    Bergamota<br>Laranja Doce
-                </div>
-                <div class="mono text-[8px] md:text-[9px]">
-                    <span class="block opacity-40 mb-3">Corpo</span>
-                    Jabuticaba<br>Cereja / Avelã
-                </div>
-                <div class="mono text-[8px] md:text-[9px]">
-                    <span class="block opacity-40 mb-3">Fundo</span>
-                    Patchouli<br>Amêndoa
-                </div>
-            </div>
-
-            <p class="mono text-[10px] md:text-[11px] leading-[2.2] opacity-50 mb-12 md:mb-16 max-w-md">
-                Uma construção arquitetônica líquida. Notas cítricas que evoluem para um núcleo denso de frutas brasileiras e um fundo amendoado de alta fixação.
-            </p>
-            
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 md:gap-0">
-                <div>
-                    <span class="mono block opacity-30 mb-2 text-[9px]">Preço_Unitário</span>
-                    <span class="serif text-4xl md:text-5xl font-light">R$ 189</span>
-                </div>
-                <button onclick="addToCart('Argentum 25ml', 189)" class="w-full md:w-auto border border-black/10 px-8 md:px-12 py-4 md:py-6 mono hover:bg-black hover:text-white transition-all duration-[1s] text-[10px]">Fazer seu pedido</button>
-            </div>
-        </div>
-
-        <div class="reveal flex items-center justify-center p-8 md:p-24">
-            <div class="img-container w-full max-w-sm">
-                <!-- Usando formato RAW para garantir exibição -->
-                <img src="https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img11.png" alt="Argentum Parfum" onerror="this.src='https://placehold.co/600x800/EEE/AAA?text=Argentum'">
-            </div>
-        </div>
-    </section>
-
-    <section class="relative max-w-[1800px] mx-auto grid md:grid-cols-2 border-b border-black/5 bg-black/[0.01]">
-        <div class="grid-line-v left-1/2 hidden md:block"></div>
-        
-        <div class="reveal flex items-center justify-center p-8 md:p-24 order-2 md:order-1">
-            <div class="img-container w-full max-w-sm">
-                <!-- Replicando imagem conforme solicitado, usando formato RAW -->
-                <img src="https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img11.png" alt="Assiral Parfum" onerror="this.src='https://placehold.co/600x800/EEE/AAA?text=Assiral'">
-            </div>
-        </div>
-
-        <div class="p-8 md:p-32 flex flex-col justify-center stagger-container order-1 md:order-2">
-            <span class="mono opacity-30 mb-6 md:mb-8 text-[9px] md:text-[10px]">Spec_002_Assiral</span>
-            <h2 class="serif text-7xl md:text-[9rem] mb-12 md:mb-16 italic font-light chrome-text">Assiral</h2>
-            
-            <div class="grid grid-cols-3 gap-4 md:gap-8 mb-12 md:mb-16 border-y border-black/5 py-8 md:py-10 opacity-80">
-                <div class="mono text-[8px] md:text-[9px]">
-                    <span class="block opacity-40 mb-3">Topo</span>
-                    Pimenta Rosa<br>Cardamomo
-                </div>
-                <div class="mono text-[8px] md:text-[9px]">
-                    <span class="block opacity-40 mb-3">Corpo</span>
-                    Íris Branca<br>Cedro Atlas
-                </div>
-                <div class="mono text-[8px] md:text-[9px]">
-                    <span class="block opacity-40 mb-3">Fundo</span>
-                    Sândalo<br>Âmbar Cinza
-                </div>
-            </div>
-
-            <p class="mono text-[10px] md:text-[11px] leading-[2.2] opacity-50 mb-12 md:mb-16 max-w-md">
-                A antítese do calor. Uma fragrância mineral e gélida que utiliza especiarias frias e madeiras nobres para criar uma aura de mistério e precisão absoluta.
-            </p>
-            
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 md:gap-0">
-                <div>
-                    <span class="mono block opacity-30 mb-2 text-[9px]">Preço_Unitário</span>
-                    <span class="serif text-4xl md:text-5xl font-light">R$ 189</span>
-                </div>
-                <button onclick="addToCart('Assiral 25ml', 189)" class="w-full md:w-auto border border-black/10 px-8 md:px-12 py-4 md:py-6 mono hover:bg-black hover:text-white transition-all duration-[1s] text-[10px]">Fazer seu pedido</button>
-            </div>
-        </div>
-    </section>
-
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-0 border-b border-black/5">
-        <div class="reveal border-r border-black/5 aspect-[4/5] overflow-hidden">
-            <img src="https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img15.png" class="w-full h-full object-cover">
-        </div>
-        <div class="reveal border-r border-black/5 aspect-[4/5] overflow-hidden" style="transition-delay: 0.2s;">
-            <img src="https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img17.png" class="w-full h-full object-cover">
-        </div>
-        <div class="reveal border-r border-black/5 aspect-[4/5] overflow-hidden" style="transition-delay: 0.4s;">
-            <img src="https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img16.png" class="w-full h-full object-cover">
-        </div>
-        <div class="reveal aspect-[4/5] overflow-hidden" style="transition-delay: 0.6s;">
-            <img src="https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img12.png" class="w-full h-full object-cover">
-        </div>
+  <!-- H-SCROLL DIVIDER -->
+  <div class="h-scroll-title">
+    <div class="h-scroll-inner chrome-text">
+      <span>Metal Líquido</span>
+      <span>·</span>
+      <span>Holográfico</span>
+      <span>·</span>
+      <span>Brasil</span>
+      <span>·</span>
+      <span>2026</span>
+      <span>·</span>
+      <span>Holográfico</span>
+      <span>·</span>
+      <span>Ayra Brasil</span>
+      <span>·</span>
     </div>
+  </div>
 
-    <section id="protocol" class="relative py-24 md:py-48 max-w-[1800px] mx-auto px-6 md:px-12 border-b border-black/5">
-        <div class="grid md:grid-cols-12 gap-12 items-start mb-16 md:mb-32 stagger-container">
-            <div class="md:col-span-5">
-                <span class="mono opacity-30 mb-6 md:mb-8 block text-[9px] md:text-[10px]">Protocolo_V.01</span>
-                <h3 class="serif text-5xl md:text-7xl italic leading-[0.9] mb-8 md:mb-12 chrome-text">Ritual <br>da Forma</h3>
-            </div>
-            <div class="md:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-                <div class="border-l border-black/10 pl-6 md:pl-10">
-                    <h4 class="serif text-2xl md:text-3xl italic mb-4 md:mb-6">01 Projeção</h4>
-                    <p class="mono opacity-40 leading-relaxed text-[9px] md:text-[10px]">Vaporize a 15cm dos pontos de pulso. Permita a ativação sob a luz ambiente.</p>
-                </div>
-                <div class="border-l border-black/10 pl-6 md:pl-10">
-                    <h4 class="serif text-2xl md:text-3xl italic mb-4 md:mb-6">02 Evolução</h4>
-                    <p class="mono opacity-40 leading-relaxed text-[9px] md:text-[10px]">Não friccione as mãos. Deixe que a arquitetura das notas decante organicamente sobre a pele.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="reveal flex justify-center">
-            <div class="img-container w-full max-w-[280px]">
-                <img src="https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img13.png" class="w-full h-auto">
-            </div>
-        </div>
-    </section>
-
-    <section id="history" class="relative py-24 md:py-48 max-w-[1800px] mx-auto px-6 md:px-12 border-b border-black/5 stagger-container">
-        <div class="max-w-4xl">
-            <span class="mono opacity-30 mb-8 md:mb-10 block text-[9px] md:text-[10px]">Log_Legado_Brasil</span>
-            <h2 class="serif text-6xl md:text-8xl italic mb-12 md:mb-16 chrome-text">Origem</h2>
-            <p class="mono text-[12px] md:text-[14px] leading-[2.6] opacity-50 mb-16 md:mb-20">
-                Nascida do desejo de unir o talento nacional às mais nobres essências mundiais. Parfums encapsulados em um design de metal líquido holográfico que desafia a forma tradicional.
-            </p>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16">
-                <div class="reveal">
-                    <div class="serif text-6xl md:text-7xl mb-4 font-light">100%</div>
-                    <div class="mono opacity-30 text-[9px]">Essências Nobres</div>
-                </div>
-                <div class="reveal" style="transition-delay: 0.3s;">
-                    <div class="serif text-6xl md:text-7xl mb-4 font-light">03</div>
-                    <div class="mono opacity-30 text-[9px]">Anos de Pesquisa</div>
-                </div>
-                <div class="reveal" style="transition-delay: 0.6s;">
-                    <div class="serif text-6xl md:text-7xl mb-4 font-light">BR</div>
-                    <div class="mono opacity-30 text-[9px]">Origem Molecular</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="py-24 md:py-40 max-w-[1800px] mx-auto px-6 md:px-12 opacity-40">
-        <div class="flex flex-col md:flex-row justify-between items-start gap-12 md:gap-20">
-            <div>
-                <h2 class="serif text-3xl md:text-4xl mb-6 md:mb-8 tracking-[0.5em] chrome-text">AYRA</h2>
-                <p class="mono text-[8px] md:text-[9px]">© 2026. Todos os direitos reservados </p>
-            </div>
-            <div class="mono space-y-4 text-[8px] md:text-[9px]">
-                <a href="https://www.instagram.com/use.ayra/" target="_blank" class="block hover:text-blue-400 transition">Instagram @use.ayra</a>
-                <span class="block">WhatsApp +55 62 99354 0281</span>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Interface Carrinho -->
-    <div id="cart-overlay" class="cart-overlay" onclick="closeCart()"></div>
-    <div id="cart-panel" class="cart-panel">
-        <div class="p-8 border-b border-black/5 flex justify-between items-center">
-            <h3 class="serif text-2xl italic">Carrinho</h3>
-            <button onclick="closeCart()" class="mono text-[10px] opacity-40 hover:opacity-100">Fechar_×</button>
-        </div>
-        <div class="flex-1 overflow-y-auto p-8" id="cart-items">
-            <div id="empty-cart" class="h-full flex items-center justify-center mono opacity-20 text-[10px]">
-                Armazenamento_Vazio
-            </div>
-        </div>
-        <div class="p-8 border-t border-black/5 space-y-6">
-            <div class="flex justify-between mono text-[11px]">
-                <span class="opacity-40">Estimativa_Total</span>
-                <span id="cart-total">R$ 0</span>
-            </div>
-            <button onclick="checkoutWhatsApp()" class="w-full bg-black text-white py-6 mono text-[10px] hover:bg-zinc-800 transition-colors">
-                Finalizar_Protocolo_Pedido
-            </button>
-        </div>
+  <!-- ASSIRAL -->
+  <div class="product-section" style="direction:rtl">
+    <div class="product-info sr" style="direction:ltr">
+      <p class="product-index">Spec_002 — Assiral</p>
+      <h2 class="product-name chrome-text chrome-text-animated">Assiral</h2>
+      <div class="notes-grid">
+        <div class="note-group"><div class="note-label">Topo</div>Pimenta Rosa<br>Cardamomo</div>
+        <div class="note-group"><div class="note-label">Corpo</div>Íris Branca<br>Cedro Atlas</div>
+        <div class="note-group"><div class="note-label">Fundo</div>Sândalo<br>Âmbar Cinza</div>
+      </div>
+      <p class="product-desc">A antítese do calor. Uma fragrância mineral e gélida que utiliza especiarias frias e madeiras nobres para criar uma aura de mistério e precisão absoluta.</p>
+      <div class="product-footer">
+        <div class="product-price">R$ 189</div>
+        <button class="add-btn" onclick="addToCart('Assiral 25ml', 189)">Fazer seu pedido</button>
+      </div>
     </div>
+    <div class="product-visual sr sr-d2" style="direction:ltr">
+      <div class="product-visual-inner">
+        <img class="product-img" src="https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img11.png" alt="Assiral Parfum" onerror="this.src='https://placehold.co/600x800/EEE/999?text=Assiral'">
+      </div>
+    </div>
+  </div>
 
-    <div id="toast" class="toast">Adicionado ao Carrinho</div>
+</section>
 
-    <script>
-        const music = document.getElementById('bg-music');
-        const audioBtn = document.getElementById('audio-toggle');
-        const neonL = document.getElementById('neon-l');
-        const neonR = document.getElementById('neon-r');
-        const cartPanel = document.getElementById('cart-panel');
-        const cartOverlay = document.getElementById('cart-overlay');
-        const cartItemsContainer = document.getElementById('cart-items');
-        const cartCount = document.getElementById('cart-count');
-        const cartTotal = document.getElementById('cart-total');
-        const toast = document.getElementById('toast');
+<!-- GALLERY -->
+<div class="gallery-strip">
+  <div class="gallery-item sr"><img src="https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img15.png" alt=""></div>
+  <div class="gallery-item sr sr-d1"><img src="https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img17.png" alt=""></div>
+  <div class="gallery-item sr sr-d2"><img src="https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img16.png" alt=""></div>
+  <div class="gallery-item sr sr-d3"><img src="https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img12.png" alt=""></div>
+</div>
 
-        let cart = [];
+<!-- RITUAL -->
+<section id="protocol" class="ritual-section">
+  <div class="sr">
+    <p class="ritual-eyebrow">Protocolo_V.01</p>
+    <h3 class="ritual-title chrome-text chrome-text-animated">Ritual<br>da<br>Forma</h3>
+    <div class="ritual-image-wrap">
+      <img class="ritual-img sr sr-d2" src="https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img13.png" alt="Ritual" onerror="this.src='https://placehold.co/300x400/EEE/999?text=Ritual'">
+    </div>
+  </div>
+  <div class="ritual-steps sr sr-d1">
+    <div class="ritual-step">
+      <div class="step-num">01</div>
+      <h4 class="step-title">Projeção</h4>
+      <p class="step-desc">Vaporize a 15cm dos pontos de pulso. Permita a ativação sob a luz ambiente.</p>
+    </div>
+    <div class="ritual-step sr-d2">
+      <div class="step-num">02</div>
+      <h4 class="step-title">Evolução</h4>
+      <p class="step-desc">Não friccione as mãos. Deixe que a arquitetura das notas decante organicamente sobre a pele.</p>
+    </div>
+  </div>
+</section>
 
-        // Função robusta para iniciar áudio
-        async function startExperience() {
-            document.getElementById('start-overlay').style.opacity = '0';
-            setTimeout(async () => {
-                document.getElementById('start-overlay').style.display = 'none';
-                
-                // Tenta tocar o áudio. Browsers exigem interação do usuário (clique)
-                music.volume = 0.5;
-                try {
-                    const playPromise = music.play();
-                    if (playPromise !== undefined) {
-                        playPromise.then(() => {
-                            updateAudioUI(true);
-                        }).catch(error => {
-                            console.log("Auto-play impedido:", error);
-                            updateAudioUI(false);
-                        });
-                    }
-                } catch (e) { 
-                    updateAudioUI(false);
-                }
-            }, 2000);
-        }
+<!-- ORIGIN -->
+<section id="history" class="origin-section">
+  <div class="origin-header sr">
+    <p class="origin-eyebrow">Log_Legado_Brasil</p>
+    <h2 class="origin-title chrome-text chrome-text-animated">Origem</h2>
+    <p class="origin-body">Nascida do desejo de unir o talento nacional às mais nobres essências mundiais. Parfums encapsulados em design de metal líquido holográfico que desafia a forma tradicional.</p>
+  </div>
+  <div class="stats-row">
+    <div class="stat-cell sr">
+      <div class="stat-num chrome-text chrome-text-animated">100%</div>
+      <div class="stat-label">Essências Nobres</div>
+    </div>
+    <div class="stat-cell sr sr-d1">
+      <div class="stat-num chrome-text chrome-text-animated">03</div>
+      <div class="stat-label">Anos de Pesquisa</div>
+    </div>
+    <div class="stat-cell sr sr-d2">
+      <div class="stat-num chrome-text chrome-text-animated">BR</div>
+      <div class="stat-label">Origem Molecular</div>
+    </div>
+  </div>
+</section>
 
-        async function toggleAudio() {
-            if (music.paused) {
-                try { await music.play(); updateAudioUI(true); } catch (err) {}
-            } else {
-                music.pause(); updateAudioUI(false);
-            }
-        }
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo">AYRA</div>
+    <p class="footer-copy">© 2026 — Todos os direitos reservados</p>
+  </div>
+  <div class="footer-links">
+    <a href="https://www.instagram.com/use.ayra/" target="_blank">Instagram @use.ayra</a>
+    <span>WhatsApp +55 62 99354-0281</span>
+  </div>
+</footer>
 
-        function updateAudioUI(isPlaying) {
-            if(audioBtn) audioBtn.innerText = isPlaying ? "Áudio_ON" : "Áudio_OFF";
-            if(isPlaying) {
-                neonL.classList.add('neon-active');
-                neonR.classList.add('neon-active');
-            } else {
-                neonL.classList.remove('neon-active');
-                neonR.classList.remove('neon-active');
-            }
-        }
+<!-- CART PANEL -->
+<div id="cart-overlay" class="cart-overlay" onclick="closeCart()"></div>
+<div id="cart-panel" class="cart-panel">
+  <div class="cart-head">
+    <h3 class="cart-title">Carrinho</h3>
+    <button class="cart-close" onclick="closeCart()">Fechar ×</button>
+  </div>
+  <div class="cart-body" id="cart-body">
+    <div class="empty-msg">Armazenamento_Vazio</div>
+  </div>
+  <div class="cart-foot">
+    <div class="cart-total-row">
+      <span class="cart-total-label">Total Estimado</span>
+      <span class="cart-total-val" id="cart-total">R$ 0</span>
+    </div>
+    <button class="checkout-btn" onclick="checkoutWhatsApp()">Finalizar_Protocolo_Pedido</button>
+  </div>
+</div>
 
-        function openCart() {
-            cartPanel.classList.add('open');
-            cartOverlay.classList.add('open');
-            renderCart();
-        }
+<div id="toast" class="toast">Adicionado ao Carrinho</div>
 
-        function closeCart() {
-            cartPanel.classList.remove('open');
-            cartOverlay.classList.remove('open');
-        }
+<script>
+/* CURSOR */
+const cur=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+function animRing(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing)}
+animRing();
 
-        function addToCart(name, price) {
-            const existingItem = cart.find(i => i.name === name);
-            if (existingItem) {
-                existingItem.qty++;
-            } else {
-                cart.push({ name, price, qty: 1 });
-            }
-            showToast();
-            updateCartCount();
-        }
+/* LIQUID CANVAS */
+const canvas=document.getElementById('liquid-canvas');
+const ctx=canvas.getContext('2d');
+let W,H,blobs=[];
 
-        function updateCartCount() {
-            const totalQty = cart.reduce((acc, item) => acc + item.qty, 0);
-            cartCount.innerText = totalQty;
-        }
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}
+resize();window.addEventListener('resize',resize);
 
-        function showToast() {
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2000);
-        }
+function makeBlob(x,y,r,c,vx,vy){return{x,y,r,c,vx,vy,ox:x,oy:y,t:Math.random()*1000}}
 
-        function removeItem(name) {
-            cart = cart.filter(i => i.name !== name);
-            renderCart();
-            updateCartCount();
-        }
+const palette=[
+  ['rgba(201,240,255,',  'rgba(255,214,240,'],
+  ['rgba(214,201,255,',  'rgba(201,255,214,'],
+  ['rgba(255,245,200,',  'rgba(201,240,255,'],
+];
 
-        function renderCart() {
-            if (cart.length === 0) {
-                cartItemsContainer.innerHTML = `<div class="h-full flex items-center justify-center mono opacity-20 text-[10px]">Armazenamento_Vazio</div>`;
-                cartTotal.innerText = `R$ 0`;
-                return;
-            }
+blobs=[
+  makeBlob(W*0.15,H*0.2,Math.min(W,H)*0.45,palette[0],0.12,-0.08),
+  makeBlob(W*0.75,H*0.7,Math.min(W,H)*0.38,palette[1],-0.10,0.06),
+  makeBlob(W*0.5,H*0.5,Math.min(W,H)*0.30,palette[2],0.07,0.12),
+];
 
-            let total = 0;
-            cartItemsContainer.innerHTML = cart.map(item => {
-                total += item.price * item.qty;
-                return `
-                    <div class="flex justify-between items-center mb-8 pb-8 border-b border-black/5">
-                        <div>
-                            <div class="serif text-xl italic">${item.name}</div>
-                            <div class="mono text-[9px] opacity-40">Qtd: ${item.qty}</div>
-                        </div>
-                        <div class="text-right">
-                            <div class="mono text-[10px]">R$ ${item.price * item.qty}</div>
-                            <button onclick="removeItem('${item.name}')" class="mono text-[8px] text-red-400 mt-2">Remover_×</button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-            cartTotal.innerText = `R$ ${total}`;
-        }
+let scrollY=0;
+window.addEventListener('scroll',()=>{scrollY=window.scrollY},{passive:true});
 
-        function checkoutWhatsApp() {
-            if (cart.length === 0) return;
-            const phoneNumber = "5562993540281";
-            let message = `Olá! Gostaria de processar um protocolo de pedido na AYRA.\n\n*Resumo:* \n`;
-            let total = 0;
-            
-            cart.forEach(item => {
-                message += `- ${item.qty}x ${item.name} (R$ ${item.price * item.qty})\n`;
-                total += item.price * item.qty;
-            });
-            
-            message += `\n*Total Estimado:* R$ ${total}\n\nAguardando confirmação de pagamento.`;
-            window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
-        }
+function drawBlob(b,t){
+  const sx=b.x+Math.sin(t*0.0006+b.t)*120;
+  const sy=b.y+Math.cos(t*0.0005+b.t)*80 - scrollY*0.15;
+  const grad=ctx.createRadialGradient(sx,sy,0,sx,sy,b.r);
+  grad.addColorStop(0,b.c[0]+'0.55)');
+  grad.addColorStop(0.5,b.c[1]+'0.35)');
+  grad.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.beginPath();
+  ctx.arc(sx,sy,b.r+Math.sin(t*0.0008)*b.r*0.12,0,Math.PI*2);
+  ctx.fillStyle=grad;
+  ctx.fill();
+}
 
-        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -10% 0px' };
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
+function loop(t){
+  ctx.clearRect(0,0,W,H);
+  blobs.forEach(b=>drawBlob(b,t));
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
 
-        document.querySelectorAll('.reveal, .stagger-container').forEach(el => observer.observe(el));
-    </script>
+/* PARALLAX on scroll */
+window.addEventListener('scroll',()=>{
+  const sy=window.scrollY;
+  document.querySelectorAll('.product-visual').forEach((el,i)=>{
+    el.style.transform=`translateY(${sy*(i%2===0?0.04:-0.04)}px)`;
+  });
+},{passive:true});
+
+/* AUDIO */
+const music=document.getElementById('bg-music');
+const audioBtn=document.getElementById('audio-toggle');
+const neonL=document.getElementById('neon-l');
+const neonR=document.getElementById('neon-r');
+
+function updateAudioUI(on){
+  if(audioBtn)audioBtn.textContent=on?'Áudio_ON':'Áudio_OFF';
+  neonL.classList.toggle('neon-active',on);
+  neonR.classList.toggle('neon-active',on);
+}
+
+async function startExperience(){
+  document.getElementById('start-overlay').classList.add('hidden');
+  music.volume=0.4;
+  try{
+    const p=music.play();
+    if(p)p.then(()=>updateAudioUI(true)).catch(()=>updateAudioUI(false));
+  }catch(e){updateAudioUI(false)}
+}
+
+async function toggleAudio(){
+  if(music.paused){try{await music.play();updateAudioUI(true)}catch(e){}}
+  else{music.pause();updateAudioUI(false)}
+}
+
+/* CART */
+let cart=[];
+const cartPanel=document.getElementById('cart-panel');
+const cartOverlay=document.getElementById('cart-overlay');
+const cartBody=document.getElementById('cart-body');
+const cartCount=document.getElementById('cart-count');
+const cartTotal=document.getElementById('cart-total');
+const toast=document.getElementById('toast');
+
+function openCart(){cartPanel.classList.add('open');cartOverlay.classList.add('open');renderCart()}
+function closeCart(){cartPanel.classList.remove('open');cartOverlay.classList.remove('open')}
+
+function addToCart(name,price){
+  const item=cart.find(i=>i.name===name);
+  if(item)item.qty++;else cart.push({name,price,qty:1});
+  showToast();
+  cartCount.textContent=cart.reduce((a,i)=>a+i.qty,0);
+}
+
+function removeItem(name){cart=cart.filter(i=>i.name!==name);renderCart();cartCount.textContent=cart.reduce((a,i)=>a+i.qty,0)}
+
+function renderCart(){
+  if(!cart.length){
+    cartBody.innerHTML='<div class="empty-msg">Armazenamento_Vazio</div>';
+    cartTotal.textContent='R$ 0';return;
+  }
+  let total=0;
+  cartBody.innerHTML=cart.map(item=>{
+    total+=item.price*item.qty;
+    return`<div class="cart-item">
+      <div><div class="cart-item-name">${item.name}</div><div class="cart-item-qty">Qtd: ${item.qty}</div></div>
+      <div class="cart-item-price">R$ ${item.price*item.qty}<button class="remove-btn" onclick="removeItem('${item.name}')">Remover ×</button></div>
+    </div>`;
+  }).join('');
+  cartTotal.textContent=`R$ ${total}`;
+}
+
+function showToast(){toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2000)}
+
+function checkoutWhatsApp(){
+  if(!cart.length)return;
+  const ph='5562993540281';
+  let msg='Olá! Gostaria de processar um protocolo de pedido na AYRA.\n\n*Resumo:*\n';
+  let total=0;
+  cart.forEach(i=>{msg+=`- ${i.qty}x ${i.name} (R$ ${i.price*i.qty})\n`;total+=i.price*i.qty});
+  msg+=`\n*Total Estimado:* R$ ${total}\n\nAguardando confirmação de pagamento.`;
+  window.open(`https://wa.me/${ph}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+/* SCROLL REVEAL */
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')});
+},{threshold:0.08,rootMargin:'0px 0px -5% 0px'});
+document.querySelectorAll('.sr').forEach(el=>observer.observe(el));
+</script>
 </body>
 </html>
