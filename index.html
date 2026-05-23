@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>AYRA brasil</title>
+<title>AYRA Brasil | Loja Oficial</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=Syne:wght@400;500;600;700;800&family=Syne+Mono&display=swap" rel="stylesheet">
 <style>
@@ -165,6 +165,8 @@ nav{
   backdrop-filter:blur(20px);
   cursor:none;
   transition:all 0.4s ease;
+  text-decoration:none;
+  color:var(--ink);
 }
 .nav-btn:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 
@@ -258,10 +260,108 @@ header{
 }
 @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-/* SECTION BASE */
+/* ==========================================================================
+   E-COMMERCE SHOP GRID
+   ========================================================================== */
+.shop-section {
+  padding: 120px 64px;
+  position: relative;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+@media(max-width:768px){ .shop-section { padding: 80px 20px; } }
+
+.shop-header-row {
+  display: flex; justify-content: space-between; align-items: flex-end; 
+  margin-bottom: 64px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 24px;
+}
+@media(max-width:600px){ .shop-header-row { flex-direction: column; align-items: flex-start; gap: 24px; } }
+
+.shop-title-wrap { display: flex; flex-direction: column; gap: 8px; }
+.shop-subtitle { font-family: 'Syne Mono', monospace; font-size: 10px; letter-spacing: 0.4em; text-transform: uppercase; opacity: 0.4; }
+.shop-title { font-family: 'DM Serif Display', serif; font-size: clamp(40px, 6vw, 72px); font-style: italic; line-height: 1; }
+
+.grid-container {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+}
+@media(max-width: 1024px){.grid-container{grid-template-columns: repeat(2, 1fr);}}
+@media(max-width: 600px){.grid-container{grid-template-columns: 1fr;}}
+
+.prod-card {
+  background: rgba(245, 242, 237, 0.4);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0,0,0,0.08);
+  padding: 24px; display: flex; flex-direction: column;
+  transition: background 0.4s ease, border-color 0.4s ease, transform 0.4s ease;
+}
+.prod-card:hover { 
+  background: rgba(255,255,255,0.8); 
+  border-color: rgba(0,0,0,0.15); 
+  transform: translateY(-4px); 
+}
+
+.prod-img-box {
+  aspect-ratio: 4/5; position: relative; overflow: hidden; margin-bottom: 24px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.02);
+}
+.prod-tag {
+  position: absolute; top: 12px; left: 12px; background: var(--ink); color: var(--paper);
+  font-family: 'Syne Mono', monospace; font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase;
+  padding: 6px 12px; z-index: 5;
+}
+.prod-img { width: 100%; height: 100%; object-fit: contain; padding: 20px; transition: opacity 0.5s ease, transform 1s ease; }
+.prod-img-hover { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease, transform 1s ease; transform: scale(1.05); }
+
+.prod-card:hover .prod-img-main { opacity: 0; }
+.prod-card:hover .prod-img-hover { opacity: 1; transform: scale(1); }
+
+/* CARROSSEL DE IMAGENS (NOVO) */
+.prod-carousel-wrap {
+  position: relative; aspect-ratio: 4/5; margin-bottom: 24px;
+  background: rgba(0,0,0,0.05); overflow: hidden;
+}
+.prod-carousel {
+  display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+  scrollbar-width: none; width: 100%; height: 100%; scroll-behavior: smooth;
+}
+.prod-carousel::-webkit-scrollbar { display: none; }
+.prod-carousel img {
+  flex: 0 0 100%; width: 100%; height: 100%;
+  object-fit: contain; padding: 20px; scroll-snap-align: start;
+}
+.carousel-btn {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: rgba(255,255,255,0.8); border: 1px solid rgba(0,0,0,0.1);
+  color: var(--ink); width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: none; z-index: 10; font-family: sans-serif; font-size: 16px;
+  transition: all 0.3s; opacity: 0;
+}
+.prod-carousel-wrap:hover .carousel-btn { opacity: 1; }
+.carousel-btn:hover { background: var(--ink); color: var(--paper); }
+.carousel-btn.left { left: 8px; }
+.carousel-btn.right { right: 8px; }
+
+.prod-info { flex: 1; display: flex; flex-direction: column; }
+.prod-name { font-family: 'DM Serif Display', serif; font-size: 28px; font-style: italic; margin-bottom: 4px; }
+.prod-size { font-family: 'Syne Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.4; margin-bottom: 16px; }
+
+.prod-bot { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 16px; border-top: 1px solid rgba(0,0,0,0.06); }
+.prod-price { font-family: 'Syne', sans-serif; font-weight: 600; font-size: 16px; }
+
+.add-btn-small {
+  font-family: 'Syne Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+  border: 1px solid rgba(0,0,0,0.12); padding: 10px 20px; background: transparent; cursor: none;
+  transition: all 0.4s ease; color: var(--ink);
+}
+.add-btn-small:hover { background: var(--ink); color: var(--paper); }
+
+
+/* ==========================================================================
+   IMMERSIVE SECTION (DEEP DIVE)
+   ========================================================================== */
 section{position:relative;overflow:hidden}
 
-/* PRODUCT SECTION */
 .product-section{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -303,17 +403,27 @@ section{position:relative;overflow:hidden}
 .product-desc{
   font-family:'Syne',sans-serif;font-weight:400;
   font-size:14px;line-height:2;opacity:0.5;
-  margin-bottom:48px;max-width:400px;
+  margin-bottom:32px;max-width:400px;
 }
+
+/* VARIANT SELECTOR (NEW) */
+.variant-selector {
+  display: flex; gap: 8px; margin-bottom: 24px; max-width: 400px;
+}
+.variant-btn {
+  flex: 1; padding: 16px 12px;
+  font-family: 'Syne Mono', monospace; font-size: 9px; letter-spacing: 0.15em;
+  text-transform: uppercase; background: transparent;
+  border: 1px solid rgba(0,0,0,0.12); color: var(--ink);
+  cursor: none; transition: all 0.3s ease;
+}
+.variant-btn.active {
+  background: var(--ink); color: var(--paper); border-color: var(--ink);
+}
+.variant-btn:hover:not(.active) { background: rgba(0,0,0,0.05); }
 
 .product-footer{
-  display:flex;justify-content:space-between;align-items:flex-end;
-  flex-wrap:wrap;gap:24px;
-}
-
-.product-price{
-  font-family:'DM Serif Display',serif;
-  font-size:48px;font-weight:400;
+  display:flex; flex-direction:column; gap:16px; max-width: 400px;
 }
 
 .add-btn{
@@ -321,10 +431,10 @@ section{position:relative;overflow:hidden}
   font-size:9px;letter-spacing:0.4em;
   text-transform:uppercase;
   border:1px solid rgba(0,0,0,0.12);
-  padding:18px 32px;
+  padding:20px; text-align: center;
   background:transparent;cursor:none;
   transition:all 0.8s ease;
-  color:var(--ink);
+  color:var(--ink); width: 100%;
 }
 .add-btn:hover{background:var(--ink);color:var(--paper)}
 
@@ -348,7 +458,7 @@ section{position:relative;overflow:hidden}
   width:100%;height:auto;
   display:block;
   position:relative;z-index:2;
-  transition:transform 2s cubic-bezier(0.2,1,0.2,1);
+  transition:transform 2s cubic-bezier(0.2,1,0.2,1), opacity 0.4s ease;
 }
 .product-visual:hover .product-img{transform:scale(1.04) translateY(-8px)}
 
@@ -365,25 +475,44 @@ section{position:relative;overflow:hidden}
   pointer-events:none;z-index:3;
 }
 
-/* GALLERY STRIP */
-.gallery-strip{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  border-bottom:1px solid rgba(0,0,0,0.06);
+/* ==========================================================================
+   AUTO-SCROLLING GALLERY STRIP
+   ========================================================================== */
+.gallery-strip-container {
+  overflow: hidden;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  padding: 40px 0;
+  background: rgba(0,0,0,0.02);
+  white-space: nowrap;
 }
-@media(max-width:600px){.gallery-strip{grid-template-columns:repeat(2,1fr)}}
+.gallery-track {
+  display: inline-flex;
+  gap: 20px;
+  padding-left: 20px;
+  animation: autoScroll 35s linear infinite;
+}
+.gallery-track:hover {
+  animation-play-state: paused;
+}
+.gallery-item {
+  width: clamp(220px, 20vw, 300px);
+  aspect-ratio: 4/5;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.4);
+  border: 1px solid rgba(0,0,0,0.04);
+}
+.gallery-item img {
+  width: 100%; height: 100%; object-fit: contain; padding: 20px;
+  transition: transform 2.5s cubic-bezier(0.2,1,0.2,1);
+}
+.gallery-item:hover img { transform: scale(1.08); }
 
-.gallery-item{
-  aspect-ratio:4/5;overflow:hidden;
-  border-right:1px solid rgba(0,0,0,0.06);
-  position:relative;
+@keyframes autoScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(-50% - 10px)); }
 }
-.gallery-item:last-child{border-right:none}
-.gallery-item img{
-  width:100%;height:100%;object-fit:cover;
-  transition:transform 2.5s cubic-bezier(0.2,1,0.2,1);
-}
-.gallery-item:hover img{transform:scale(1.08)}
 
 /* RITUAL SECTION */
 .ritual-section{
@@ -625,6 +754,7 @@ footer{
 .h-scroll-title{
   white-space:nowrap;
   overflow:hidden;
+  border-top:1px solid rgba(0,0,0,0.06);
   border-bottom:1px solid rgba(0,0,0,0.06);
   padding:32px 0;
 }
@@ -643,12 +773,6 @@ footer{
 #audio-toggle{display:none}
 @media(min-width:769px){#audio-toggle{display:block}}
 
-/* DIVIDER LINE */
-.divider-line{
-  height:1px;
-  background:linear-gradient(to right,transparent,rgba(0,0,0,0.08),transparent);
-  border:none;margin:0;
-}
 </style>
 </head>
 <body>
@@ -659,6 +783,7 @@ footer{
 <canvas id="liquid-canvas"></canvas>
 <div id="chrome-noise"></div>
 
+<!-- Atualizado com seu novo repositório -->
 <audio id="bg-music" loop crossorigin="anonymous" preload="auto">
   <source src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Driftline.mp3" type="audio/mpeg">
 </audio>
@@ -677,6 +802,7 @@ footer{
 <nav>
   <a href="#" class="nav-logo chrome-text">AYRA</a>
   <div class="nav-right">
+    <a href="#shop" class="nav-btn" style="border-color:transparent; background:transparent;">Catálogo</a>
     <button id="audio-toggle" class="nav-btn" onclick="toggleAudio()">Áudio_OFF</button>
     <button class="nav-btn" onclick="openCart()">Carrinho(<span id="cart-count">0</span>)</button>
   </div>
@@ -692,9 +818,9 @@ footer{
     <h1 class="hero-title chrome-text chrome-text-animated">AYRA</h1>
     <div class="hero-subtitle-row">
       <p class="hero-desc">
-        O melhor da perfumaria.<br>Feito no Brasil.<br>Perfumne design
+        O melhor da perfumaria.<br>Feito no Brasil.<br>Perfume design
       </p>
-      <a href="#collection" class="hero-cta">Explorar.Portfólio →</a>
+      <a href="#shop" class="hero-cta">Comprar Agora →</a>
     </div>
   </div>
 </header>
@@ -707,17 +833,149 @@ footer{
     <span>Feito no Brasil</span><span>◆</span>
     <span>O melhor</span><span>◆</span>
     <span>Edição Chrome</span><span>◆</span>
-    <span>25ml</span><span>◆</span>
+    <span>Discovery 5ml</span><span>◆</span>
     <span>Ayra Brasil</span><span>◆</span>
     <span>Essências Nobres</span><span>◆</span>
     <span>Feito no Brasil</span><span>◆</span>
     <span>o melhor</span><span>◆</span>
     <span>Edição Chrome</span><span>◆</span>
-    <span>25ml</span><span>◆</span>
+    <span>Discovery 5ml</span><span>◆</span>
   </div>
 </div>
 
-<!-- COLLECTION -->
+<!-- NOVO: E-COMMERCE SHOP GRID -->
+<section id="shop" class="shop-section">
+  <div class="shop-header-row sr">
+    <div class="shop-title-wrap">
+      <span class="shop-subtitle">Catálogo Exclusivo</span>
+      <h2 class="shop-title chrome-text chrome-text-animated">A Coleção</h2>
+    </div>
+    <a href="#collection" class="nav-btn" style="background:transparent; border:none; text-decoration:underline;">Ver Notas Olfativas ↓</a>
+  </div>
+
+  <div class="grid-container">
+    
+    <!-- Argentum 30ml -->
+    <div class="prod-card sr">
+      <div class="prod-carousel-wrap">
+        <div class="prod-tag">Mais Vendido</div>
+        <button class="carousel-btn left" onclick="scrollCarousel(this, -1)">‹</button>
+        <button class="carousel-btn right" onclick="scrollCarousel(this, 1)">›</button>
+        <div class="prod-carousel">
+          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-1.png" alt="Argentum 30ml 1" onerror="this.src='https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img11.png'">
+          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-2.png" alt="Argentum 30ml 2">
+          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-3.png" alt="Argentum 30ml 3">
+          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-4.png" alt="Argentum 30ml 4">
+        </div>
+      </div>
+      <div class="prod-info">
+        <h3 class="prod-name">Argentum</h3>
+        <p class="prod-size">Parfum · 30ml · Frasco Chrome</p>
+        <div class="prod-bot">
+          <span class="prod-price">R$ 149,90</span>
+          <button class="add-btn-small" onclick="addToCart('Argentum 30ml', 149.90)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Assiral 30ml -->
+    <div class="prod-card sr sr-d1">
+      <div class="prod-carousel-wrap">
+        <button class="carousel-btn left" onclick="scrollCarousel(this, -1)">‹</button>
+        <button class="carousel-btn right" onclick="scrollCarousel(this, 1)">›</button>
+        <div class="prod-carousel">
+          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-1.png" alt="Assiral 30ml 1" onerror="this.src='https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img11.png'">
+          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-2.png" alt="Assiral 30ml 2">
+          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-3.png" alt="Assiral 30ml 3">
+          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-4.png" alt="Assiral 30ml 4">
+          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-5.png" alt="Assiral 30ml 5">
+        </div>
+      </div>
+      <div class="prod-info">
+        <h3 class="prod-name">Assiral</h3>
+        <p class="prod-size">Parfum · 30ml · Frasco Chrome</p>
+        <div class="prod-bot">
+          <span class="prod-price">R$ 149,90</span>
+          <button class="add-btn-small" onclick="addToCart('Assiral 30ml', 149.90)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Argentum 5ml (Carrossel) -->
+    <div class="prod-card sr sr-d2">
+      <div class="prod-carousel-wrap">
+        <div class="prod-tag" style="background:#555">Discovery</div>
+        <button class="carousel-btn left" onclick="scrollCarousel(this, -1)">‹</button>
+        <button class="carousel-btn right" onclick="scrollCarousel(this, 1)">›</button>
+        <div class="prod-carousel">
+          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(1).png" alt="Argentum 5ml 1">
+          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(2).png" alt="Argentum 5ml 2">
+          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(3).png" alt="Argentum 5ml 3">
+          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(4).png" alt="Argentum 5ml 4">
+          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(5).png" alt="Argentum 5ml 5">
+          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(6).png" alt="Argentum 5ml 6">
+          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(7).png" alt="Argentum 5ml 7">
+          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(8).png" alt="Argentum 5ml 8">
+        </div>
+      </div>
+      <div class="prod-info">
+        <h3 class="prod-name">Argentum</h3>
+        <p class="prod-size">Parfum · 5ml · Discovery Size</p>
+        <div class="prod-bot">
+          <span class="prod-price">R$ 25,00</span>
+          <button class="add-btn-small" onclick="addToCart('Argentum 5ml', 25)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Assiral 5ml (Carrossel) -->
+    <div class="prod-card sr sr-d3">
+      <div class="prod-carousel-wrap">
+        <div class="prod-tag" style="background:#555">Discovery</div>
+        <button class="carousel-btn left" onclick="scrollCarousel(this, -1)">‹</button>
+        <button class="carousel-btn right" onclick="scrollCarousel(this, 1)">›</button>
+        <div class="prod-carousel">
+          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(1).png" alt="Assiral 5ml 1">
+          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(2).png" alt="Assiral 5ml 2">
+          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(3).png" alt="Assiral 5ml 3">
+          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(4).png" alt="Assiral 5ml 4">
+          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(5).png" alt="Assiral 5ml 5">
+          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(6).png" alt="Assiral 5ml 6">
+          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(7).png" alt="Assiral 5ml 7">
+        </div>
+      </div>
+      <div class="prod-info">
+        <h3 class="prod-name">Assiral</h3>
+        <p class="prod-size">Parfum · 5ml · Discovery Size</p>
+        <div class="prod-bot">
+          <span class="prod-price">R$ 25,00</span>
+          <button class="add-btn-small" onclick="addToCart('Assiral 5ml', 25)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- H-SCROLL DIVIDER -->
+<div class="h-scroll-title">
+  <div class="h-scroll-inner chrome-text">
+    <span>Experiência Imersiva</span>
+    <span>·</span>
+    <span>Holográfico</span>
+    <span>·</span>
+    <span>Brasil</span>
+    <span>·</span>
+    <span>2026</span>
+    <span>·</span>
+    <span>Notas Olfativas</span>
+    <span>·</span>
+    <span>Ayra Brasil</span>
+    <span>·</span>
+  </div>
+</div>
+
+<!-- COLLECTION (IMMERSIVE SECTIONS) -->
 <section id="collection">
 
   <!-- ARGENTUM -->
@@ -731,33 +989,21 @@ footer{
         <div class="note-group"><div class="note-label">Fundo</div>Patchouli<br>Amêndoa</div>
       </div>
       <p class="product-desc">Uma construção arquitetônica líquida. Notas cítricas que evoluem para um núcleo denso de frutas brasileiras e um fundo amendoado de alta fixação.</p>
+      
+      <!-- Variant Selector -->
+      <div class="variant-selector">
+        <button class="variant-btn btn-arg active" id="btn-arg-30" onclick="selectVariant('arg', 30, 149.90, 'Argentum 30ml', 'https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-1.png')">30ML / R$ 149,90</button>
+        <button class="variant-btn btn-arg" id="btn-arg-5" onclick="selectVariant('arg', 5, 25, 'Argentum 5ml', 'https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(1).png')">5ML / R$ 25,00</button>
+      </div>
+
       <div class="product-footer">
-        <div class="product-price">R$ 189</div>
-        <button class="add-btn" onclick="addToCart('Argentum 25ml', 189)">Fazer seu pedido</button>
+        <button class="add-btn" id="add-arg" onclick="addToCart('Argentum 30ml', 149.90)">Adicionar ao Carrinho</button>
       </div>
     </div>
     <div class="product-visual sr sr-d2">
       <div class="product-visual-inner">
-        <img class="product-img" src="https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img11.png" alt="Argentum Parfum" onerror="this.src='https://placehold.co/600x800/EEE/999?text=Argentum'">
+        <img id="img-arg" class="product-img" src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-1.png" alt="Argentum Parfum" onerror="this.src='https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img11.png'">
       </div>
-    </div>
-  </div>
-
-  <!-- H-SCROLL DIVIDER -->
-  <div class="h-scroll-title">
-    <div class="h-scroll-inner chrome-text">
-      <span>Metal Líquido</span>
-      <span>·</span>
-      <span>Holográfico</span>
-      <span>·</span>
-      <span>Brasil</span>
-      <span>·</span>
-      <span>2026</span>
-      <span>·</span>
-      <span>Holográfico</span>
-      <span>·</span>
-      <span>Ayra Brasil</span>
-      <span>·</span>
     </div>
   </div>
 
@@ -772,26 +1018,49 @@ footer{
         <div class="note-group"><div class="note-label">Fundo</div>Sândalo<br>Âmbar Cinza</div>
       </div>
       <p class="product-desc">A antítese do calor. Uma fragrância mineral e gélida que utiliza especiarias frias e madeiras nobres para criar uma aura de mistério e precisão absoluta.</p>
+      
+      <!-- Variant Selector -->
+      <div class="variant-selector">
+        <button class="variant-btn btn-ass active" id="btn-ass-30" onclick="selectVariant('ass', 30, 149.90, 'Assiral 30ml', 'https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-1.png')">30ML / R$ 149,90</button>
+        <button class="variant-btn btn-ass" id="btn-ass-5" onclick="selectVariant('ass', 5, 25, 'Assiral 5ml', 'https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(1).png')">5ML / R$ 25,00</button>
+      </div>
+
       <div class="product-footer">
-        <div class="product-price">R$ 189</div>
-        <button class="add-btn" onclick="addToCart('Assiral 25ml', 189)">Fazer seu pedido</button>
+        <button class="add-btn" id="add-ass" onclick="addToCart('Assiral 30ml', 149.90)">Adicionar ao Carrinho</button>
       </div>
     </div>
     <div class="product-visual sr sr-d2" style="direction:ltr">
       <div class="product-visual-inner">
-        <img class="product-img" src="https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img11.png" alt="Assiral Parfum" onerror="this.src='https://placehold.co/600x800/EEE/999?text=Assiral'">
+        <img id="img-ass" class="product-img" src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-1.png" alt="Assiral Parfum" onerror="this.src='https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img11.png'">
       </div>
     </div>
   </div>
 
 </section>
 
-<!-- GALLERY -->
-<div class="gallery-strip">
-  <div class="gallery-item sr"><img src="https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img15.png" alt=""></div>
-  <div class="gallery-item sr sr-d1"><img src="https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img17.png" alt=""></div>
-  <div class="gallery-item sr sr-d2"><img src="https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img16.png" alt=""></div>
-  <div class="gallery-item sr sr-d3"><img src="https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img12.png" alt=""></div>
+<!-- GALLERY (AUTO-SCROLL) -->
+<div class="gallery-strip-container">
+  <div class="gallery-track">
+    <!-- Grupo 1 -->
+    <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-2.png" alt="Galeria de Produto"></div>
+    <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(2).png" alt="Galeria de Produto"></div>
+    <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(3).png" alt="Galeria de Produto"></div>
+    <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-3.png" alt="Galeria de Produto"></div>
+    <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-4.png" alt="Galeria de Produto"></div>
+    <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(5).png" alt="Galeria de Produto"></div>
+    <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(7).png" alt="Galeria de Produto"></div>
+    <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-2.png" alt="Galeria de Produto"></div>
+    
+    <!-- Grupo 2 (Cópia exata para criar o loop infinito contínuo) -->
+    <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-2.png" alt="Galeria de Produto"></div>
+    <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(2).png" alt="Galeria de Produto"></div>
+    <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(3).png" alt="Galeria de Produto"></div>
+    <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-3.png" alt="Galeria de Produto"></div>
+    <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-4.png" alt="Galeria de Produto"></div>
+    <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(5).png" alt="Galeria de Produto"></div>
+    <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(7).png" alt="Galeria de Produto"></div>
+    <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-2.png" alt="Galeria de Produto"></div>
+  </div>
 </div>
 
 <!-- RITUAL -->
@@ -865,7 +1134,7 @@ footer{
   <div class="cart-foot">
     <div class="cart-total-row">
       <span class="cart-total-label">Total Estimado</span>
-      <span class="cart-total-val" id="cart-total">R$ 0</span>
+      <span class="cart-total-val" id="cart-total">R$ 0,00</span>
     </div>
     <button class="checkout-btn" onclick="checkoutWhatsApp()">Finalizar_Protocolo_Pedido</button>
   </div>
@@ -960,6 +1229,26 @@ async function toggleAudio(){
   else{music.pause();updateAudioUI(false)}
 }
 
+/* VARIANT SELECTION LOGIC */
+function selectVariant(prodId, size, price, name, imgSrc) {
+  // 1. Atualizar botões de variante
+  document.querySelectorAll('.btn-' + prodId).forEach(b => b.classList.remove('active'));
+  document.getElementById('btn-' + prodId + '-' + size).classList.add('active');
+
+  // 2. Atualizar o botão de "Adicionar" principal
+  const addBtn = document.getElementById('add-' + prodId);
+  addBtn.setAttribute('onclick', `addToCart('${name}', ${price})`);
+
+  // 3. Atualizar a imagem com transição suave
+  const imgEl = document.getElementById('img-' + prodId);
+  imgEl.style.opacity = 0;
+  setTimeout(() => {
+     imgEl.src = imgSrc;
+     imgEl.style.opacity = 1;
+  }, 300);
+}
+
+
 /* CART */
 let cart=[];
 const cartPanel=document.getElementById('cart-panel');
@@ -984,17 +1273,17 @@ function removeItem(name){cart=cart.filter(i=>i.name!==name);renderCart();cartCo
 function renderCart(){
   if(!cart.length){
     cartBody.innerHTML='<div class="empty-msg">Armazenamento_Vazio</div>';
-    cartTotal.textContent='R$ 0';return;
+    cartTotal.textContent='R$ 0,00';return;
   }
   let total=0;
   cartBody.innerHTML=cart.map(item=>{
     total+=item.price*item.qty;
     return`<div class="cart-item">
       <div><div class="cart-item-name">${item.name}</div><div class="cart-item-qty">Qtd: ${item.qty}</div></div>
-      <div class="cart-item-price">R$ ${item.price*item.qty}<button class="remove-btn" onclick="removeItem('${item.name}')">Remover ×</button></div>
+      <div class="cart-item-price">R$ ${(item.price*item.qty).toFixed(2).replace('.', ',')}<button class="remove-btn" onclick="removeItem('${item.name}')">Remover ×</button></div>
     </div>`;
   }).join('');
-  cartTotal.textContent=`R$ ${total}`;
+  cartTotal.textContent=`R$ ${total.toFixed(2).replace('.', ',')}`;
 }
 
 function showToast(){toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2000)}
@@ -1002,10 +1291,13 @@ function showToast(){toast.classList.add('show');setTimeout(()=>toast.classList.
 function checkoutWhatsApp(){
   if(!cart.length)return;
   const ph='5562993540281';
-  let msg='Olá! Gostaria de processar um protocolo de pedido na AYRA.\n\n*Resumo:*\n';
+  let msg='Olá! Gostaria de processar um protocolo de pedido na AYRA.\n\n*Resumo do Pedido:*\n';
   let total=0;
-  cart.forEach(i=>{msg+=`- ${i.qty}x ${i.name} (R$ ${i.price*i.qty})\n`;total+=i.price*i.qty});
-  msg+=`\n*Total Estimado:* R$ ${total}\n\nAguardando confirmação de pagamento.`;
+  cart.forEach(i=>{
+    msg+=`▪ ${i.qty}x ${i.name} (R$ ${(i.price*i.qty).toFixed(2).replace('.', ',')})\n`;
+    total+=i.price*i.qty;
+  });
+  msg+=`\n*Total Estimado:* R$ ${total.toFixed(2).replace('.', ',')}\n\nAguardando confirmação de pagamento.`;
   window.open(`https://wa.me/${ph}?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
@@ -1014,6 +1306,14 @@ const observer=new IntersectionObserver(entries=>{
   entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')});
 },{threshold:0.08,rootMargin:'0px 0px -5% 0px'});
 document.querySelectorAll('.sr').forEach(el=>observer.observe(el));
+
+/* LOGICA DO CARROSSEL DE IMAGENS */
+function scrollCarousel(btn, direction) {
+  const carousel = btn.parentElement.querySelector('.prod-carousel');
+  const scrollAmount = carousel.offsetWidth;
+  carousel.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+}
+
 </script>
 </body>
 </html>
