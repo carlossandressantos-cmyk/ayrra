@@ -315,7 +315,7 @@ header{
 .prod-card:hover .prod-img-main { opacity: 0; }
 .prod-card:hover .prod-img-hover { opacity: 1; transform: scale(1); }
 
-/* CARROSSEL DE IMAGENS (NOVO) */
+/* CARROSSEL DE IMAGENS */
 .prod-carousel-wrap {
   position: relative; aspect-ratio: 4/5; margin-bottom: 24px;
   background: rgba(0,0,0,0.05); overflow: hidden;
@@ -406,7 +406,7 @@ section{position:relative;overflow:hidden}
   margin-bottom:32px;max-width:400px;
 }
 
-/* VARIANT SELECTOR (NEW) */
+/* VARIANT SELECTOR */
 .variant-selector {
   display: flex; gap: 8px; margin-bottom: 24px; max-width: 400px;
 }
@@ -783,7 +783,7 @@ footer{
 <canvas id="liquid-canvas"></canvas>
 <div id="chrome-noise"></div>
 
-<!-- Atualizado com seu novo repositório -->
+<!-- Áudio Oficial de Fundo -->
 <audio id="bg-music" loop crossorigin="anonymous" preload="auto">
   <source src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Driftline.mp3" type="audio/mpeg">
 </audio>
@@ -818,7 +818,7 @@ footer{
     <h1 class="hero-title chrome-text chrome-text-animated">AYRA</h1>
     <div class="hero-subtitle-row">
       <p class="hero-desc">
-        O melhor da perfumaria.<br>Feito no Brasil.<br>Perfume design
+        O melhor da perfumaria.<br>A ayra surge de um sonho<br>Perfume design
       </p>
       <a href="#shop" class="hero-cta">Comprar Agora →</a>
     </div>
@@ -832,18 +832,18 @@ footer{
     <span>Essências Nobres</span><span>◆</span>
     <span>Feito no Brasil</span><span>◆</span>
     <span>O melhor</span><span>◆</span>
-    <span>Edição Chrome</span><span>◆</span>
-    <span>Discovery 5ml</span><span>◆</span>
+    <span>Lançamentos</span><span>◆</span>
+    <span>30mL e 5ml</span><span>◆</span>
     <span>Ayra Brasil</span><span>◆</span>
     <span>Essências Nobres</span><span>◆</span>
     <span>Feito no Brasil</span><span>◆</span>
     <span>o melhor</span><span>◆</span>
     <span>Edição Chrome</span><span>◆</span>
-    <span>Discovery 5ml</span><span>◆</span>
+    <span>30mL e 5ml</span><span>◆</span>
   </div>
 </div>
 
-<!-- NOVO: E-COMMERCE SHOP GRID -->
+<!-- E-COMMERCE SHOP GRID -->
 <section id="shop" class="shop-section">
   <div class="shop-header-row sr">
     <div class="shop-title-wrap">
@@ -855,7 +855,7 @@ footer{
 
   <div class="grid-container">
     
-    <!-- Argentum 30ml -->
+    <!-- Argentum 30ml (Contém agora a foto da Larissa) -->
     <div class="prod-card sr">
       <div class="prod-carousel-wrap">
         <div class="prod-tag">Mais Vendido</div>
@@ -866,6 +866,7 @@ footer{
           <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-2.png" alt="Argentum 30ml 2">
           <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-3.png" alt="Argentum 30ml 3">
           <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-4.png" alt="Argentum 30ml 4">
+          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/fotolarissa1argetum.png" alt="Argentum 30ml - Foto Larissa 1">
         </div>
       </div>
       <div class="prod-info">
@@ -878,7 +879,7 @@ footer{
       </div>
     </div>
 
-    <!-- Assiral 30ml -->
+    <!-- Assiral 30ml (Contém as fotos Carlos 1 e Carlos 2) -->
     <div class="prod-card sr sr-d1">
       <div class="prod-carousel-wrap">
         <button class="carousel-btn left" onclick="scrollCarousel(this, -1)">‹</button>
@@ -889,6 +890,8 @@ footer{
           <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-3.png" alt="Assiral 30ml 3">
           <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-4.png" alt="Assiral 30ml 4">
           <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-5.png" alt="Assiral 30ml 5">
+          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/fotoCarlos1assiral.png" alt="Assiral 30ml - Foto Carlos 1">
+          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/fotoCarlos2assiral.png" alt="Assiral 30ml - Foto Carlos 2">
         </div>
       </div>
       <div class="prod-info">
@@ -901,7 +904,7 @@ footer{
       </div>
     </div>
 
-    <!-- Argentum 5ml (Carrossel) -->
+    <!-- Argentum 5ml -->
     <div class="prod-card sr sr-d2">
       <div class="prod-carousel-wrap">
         <div class="prod-tag" style="background:#555">Discovery</div>
@@ -928,7 +931,7 @@ footer{
       </div>
     </div>
 
-    <!-- Assiral 5ml (Carrossel) -->
+    <!-- Assiral 5ml -->
     <div class="prod-card sr sr-d3">
       <div class="prod-carousel-wrap">
         <div class="prod-tag" style="background:#555">Discovery</div>
@@ -986,9 +989,9 @@ footer{
       <div class="notes-grid">
         <div class="note-group"><div class="note-label">Topo</div>Bergamota<br>Laranja Doce</div>
         <div class="note-group"><div class="note-label">Corpo</div>Jabuticaba<br>Cereja · Avelã</div>
-        <div class="note-group"><div class="note-label">Fundo</div>Patchouli<br>Amêndoa</div>
+        <div class="note-group"><div class="note-label">Fundo</div>Fava Tonka<br>Pimenta Preta</div>
       </div>
-      <p class="product-desc">Uma construção arquitetônica líquida. Notas cítricas que evoluem para um núcleo denso de frutas brasileiras e um fundo amendoado de alta fixação.</p>
+      <p class="product-desc">Sabe aquele perfume que anuncia a sua chegada antes mesmo de você falar? O Argentum é exatamente isso. Ele nasce de uma mistura deliciosa e surpreendente: o frescor radiante dos cítricos com a doçura noturna e suculenta da jabuticaba e da cereja. Conforme o tempo passa na pele, ele deixa de ser apenas frutal e se torna quente, aveludado e envolvente. É uma fragrância que seduz, conforta e deixa um rastro inesquecível por onde você passa. Perfeito para quem gosta de marcar presença com elegância.</p>
       
       <!-- Variant Selector -->
       <div class="variant-selector">
@@ -1013,11 +1016,11 @@ footer{
       <p class="product-index">Spec_002 — Assiral</p>
       <h2 class="product-name chrome-text chrome-text-animated">Assiral</h2>
       <div class="notes-grid">
-        <div class="note-group"><div class="note-label">Topo</div>Pimenta Rosa<br>Cardamomo</div>
-        <div class="note-group"><div class="note-label">Corpo</div>Íris Branca<br>Cedro Atlas</div>
-        <div class="note-group"><div class="note-label">Fundo</div>Sândalo<br>Âmbar Cinza</div>
+        <div class="note-group"><div class="note-label">Topo</div>Petitgrain<br>Hortelã-Pimenta</div>
+        <div class="note-group"><div class="note-label">Corpo</div>Neroli<br>Gerânio</div>
+        <div class="note-group"><div class="note-label">Fundo</div>Patchouli<br>Especiarias</div>
       </div>
-      <p class="product-desc">A antítese do calor. Uma fragrância mineral e gélida que utiliza especiarias frias e madeiras nobres para criar uma aura de mistério e precisão absoluta.</p>
+      <p class="product-desc">Sabe aquele perfume que transmite confiança imediata e atitude? Esta criação foi pensada para quem marca presença com uma elegância inquestionável. Ela abre com um choque gelado e cortante de menta e limão — como um banho de água fria que desperta os sentidos e traz uma energia afiada. Mas não se engane pelo frescor inicial: conforme seca na pele, o perfume revela um lado muito mais robusto e sedutor. A elegância clássica da lavanda se une à força das madeiras densas, do patchouli terroso e de especiarias quentes, criando uma aura moderna e magnética.</p>
       
       <!-- Variant Selector -->
       <div class="variant-selector">
