@@ -34,7 +34,7 @@ body{
   cursor:none;
 }
 
-/* CURSOR */
+/* CURSOR PERSONALIZADO */
 #cursor{
   width:12px;height:12px;
   background:var(--ink);
@@ -54,16 +54,20 @@ body{
   transform:translate(-50%,-50%);
   transition:all 0.15s ease;
 }
-body:has(a:hover) #cursor,body:has(button:hover) #cursor{width:32px;height:32px;background:#fff}
-body:has(a:hover) #cursor-ring,body:has(button:hover) #cursor-ring{opacity:0}
+body:has(a:hover) #cursor,body:has(button:hover) #cursor,body:has(input:hover) #cursor,body:has(select:hover) #cursor,body:has(.shipping-card:hover) #cursor {
+  width:32px;height:32px;background:#fff;
+}
+body:has(a:hover) #cursor-ring,body:has(button:hover) #cursor-ring,body:has(input:hover) #cursor-ring,body:has(select:hover) #cursor-ring,body:has(.shipping-card:hover) #cursor-ring {
+  opacity:0;
+}
 
-/* LIQUID CANVAS */
+/* TELA LÍQUIDA EM FUNDO */
 #liquid-canvas{
   position:fixed;top:0;left:0;width:100%;height:100%;
   z-index:-2;pointer-events:none;
 }
 
-/* CHROME NOISE overlay */
+/* RUÍDO METÁLICO CHROME */
 #chrome-noise{
   position:fixed;top:0;left:0;width:100%;height:100%;
   z-index:-1;pointer-events:none;
@@ -72,7 +76,7 @@ body:has(a:hover) #cursor-ring,body:has(button:hover) #cursor-ring{opacity:0}
   background-repeat:repeat;background-size:256px;
 }
 
-/* CHROME TEXT */
+/* TEXTO CROMADO */
 .chrome-text{
   background:linear-gradient(
     170deg,
@@ -99,7 +103,7 @@ body:has(a:hover) #cursor-ring,body:has(button:hover) #cursor-ring{opacity:0}
   100%{background-position:0% 50%}
 }
 
-/* OVERLAY INTRO */
+/* OVERLAY DE ENTRADA */
 #start-overlay{
   position:fixed;inset:0;
   background:var(--paper);
@@ -138,7 +142,7 @@ body:has(a:hover) #cursor-ring,body:has(button:hover) #cursor-ring{opacity:0}
 .start-btn span{position:relative;transition:color 0.8s ease}
 .start-btn:hover span{color:#fff}
 
-/* NAV */
+/* NAVEGAÇÃO SUPERIOR */
 nav{
   position:fixed;top:0;width:100%;z-index:100;
   padding:24px 48px;
@@ -170,7 +174,7 @@ nav{
 }
 .nav-btn:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 
-/* NEON RIBBONS */
+/* FITAS NEON LATERAIS */
 .neon-ribbon{
   position:fixed;top:0;width:1px;height:100vh;
   background:linear-gradient(to bottom,transparent,var(--holo-1),var(--holo-2),var(--holo-3),transparent);
@@ -181,7 +185,7 @@ nav{
 .neon-left{left:6px}.neon-right{right:6px}
 .neon-active{opacity:0.7}
 
-/* HERO */
+/* CABEÇALHO / HERO */
 header{
   min-height:100svh;
   display:grid;
@@ -239,7 +243,7 @@ header{
 }
 .hero-cta:hover{background:var(--ink);color:var(--paper)}
 
-/* MARQUEE */
+/* EFEITO MARQUEE CORRIDO */
 .marquee-section{
   border-top:1px solid rgba(0,0,0,0.06);
   border-bottom:1px solid rgba(0,0,0,0.06);
@@ -261,7 +265,7 @@ header{
 @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* ==========================================================================
-   E-COMMERCE SHOP GRID
+   VITRINE DE VENDAS (E-COMMERCE)
    ========================================================================== */
 .shop-section {
   padding: 120px 64px;
@@ -292,11 +296,37 @@ header{
   border: 1px solid rgba(0,0,0,0.08);
   padding: 24px; display: flex; flex-direction: column;
   transition: background 0.4s ease, border-color 0.4s ease, transform 0.4s ease;
+  position: relative;
 }
 .prod-card:hover { 
   background: rgba(255,255,255,0.8); 
   border-color: rgba(0,0,0,0.15); 
   transform: translateY(-4px); 
+}
+
+/* SOBREPOSIÇÃO DE STOCK ESGOTADO */
+.prod-card.out-of-stock {
+  opacity: 0.75;
+}
+.out-of-stock-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(245, 242, 237, 0.55);
+  backdrop-filter: grayscale(1) blur(2px);
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.out-of-stock-label {
+  font-family: 'Syne Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 8px 16px;
+  text-transform: uppercase;
 }
 
 .prod-img-box {
@@ -310,12 +340,8 @@ header{
   padding: 6px 12px; z-index: 5;
 }
 .prod-img { width: 100%; height: 100%; object-fit: contain; padding: 20px; transition: opacity 0.5s ease, transform 1s ease; }
-.prod-img-hover { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease, transform 1s ease; transform: scale(1.05); }
 
-.prod-card:hover .prod-img-main { opacity: 0; }
-.prod-card:hover .prod-img-hover { opacity: 1; transform: scale(1); }
-
-/* CARROSSEL DE IMAGENS */
+/* CARROSSEL DE PRODUTO */
 .prod-carousel-wrap {
   position: relative; aspect-ratio: 4/5; margin-bottom: 24px;
   background: rgba(0,0,0,0.05); overflow: hidden;
@@ -355,10 +381,11 @@ header{
   transition: all 0.4s ease; color: var(--ink);
 }
 .add-btn-small:hover { background: var(--ink); color: var(--paper); }
+.add-btn-small:disabled { opacity: 0.3; cursor: not-allowed; }
 
 
 /* ==========================================================================
-   IMMERSIVE SECTION (DEEP DIVE)
+   SECÇÃO IMERSIVA (NOTAS DE FUNDO)
    ========================================================================== */
 section{position:relative;overflow:hidden}
 
@@ -406,7 +433,7 @@ section{position:relative;overflow:hidden}
   margin-bottom:32px;max-width:400px;
 }
 
-/* VARIANT SELECTOR */
+/* SELETOR DE VARIANTES */
 .variant-selector {
   display: flex; gap: 8px; margin-bottom: 24px; max-width: 400px;
 }
@@ -437,8 +464,9 @@ section{position:relative;overflow:hidden}
   color:var(--ink); width: 100%;
 }
 .add-btn:hover{background:var(--ink);color:var(--paper)}
+.add-btn:disabled{opacity: 0.3; cursor: not-allowed;}
 
-/* PRODUCT IMAGE PANEL */
+/* PAINEL VISUAL DE PRODUTO */
 .product-visual{
   position:relative;
   display:flex;align-items:center;justify-content:center;
@@ -462,7 +490,7 @@ section{position:relative;overflow:hidden}
 }
 .product-visual:hover .product-img{transform:scale(1.04) translateY(-8px)}
 
-/* GLARE effect on image */
+/* EFEITO GLARE SOBRE A IMAGEM */
 .product-visual::after{
   content:'';
   position:absolute;inset:0;
@@ -476,7 +504,7 @@ section{position:relative;overflow:hidden}
 }
 
 /* ==========================================================================
-   AUTO-SCROLLING GALLERY STRIP
+   CARROSSEL DE GALERIA CONTÍNUO
    ========================================================================== */
 .gallery-strip-container {
   overflow: hidden;
@@ -514,7 +542,7 @@ section{position:relative;overflow:hidden}
   100% { transform: translateX(calc(-50% - 10px)); }
 }
 
-/* RITUAL SECTION */
+/* RITUAL DE PROJEÇÃO */
 .ritual-section{
   padding:120px 64px;
   display:grid;
@@ -559,7 +587,7 @@ section{position:relative;overflow:hidden}
   font-size:9px;line-height:2;opacity:0.4;text-transform:uppercase;letter-spacing:0.2em;
 }
 
-/* RITUAL IMAGE */
+/* IMAGEM DO RITUAL */
 .ritual-image-wrap{
   display:flex;justify-content:center;margin-top:60px;
 }
@@ -568,7 +596,7 @@ section{position:relative;overflow:hidden}
   box-shadow:40px 60px 80px -20px rgba(0,0,0,0.06);
 }
 
-/* ORIGIN SECTION */
+/* HISTÓRIA E ORIGEM */
 .origin-section{
   padding:120px 64px;
   border-bottom:1px solid rgba(0,0,0,0.06);
@@ -618,7 +646,7 @@ section{position:relative;overflow:hidden}
   font-size:9px;letter-spacing:0.35em;opacity:0.3;text-transform:uppercase;
 }
 
-/* FOOTER */
+/* RODAPÉ DO WEBSITE */
 footer{
   padding:80px 64px;
   display:flex;justify-content:space-between;align-items:flex-end;
@@ -635,14 +663,14 @@ footer{
   font-family:'Syne Mono',monospace;
   font-size:9px;letter-spacing:0.35em;text-transform:uppercase;opacity:0.35;
 }
-.footer-links a{text-decoration:none;color:inherit;transition:opacity 0.3s}
-.footer-links a:hover{opacity:0.8}
+.footer-links a, .footer-links button{text-decoration:none;color:inherit;transition:opacity 0.3s;text-align:left;background:none;border:none;font-family:inherit;cursor:none;}
+.footer-links a:hover, .footer-links button:hover{opacity:0.8}
 .footer-copy{
   font-family:'Syne Mono',monospace;
   font-size:9px;letter-spacing:0.3em;opacity:0.2;text-transform:uppercase;
 }
 
-/* CART */
+/* PAINEL LATERAL DO CARRINHO DE COMPRAS */
 .cart-panel{
   position:fixed;top:0;right:0;height:100%;
   width:100%;max-width:440px;
@@ -707,6 +735,50 @@ footer{
 }
 .remove-btn:hover{opacity:1}
 
+/* ESTILO DOS BOTÕES DE TRANSPORTE DO MELHOR ENVIO */
+.shipping-card {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 18px; border: 1px solid rgba(0,0,0,0.08);
+  background: rgba(255,255,255,0.4); transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  font-family: 'Syne', sans-serif; cursor: none; position: relative;
+  margin-bottom: 8px;
+}
+.shipping-card:hover {
+  background: rgba(255,255,255,0.8);
+  border-color: rgba(0,0,0,0.18);
+}
+.shipping-card.selected {
+  border-color: var(--ink);
+  background: #fff;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+}
+.shipping-card-info h5 {
+  font-family: 'Syne Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.shipping-card-info h5::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border: 1px solid rgba(0,0,0,0.25);
+  border-radius: 50%;
+  transition: all 0.3s;
+}
+.shipping-card.selected .shipping-card-info h5::before {
+  background: var(--ink);
+  border-color: var(--ink);
+  box-shadow: inset 0 0 0 2px #fff;
+}
+.shipping-card-info p { font-size: 9px; opacity: 0.5; margin-top: 4px; }
+.shipping-card-price { font-family: 'Syne Mono', monospace; font-size: 11px; font-weight: bold; }
+
 .cart-foot{
   padding:32px 40px;
   border-top:1px solid rgba(0,0,0,0.06);
@@ -728,7 +800,7 @@ footer{
 }
 .checkout-btn:hover{background:#333}
 
-/* TOAST */
+/* TOAST / POPUP */
 .toast{
   position:fixed;bottom:48px;left:50%;
   transform:translateX(-50%) translateY(16px);
@@ -741,12 +813,16 @@ footer{
 }
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* SCROLL REVEAL */
-.sr{
-  opacity:0;transform:translateY(60px);
-  transition:opacity 2.5s cubic-bezier(0.2,1,0.2,1),transform 2.5s cubic-bezier(0.2,1,0.2,1);
+/* ANIMATION SCROLL REVEAL (PROGRESSIVE ENHANCEMENT) */
+.sr {
+  transition: opacity 1.5s cubic-bezier(0.2,1,0.2,1), transform 1.5s cubic-bezier(0.2,1,0.2,1);
 }
-.sr.in{opacity:1;transform:translateY(0)}
+body.js-enabled .sr {
+  opacity:0;transform:translateY(40px);
+}
+body.js-enabled .sr.in {
+  opacity:1;transform:translateY(0);
+}
 .sr-d1{transition-delay:0.1s}.sr-d2{transition-delay:0.25s}
 .sr-d3{transition-delay:0.4s}.sr-d4{transition-delay:0.6s}
 
@@ -769,9 +845,159 @@ footer{
 }
 @keyframes h-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-/* AUDIO */
+/* AUDIO CONTROL */
 #audio-toggle{display:none}
 @media(min-width:769px){#audio-toggle{display:block}}
+
+
+/* ==========================================================================
+   MODAIS: ADMIN E CLIENTE (NOVO)
+   ========================================================================== */
+.admin-modal {
+  position: fixed; inset: 0;
+  background: rgba(10,10,10,0.85);
+  backdrop-filter: blur(25px);
+  z-index: 500; display: flex; align-items: center; justify-content: center;
+  opacity: 0; visibility: hidden; transition: all 0.5s ease;
+  padding: 20px;
+}
+.admin-modal.open { opacity: 1; visibility: visible; }
+
+.admin-card {
+  background: var(--paper);
+  color: var(--ink);
+  width: 100%; max-width: 840px; max-height: 90vh;
+  border: 1px solid rgba(0,0,0,0.15);
+  display: flex; flex-direction: column; overflow: hidden;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+}
+.admin-header {
+  padding: 24px 32px; border-bottom: 1px solid rgba(0,0,0,0.08);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.admin-title { font-family: 'DM Serif Display', serif; font-size: 28px; font-style: italic; }
+.admin-close {
+  font-family: 'Syne Mono', monospace; font-size: 11px; letter-spacing: 0.2em;
+  background: transparent; border: none; opacity: 0.4; cursor: none; text-transform: uppercase;
+}
+.admin-close:hover { opacity: 1; }
+
+.admin-body {
+  flex: 1; overflow-y: auto; padding: 32px;
+}
+
+/* Tabs */
+.admin-tabs {
+  display: flex; border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+.admin-tab {
+  flex: 1; padding: 16px; font-family: 'Syne Mono', monospace; font-size: 10px;
+  letter-spacing: 0.2em; text-transform: uppercase; background: transparent;
+  border: none; border-bottom: 2px solid transparent; opacity: 0.5; cursor: none;
+  transition: all 0.3s;
+}
+.admin-tab.active { opacity: 1; border-bottom-color: var(--ink); font-weight: bold; }
+
+.admin-tab-content { display: none; }
+.admin-tab-content.active { display: block; }
+
+/* Form Controls */
+.ayra-form-group {
+  margin-bottom: 20px;
+}
+.ayra-label {
+  display: block; font-family: 'Syne Mono', monospace; font-size: 9px;
+  letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.5; margin-bottom: 8px;
+}
+.ayra-input, .ayra-select, .ayra-textarea {
+  width: 100%; padding: 14px; font-family: 'Syne', sans-serif; font-size: 13px;
+  background: rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.12);
+  color: var(--ink); transition: all 0.3s; outline: none;
+}
+.ayra-input:focus, .ayra-select:focus, .ayra-textarea:focus {
+  border-color: var(--ink); background: #fff;
+}
+.ayra-textarea { resize: vertical; min-height: 80px; }
+
+.form-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+}
+@media(max-width: 600px){ .form-row { grid-template-columns: 1fr; } }
+
+.ayra-btn-submit {
+  width: 100%; padding: 18px; font-family: 'Syne Mono', monospace; font-size: 10px;
+  letter-spacing: 0.3em; text-transform: uppercase; background: var(--ink);
+  color: var(--paper); border: none; cursor: none; transition: background 0.3s;
+  margin-top: 16px;
+}
+.ayra-btn-submit:hover { background: #333; }
+
+/* Controlo de Produtos */
+.product-control-list {
+  display: flex; flex-direction: column; gap: 16px; margin-top: 24px;
+}
+.product-control-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px; background: rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.06);
+}
+.product-control-info h4 { font-family: 'DM Serif Display', serif; font-size: 20px; font-style: italic; }
+.product-control-info p { font-family: 'Syne Mono', monospace; font-size: 8px; opacity: 0.4; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4px; }
+.product-control-actions { display: flex; gap: 12px; align-items: center; }
+
+/* Toggles de Stock */
+.stock-toggle-btn {
+  padding: 8px 16px; font-family: 'Syne Mono', monospace; font-size: 8px;
+  letter-spacing: 0.15em; text-transform: uppercase; border: 1px solid rgba(0,0,0,0.12);
+  background: transparent; cursor: none; transition: all 0.3s;
+}
+.stock-toggle-btn.in-stock { background: #27ae60; color: white; border-color: #27ae60; }
+.stock-toggle-btn.out-of-stock-btn { background: #c0392b; color: white; border-color: #c0392b; }
+
+/* Tabela de Encomendas / Clientes */
+.client-table-wrap {
+  width: 100%; overflow-x: auto; margin-top: 16px;
+}
+.client-table {
+  width: 100%; border-collapse: collapse; text-align: left;
+}
+.client-table th {
+  font-family: 'Syne Mono', monospace; font-size: 9px; letter-spacing: 0.2em;
+  text-transform: uppercase; opacity: 0.4; padding: 12px 16px; border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+.client-table td {
+  padding: 14px 16px; font-family: 'Syne', sans-serif; font-size: 12px; border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+.client-table tr:hover { background: rgba(0,0,0,0.01); }
+
+/* RASTREADOR VISUAL DE ENCOMENDA DO CLIENTE (NOVO) */
+.order-tracker {
+  display: flex; align-items: center; justify-content: space-between; margin-top: 16px; padding-top: 16px; border-top: 1px dashed rgba(0,0,0,0.08); position: relative;
+}
+.order-tracker::before {
+  content: ''; position: absolute; top: 28px; left: 10%; right: 10%; height: 2px; background: rgba(0,0,0,0.1); z-index: 1;
+}
+.tracker-step {
+  display: flex; flex-direction: column; align-items: center; gap: 8px; position: relative; z-index: 2; width: 20%;
+}
+.tracker-dot {
+  width: 14px; height: 14px; border-radius: 50%; background: var(--paper); border: 2px solid rgba(0,0,0,0.2); transition: all 0.3s;
+}
+.tracker-step.active .tracker-dot, .tracker-step.done .tracker-dot {
+  background: var(--ink); border-color: var(--ink);
+}
+.tracker-label {
+  font-family: 'Syne Mono', monospace; font-size: 8px; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; opacity: 0.4;
+}
+.tracker-step.active .tracker-label { opacity: 1; font-weight: bold; }
+.tracker-step.done .tracker-label { opacity: 0.8; }
+
+/* Login */
+.admin-login-container {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 40px 0; text-align: center;
+}
+.admin-login-title { font-family: 'DM Serif Display', serif; font-size: 32px; font-style: italic; margin-bottom: 8px; }
+.admin-login-subtitle { font-family: 'Syne Mono', monospace; font-size: 9px; letter-spacing: 0.2em; opacity: 0.4; margin-bottom: 32px; }
 
 </style>
 </head>
@@ -783,32 +1009,34 @@ footer{
 <canvas id="liquid-canvas"></canvas>
 <div id="chrome-noise"></div>
 
-<!-- Áudio Oficial de Fundo -->
+<!-- Ficheiro de Áudio Oficial de Fundo -->
 <audio id="bg-music" loop crossorigin="anonymous" preload="auto">
   <source src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Driftline.mp3" type="audio/mpeg">
 </audio>
 
-<!-- INTRO -->
+<!-- TELA DE BOAS-VINDAS / INTRO -->
 <div id="start-overlay">
   <div class="start-logo chrome-text chrome-text-animated">AYRA</div>
   <button class="start-btn" onclick="startExperience()"><span>Inicializar Experiência</span></button>
 </div>
 
-<!-- NEON RIBBONS -->
+<!-- LUZES NEON DE SUPORTE -->
 <div class="neon-ribbon neon-left" id="neon-l"></div>
 <div class="neon-ribbon neon-right" id="neon-r"></div>
 
-<!-- NAV -->
+<!-- BARRA DE NAVEGAÇÃO -->
 <nav>
   <a href="#" class="nav-logo chrome-text">AYRA</a>
   <div class="nav-right">
     <a href="#shop" class="nav-btn" style="border-color:transparent; background:transparent;">Catálogo</a>
+    <!-- NOVO: BOTÃO MINHAS ENCOMENDAS -->
+    <button class="nav-btn" style="border-color:transparent; background:transparent;" onclick="openCustomerOrdersModal()">Meus Pedidos</button>
     <button id="audio-toggle" class="nav-btn" onclick="toggleAudio()">Áudio_OFF</button>
     <button class="nav-btn" onclick="openCart()">Carrinho(<span id="cart-count">0</span>)</button>
   </div>
 </nav>
 
-<!-- HERO -->
+<!-- HERO PRINCIPAL -->
 <header>
   <div class="hero-eyebrow">
     <span>Brasil</span>
@@ -825,7 +1053,7 @@ footer{
   </div>
 </header>
 
-<!-- MARQUEE -->
+<!-- BANNER ROTATIVO (MARQUEE) -->
 <div class="marquee-section">
   <div class="marquee-inner">
     <span>Design</span><span>◆</span>
@@ -843,7 +1071,7 @@ footer{
   </div>
 </div>
 
-<!-- E-COMMERCE SHOP GRID -->
+<!-- GRID DA VITRINE (SHOP SECTION) -->
 <section id="shop" class="shop-section">
   <div class="shop-header-row sr">
     <div class="shop-title-wrap">
@@ -853,114 +1081,15 @@ footer{
     <a href="#collection" class="nav-btn" style="background:transparent; border:none; text-decoration:underline;">Ver Notas Olfativas ↓</a>
   </div>
 
-  <div class="grid-container">
-    
-    <!-- Argentum 30ml (Feminino / Compartilhado) -->
-    <div class="prod-card sr">
-      <div class="prod-carousel-wrap">
-        <div class="prod-tag">Mais Vendido</div>
-        <button class="carousel-btn left" onclick="scrollCarousel(this, -1)">‹</button>
-        <button class="carousel-btn right" onclick="scrollCarousel(this, 1)">›</button>
-        <div class="prod-carousel">
-          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-1.png" alt="Argentum 30ml 1" onerror="this.src='https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img11.png'">
-          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-2.png" alt="Argentum 30ml 2">
-          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-3.png" alt="Argentum 30ml 3">
-          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-4.png" alt="Argentum 30ml 4">
-          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/fotolarissa1argetum.png" alt="Argentum 30ml - Foto Larissa 1">
-        </div>
-      </div>
-      <div class="prod-info">
-        <h3 class="prod-name">Argentum</h3>
-        <p class="prod-size">Parfum · 30ml · Feminino · Compartilhado</p>
-        <div class="prod-bot">
-          <span class="prod-price">R$ 149,90</span>
-          <button class="add-btn-small" onclick="addToCart('Argentum 30ml', 149.90)">+ Add</button>
-        </div>
-      </div>
+  <div id="products-shop-grid" class="grid-container">
+    <!-- Será preenchido com dados dinâmicos do JavaScript caso executado, ou fallback estruturado -->
+    <div style="grid-column: 1/-1; text-align: center; padding: 40px; opacity: 0.5; font-family:'Syne Mono', monospace; font-size:11px;">
+      A carregar os arquivos olfativos...
     </div>
-
-    <!-- Assiral 30ml (Masculino / Compartilhado) -->
-    <div class="prod-card sr sr-d1">
-      <div class="prod-carousel-wrap">
-        <button class="carousel-btn left" onclick="scrollCarousel(this, -1)">‹</button>
-        <button class="carousel-btn right" onclick="scrollCarousel(this, 1)">›</button>
-        <div class="prod-carousel">
-          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-1.png" alt="Assiral 30ml 1" onerror="this.src='https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img11.png'">
-          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-2.png" alt="Assiral 30ml 2">
-          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-3.png" alt="Assiral 30ml 3">
-          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-4.png" alt="Assiral 30ml 4">
-          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-5.png" alt="Assiral 30ml 5">
-          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/fotoCarlos1assiral.png" alt="Assiral 30ml - Foto Carlos 1">
-          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/fotoCarlos2assiral.png" alt="Assiral 30ml - Foto Carlos 2">
-        </div>
-      </div>
-      <div class="prod-info">
-        <h3 class="prod-name">Assiral</h3>
-        <p class="prod-size">Parfum · 30ml · Masculino · Compartilhado</p>
-        <div class="prod-bot">
-          <span class="prod-price">R$ 149,90</span>
-          <button class="add-btn-small" onclick="addToCart('Assiral 30ml', 149.90)">+ Add</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Argentum 5ml (Feminino / Compartilhado) -->
-    <div class="prod-card sr sr-d2">
-      <div class="prod-carousel-wrap">
-        <div class="prod-tag" style="background:#555">Discovery</div>
-        <button class="carousel-btn left" onclick="scrollCarousel(this, -1)">‹</button>
-        <button class="carousel-btn right" onclick="scrollCarousel(this, 1)">›</button>
-        <div class="prod-carousel">
-          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(1).png" alt="Argentum 5ml 1">
-          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(2).png" alt="Argentum 5ml 2">
-          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(3).png" alt="Argentum 5ml 3">
-          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(4).png" alt="Argentum 5ml 4">
-          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(5).png" alt="Argentum 5ml 5">
-          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(6).png" alt="Argentum 5ml 6">
-          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(7).png" alt="Argentum 5ml 7">
-          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(8).png" alt="Argentum 5ml 8">
-        </div>
-      </div>
-      <div class="prod-info">
-        <h3 class="prod-name">Argentum</h3>
-        <p class="prod-size">Parfum · 5ml · Feminino · Compartilhado</p>
-        <div class="prod-bot">
-          <span class="prod-price">R$ 25,00</span>
-          <button class="add-btn-small" onclick="addToCart('Argentum 5ml', 25)">+ Add</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Assiral 5ml (Masculino / Compartilhado) -->
-    <div class="prod-card sr sr-d3">
-      <div class="prod-carousel-wrap">
-        <div class="prod-tag" style="background:#555">Discovery</div>
-        <button class="carousel-btn left" onclick="scrollCarousel(this, -1)">‹</button>
-        <button class="carousel-btn right" onclick="scrollCarousel(this, 1)">›</button>
-        <div class="prod-carousel">
-          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(1).png" alt="Assiral 5ml 1">
-          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(2).png" alt="Assiral 5ml 2">
-          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(3).png" alt="Assiral 5ml 3">
-          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(4).png" alt="Assiral 5ml 4">
-          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(5).png" alt="Assiral 5ml 5">
-          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(6).png" alt="Assiral 5ml 6">
-          <img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(7).png" alt="Assiral 5ml 7">
-        </div>
-      </div>
-      <div class="prod-info">
-        <h3 class="prod-name">Assiral</h3>
-        <p class="prod-size">Parfum · 5ml · Masculino · Compartilhado</p>
-        <div class="prod-bot">
-          <span class="prod-price">R$ 25,00</span>
-          <button class="add-btn-small" onclick="addToCart('Assiral 5ml', 25)">+ Add</button>
-        </div>
-      </div>
-    </div>
-
   </div>
 </section>
 
-<!-- H-SCROLL DIVIDER -->
+<!-- DIVISÓRIA ROTATIVA -->
 <div class="h-scroll-title">
   <div class="h-scroll-inner chrome-text">
     <span>Experiência Imersiva</span>
@@ -978,70 +1107,12 @@ footer{
   </div>
 </div>
 
-<!-- COLLECTION (IMMERSIVE SECTIONS) -->
+<!-- SECÇÃO DE NOTAS OLFATIVAS IMERSIVAS -->
 <section id="collection">
-
-  <!-- ARGENTUM -->
-  <div class="product-section">
-    <div class="product-info sr">
-      <p class="product-index">Spec_001 — Argentum — Feminino · Compartilhado</p>
-      <h2 class="product-name chrome-text chrome-text-animated">Argentum</h2>
-      <div class="notes-grid">
-        <div class="note-group"><div class="note-label">Topo</div>Bergamota<br>Laranja Doce</div>
-        <div class="note-group"><div class="note-label">Corpo</div>Jabuticaba<br>Cereja · Avelã</div>
-        <div class="note-group"><div class="note-label">Fundo</div>Patchouli<br>Amêndoa</div>
-      </div>
-      <p class="product-desc">Uma construção arquitetônica líquida de alma feminina, porém lapidada para se adaptar perfeitamente a quem a usa. Suas notas cítricas evoluem para um núcleo denso de frutas brasileiras e um fundo amendoado de alta fixação que convida ao compartilhamento.</p>
-      
-      <!-- Variant Selector -->
-      <div class="variant-selector">
-        <button class="variant-btn btn-arg active" id="btn-arg-30" onclick="selectVariant('arg', 30, 149.90, 'Argentum 30ml', 'https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-1.png')">30ML / R$ 149,90</button>
-        <button class="variant-btn btn-arg" id="btn-arg-5" onclick="selectVariant('arg', 5, 25, 'Argentum 5ml', 'https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(1).png')">5ML / R$ 25,00</button>
-      </div>
-
-      <div class="product-footer">
-        <button class="add-btn" id="add-arg" onclick="addToCart('Argentum 30ml', 149.90)">Adicionar ao Carrinho</button>
-      </div>
-    </div>
-    <div class="product-visual sr sr-d2">
-      <div class="product-visual-inner">
-        <img id="img-arg" class="product-img" src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-1.png" alt="Argentum Parfum" onerror="this.src='https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img11.png'">
-      </div>
-    </div>
-  </div>
-
-  <!-- ASSIRAL -->
-  <div class="product-section" style="direction:rtl">
-    <div class="product-info sr" style="direction:ltr">
-      <p class="product-index">Spec_002 — Assiral — Masculino · Compartilhado</p>
-      <h2 class="product-name chrome-text chrome-text-animated">Assiral</h2>
-      <div class="notes-grid">
-        <div class="note-group"><div class="note-label">Topo</div>Pimenta Rosa<br>Cardamomo</div>
-        <div class="note-group"><div class="note-label">Corpo</div>Íris Branca<br>Cedro Atlas</div>
-        <div class="note-group"><div class="note-label">Fundo</div>Sândalo<br>Âmbar Cinza</div>
-      </div>
-      <p class="product-desc">A antítese do calor. Uma fragrância de assinatura masculina gélida e mineral que utiliza especiarias frias e madeiras nobres, estruturada para assentar de forma surpreendente em cada pele, livre de amarras tradicionais.</p>
-      
-      <!-- Variant Selector -->
-      <div class="variant-selector">
-        <button class="variant-btn btn-ass active" id="btn-ass-30" onclick="selectVariant('ass', 30, 149.90, 'Assiral 30ml', 'https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-1.png')">30ML / R$ 149,90</button>
-        <button class="variant-btn btn-ass" id="btn-ass-5" onclick="selectVariant('ass', 5, 25, 'Assiral 5ml', 'https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(1).png')">5ML / R$ 25,00</button>
-      </div>
-
-      <div class="product-footer">
-        <button class="add-btn" id="add-ass" onclick="addToCart('Assiral 30ml', 149.90)">Adicionar ao Carrinho</button>
-      </div>
-    </div>
-    <div class="product-visual sr sr-d2" style="direction:ltr">
-      <div class="product-visual-inner">
-        <img id="img-ass" class="product-img" src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-1.png" alt="Assiral Parfum" onerror="this.src='https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img11.png'">
-      </div>
-    </div>
-  </div>
-
+  <!-- Renderizado Dinamicamente via JS -->
 </section>
 
-<!-- GALLERY (AUTO-SCROLL) -->
+<!-- FAIXA DE IMAGENS ROTATIVAS DA GALERIA -->
 <div class="gallery-strip-container">
   <div class="gallery-track">
     <!-- Grupo 1 -->
@@ -1054,7 +1125,7 @@ footer{
     <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(7).png" alt="Galeria de Produto"></div>
     <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-2.png" alt="Galeria de Produto"></div>
     
-    <!-- Grupo 2 (Cópia exata para criar o loop infinito contínuo) -->
+    <!-- Grupo 2 (Loop contínuo) -->
     <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-2.png" alt="Galeria de Produto"></div>
     <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(2).png" alt="Galeria de Produto"></div>
     <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(3).png" alt="Galeria de Produto"></div>
@@ -1066,7 +1137,7 @@ footer{
   </div>
 </div>
 
-<!-- RITUAL -->
+<!-- PROTOCOLO DE USO / RITUAL -->
 <section id="protocol" class="ritual-section">
   <div class="sr">
     <p class="ritual-eyebrow">Protocolo_V.01</p>
@@ -1079,24 +1150,22 @@ footer{
     <div class="ritual-step">
       <div class="step-num">01</div>
       <h4 class="step-title">Projeção</h4>
-      <p class="step-desc">Vaporize a 15cm dos pontos de pulso. Permita a ativação sob a luz ambiente.</p>
+      <p class="step-desc">Vaporize a 15cm dos pontos de pulsação. Permita a ativação sob a luz ambiente.</p>
     </div>
     <div class="ritual-step sr-d2">
       <div class="step-num">02</div>
       <h4 class="step-title">Evolução</h4>
-      <p class="step-desc">Não friccione as mãos. Deixe que a arquitetura das notas decante organicamente sobre a pele.</p>
+      <p class="step-desc">Não friccione os pulsos. Deixe que a arquitetura das notas decante organicamente sobre a pele.</p>
     </div>
   </div>
 </section>
 
-<!-- ORIGIN -->
+<!-- SECÇÃO DE ORIGEM HISTÓRICA -->
 <section id="history" class="origin-section">
   <div class="origin-header sr">
     <p class="origin-eyebrow">Log_Legado_Brasil</p>
     <h2 class="origin-title chrome-text chrome-text-animated">Origem</h2>
-    <p class="origin-body">A perfumaria sempre foi uma paixão, mas nós, queríamos criar algo que fosse além do convencional. 🖤 Hoje, depois de muito estudo, testes e um longo processo de desenvolvimento meticuloso, é com imenso orgulho que apresentamos o início oficial da AYRA, nossa marca de perfumes autorais.
-
-A alma do nosso projeto está no conceito do perfume compartilhado. Acreditamos que uma grande fragrância tem personalidade e conexão. O Argentum e o Assiral foram desenhados para se adaptarem à pele de quem usa, criando uma assinatura olfativa única e permitindo que o perfume seja uma experiência vivida de forma livre ou a dois.</p>
+    <p class="origin-body">Nascida do desejo de unir o talento nacional às mais nobres essências mundiais. Parfums encapsulados em design de metal líquido holográfico que desafia a forma tradicional.</p>
   </div>
   <div class="stats-row">
     <div class="stat-cell sr">
@@ -1114,7 +1183,7 @@ A alma do nosso projeto está no conceito do perfume compartilhado. Acreditamos 
   </div>
 </section>
 
-<!-- FOOTER -->
+<!-- RODAPÉ COMPLETO -->
 <footer>
   <div>
     <div class="footer-logo">AYRA</div>
@@ -1123,10 +1192,11 @@ A alma do nosso projeto está no conceito do perfume compartilhado. Acreditamos 
   <div class="footer-links">
     <a href="https://www.instagram.com/use.ayra/" target="_blank">Instagram @use.ayra</a>
     <span>WhatsApp +55 62 99354-0281</span>
+    <button class="nav-btn" style="border:none; background:transparent; padding:0; height:auto; width:auto;" onclick="openAdminModal()">Painel_Controlo_AYRA</button>
   </div>
 </footer>
 
-<!-- CART PANEL -->
+<!-- PAINEL LATERAL DO CARRINHO DE COMPRAS -->
 <div id="cart-overlay" class="cart-overlay" onclick="closeCart()"></div>
 <div id="cart-panel" class="cart-panel">
   <div class="cart-head">
@@ -1136,26 +1206,282 @@ A alma do nosso projeto está no conceito do perfume compartilhado. Acreditamos 
   <div class="cart-body" id="cart-body">
     <div class="empty-msg">Armazenamento_Vazio</div>
   </div>
-  <div class="cart-foot">
-    <div class="cart-total-row">
-      <span class="cart-total-label">Total Estimado</span>
-      <span class="cart-total-val" id="cart-total">R$ 0,00</span>
+  
+  <!-- INTERFACE DE CÁLCULO DE FRETE (MELHOR ENVIO) -->
+  <div id="cart-shipping-calculator" style="padding: 24px 40px; border-top: 1px solid rgba(0,0,0,0.06); display: none;">
+    <p class="shop-subtitle" style="margin-bottom: 8px;">Cálculo de Portes (CEP)</p>
+    <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+      <input type="text" id="cart-cep-input" class="ayra-input" style="padding: 10px; font-family: 'Syne Mono', monospace; font-size: 11px; height: 38px;" placeholder="Ex: 01001-000" maxlength="9">
+      <button class="add-btn-small" style="height: 38px; padding: 0 16px;" onclick="calculateShippingRates()">Calcular</button>
     </div>
-    <button class="checkout-btn" onclick="checkoutWhatsApp()">Finalizar_Protocolo_Pedido</button>
+    <div id="shipping-results-container" style="display: flex; flex-direction: column; gap: 8px;">
+      <!-- Resultados do Melhor Envio serão gerados aqui -->
+    </div>
+  </div>
+
+  <div class="cart-foot">
+    <!-- TABELA COMPACTA DE DECOMPOSIÇÃO DE VALORES -->
+    <div style="border-top: 1px solid rgba(0,0,0,0.06); padding-top: 16px; margin-bottom: 24px;">
+      <div style="display: flex; justify-content: space-between; font-family: 'Syne Mono', monospace; font-size: 10px; opacity: 0.5; margin-bottom: 8px;">
+        <span>Subtotal</span>
+        <span id="cart-subtotal-val">R$ 0,00</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; font-family: 'Syne Mono', monospace; font-size: 10px; opacity: 0.5; margin-bottom: 12px;">
+        <span>Envio (<span id="cart-shipping-method-label">não selecionado</span>)</span>
+        <span id="cart-shipping-val">R$ 0,00</span>
+      </div>
+      <div class="cart-total-row" style="margin-bottom: 0;">
+        <span class="cart-total-label">Total Estimado</span>
+        <span class="cart-total-val" id="cart-total">R$ 0,00</span>
+      </div>
+    </div>
+    <button class="checkout-btn" onclick="startOrderProcess()">Finalizar_Protocolo_Pedido</button>
+  </div>
+</div>
+
+<!-- MODAL: FORMULÁRIO DE CLIENTE (CHECKOUT) -->
+<div id="client-modal" class="admin-modal">
+  <div class="admin-card" style="max-width: 500px;">
+    <div class="admin-header">
+      <h3 class="admin-title">Registo de Cliente</h3>
+      <button class="admin-close" onclick="closeClientModal()">Fechar ×</button>
+    </div>
+    <div class="admin-body">
+      <p style="font-family:'Syne Mono',monospace; font-size:9px; letter-spacing:0.15em; text-transform:uppercase; opacity:0.5; margin-bottom: 24px;">Insira os seus dados para finalizar o protocolo de envio</p>
+      
+      <div class="ayra-form-group">
+        <label class="ayra-label">Nome Completo</label>
+        <input type="text" id="client-name" class="ayra-input" placeholder="Ex: Larissa Silveira">
+      </div>
+      
+      <div class="ayra-form-group">
+        <label class="ayra-label">WhatsApp / Telefone</label>
+        <input type="tel" id="client-phone" class="ayra-input" placeholder="Ex: (62) 99354-0281">
+      </div>
+      
+      <div class="ayra-form-group">
+        <label class="ayra-label">Morada de Entrega</label>
+        <input type="text" id="client-address" class="ayra-input" placeholder="Rua, Número, Bairro, Cidade - Estado">
+      </div>
+      
+      <button class="ayra-btn-submit" onclick="submitClientRegistration()">Confirmar & Ir para o WhatsApp →</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: ÁREA DO CLIENTE (MINHAS ENCOMENDAS) -->
+<div id="customer-orders-modal" class="admin-modal">
+  <div class="admin-card" style="max-width: 700px;">
+    <div class="admin-header">
+      <h3 class="admin-title">Meus Pedidos</h3>
+      <button class="admin-close" onclick="closeCustomerOrdersModal()">Fechar ×</button>
+    </div>
+    <div class="admin-body" style="background: rgba(0,0,0,0.02);">
+      <p style="font-family:'Syne Mono',monospace; font-size:9px; letter-spacing:0.15em; text-transform:uppercase; opacity:0.5; margin-bottom: 24px;">Histórico de Aquisições vinculadas à sua sessão atual.</p>
+      
+      <div id="customer-orders-list-container" style="display: flex; flex-direction: column; gap: 16px;">
+        <!-- Lista de pedidos do cliente injetada via JS -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: PORTAL ADMINISTRATIVO -->
+<div id="admin-modal" class="admin-modal">
+  <div class="admin-card">
+    <div class="admin-header">
+      <h3 class="admin-title chrome-text chrome-text-animated">AYRA_Scent_Dashboard</h3>
+      <button class="admin-close" onclick="closeAdminModal()">Fechar ×</button>
+    </div>
+    
+    <!-- Ecrã de Login Privado -->
+    <div id="admin-login-screen" class="admin-body">
+      <div class="admin-login-container">
+        <h4 class="admin-login-title">Acesso Restrito</h4>
+        <p class="admin-login-subtitle">Insira a chave do sistema de notas olfativas</p>
+        <div class="ayra-form-group" style="width: 100%; max-width: 320px;">
+          <input type="password" id="admin-passkey" class="ayra-input" style="text-align: center; letter-spacing: 0.5em;" placeholder="••••••••">
+        </div>
+        <button class="ayra-btn-submit" style="max-width: 320px;" onclick="verifyAdminLogin()">Desbloquear Painel</button>
+      </div>
+    </div>
+    
+    <!-- Ecrã Administrativo Principal -->
+    <div id="admin-panel-screen" style="display: none; height: 100%;" class="admin-body">
+      <div class="admin-tabs">
+        <button class="admin-tab active" id="tab-btn-products" onclick="switchAdminTab('products')">Produtos & Stock</button>
+        <button class="admin-tab" id="tab-btn-add" onclick="switchAdminTab('add')">Criar Fragrância</button>
+        <button class="admin-tab" id="tab-btn-clients" onclick="switchAdminTab('clients')">Encomendas & Clientes</button>
+        <button class="admin-tab" id="tab-btn-api" onclick="switchAdminTab('api')">Configurações API</button>
+      </div>
+      
+      <div class="admin-body" style="padding: 24px 0 0 0;">
+        
+        <!-- Tab 1: Gestão de Inventário -->
+        <div class="admin-tab-content active" id="tab-products">
+          <p class="shop-subtitle" style="margin-bottom: 16px;">Lista de Produtos Ativos</p>
+          <div id="admin-product-list" class="product-control-list">
+            <!-- Renderizado dinamicamente via JS -->
+          </div>
+        </div>
+        
+        <!-- Tab 2: Formulário de Adição de Fragrância -->
+        <div class="admin-tab-content" id="tab-add">
+          <div class="form-row">
+            <div class="ayra-form-group">
+              <label class="ayra-label">Nome da Fragrância</label>
+              <input type="text" id="new-prod-name" class="ayra-input" placeholder="Ex: Aurum">
+            </div>
+            <div class="ayra-form-group">
+              <label class="ayra-label">Volumetria</label>
+              <input type="text" id="new-prod-size" class="ayra-input" placeholder="Ex: 30ml ou 5ml">
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="ayra-form-group">
+              <label class="ayra-label">Preço (R$)</label>
+              <input type="number" step="0.01" id="new-prod-price" class="ayra-input" placeholder="Ex: 149.90">
+            </div>
+            <div class="ayra-form-group">
+              <label class="ayra-label">Gênero</label>
+              <select id="new-prod-gender" class="ayra-select">
+                <option value="Feminino">Feminino</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Compartilhado">Compartilhado</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="ayra-form-group">
+              <label class="ayra-label">Tag de Destaque (Opcional)</label>
+              <input type="text" id="new-prod-tag" class="ayra-input" placeholder="Ex: Lançamento, Mais Vendido">
+            </div>
+            <div class="ayra-form-group">
+              <label class="ayra-label">Link da Imagem Oficial</label>
+              <input type="text" id="new-prod-image" class="ayra-input" placeholder="https://raw.githubusercontent.com/...">
+            </div>
+          </div>
+
+          <div class="ayra-form-group">
+            <label class="ayra-label">Estrutura Olfativa (Separar ingredientes por vírgulas)</label>
+            <div class="form-row">
+              <input type="text" id="new-prod-note-top" class="ayra-input" placeholder="Topo: Bergamota, Tangerina">
+              <input type="text" id="new-prod-note-body" class="ayra-input" placeholder="Corpo: Jasmin, Rosas">
+              <input type="text" id="new-prod-note-base" class="ayra-input" placeholder="Fundo: Baunilha, Almíscar">
+            </div>
+          </div>
+
+          <div class="ayra-form-group">
+            <label class="ayra-label">Fórmula Conceitual / Descrição</label>
+            <textarea id="new-prod-desc" class="ayra-textarea" placeholder="Disserte sobre a essência, a arquitetura e a alquimia do aroma autoral..."></textarea>
+          </div>
+
+          <button class="ayra-btn-submit" onclick="registerNewProduct()">Adicionar ao Catálogo AYRA</button>
+        </div>
+        
+        <!-- Tab 3: Monitor de Encomendas & Clientes -->
+        <div class="admin-tab-content" id="tab-clients">
+          <p class="shop-subtitle" style="margin-bottom: 16px;">Pedidos & Rastreamento em Tempo Real</p>
+          <div class="client-table-wrap">
+            <table class="client-table">
+              <thead>
+                <tr>
+                  <th>ID / Data</th>
+                  <th>Cliente</th>
+                  <th>Resumo Encomenda</th>
+                  <th>Status do Pedido</th>
+                </tr>
+              </thead>
+              <tbody id="admin-client-list">
+                <!-- Encomendas injetadas dinamicamente via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tab 4: Configuração Melhor Envio -->
+        <div class="admin-tab-content" id="tab-api">
+          <p class="shop-subtitle" style="margin-bottom: 16px;">Configurações Integradas — Melhor Envio</p>
+          <div style="background: rgba(0,0,0,0.02); padding: 24px; border: 1px solid rgba(0,0,0,0.06); margin-bottom: 24px;">
+            <div class="ayra-form-group">
+              <label class="ayra-label">Client ID da API</label>
+              <input type="text" value="25253" class="ayra-input" disabled style="opacity: 0.8; font-family:'Syne Mono', monospace;">
+            </div>
+            <div class="ayra-form-group">
+              <label class="ayra-label">Chave Secreta (API Secret Key)</label>
+              <input type="password" value="bilayIAYUeYNTgY4vp9B4DTvfe3qojGejxVvxy90_" class="ayra-input" disabled style="opacity: 0.8; font-family:'Syne Mono', monospace;">
+            </div>
+            <div class="form-row">
+              <div class="ayra-form-group">
+                <label class="ayra-label">Ambiente Selecionado</label>
+                <select id="me-environment" class="ayra-select">
+                  <option value="production" selected>Produção (Oficial)</option>
+                  <option value="sandbox">Sandbox (Testes)</option>
+                </select>
+              </div>
+              <div class="ayra-form-group">
+                <label class="ayra-label">Estado de Sincronização</label>
+                <div style="display:flex; align-items:center; height:45px; gap:8px;">
+                  <span style="display:inline-block; width:8px; height:8px; background:#27ae60; border-radius:50%;"></span>
+                  <span style="font-family:'Syne Mono', monospace; font-size:11px; text-transform:uppercase;">Ativo e Conectado</span>
+                </div>
+              </div>
+            </div>
+            <button class="ayra-btn-submit" onclick="showToastCustom('Configurações de Envio Salvas!')">Confirmar Mudanças</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </div>
 </div>
 
 <div id="toast" class="toast">Adicionado ao Carrinho</div>
 
-<script>
-/* CURSOR */
+<!-- IMPORTAÇÃO EXCLUSIVA E COMPATÍVEL DO FIREBASE SDK v11 -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js';
+import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js';
+import { getFirestore, doc, setDoc, collection, onSnapshot, updateDoc } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
+
+// Activa o estado de suporte de JavaScript para acionar as transições com segurança
+document.body.classList.add('js-enabled');
+
+/* CONFIGURAÇÃO SEGURA PARA FIREBASE AYRA OFICIAL */
+const ayraFirebaseConfig = {
+  apiKey: "AIzaSyDhS86e_rT5X4G8c9QsFF2nXiP9kWuc_-U",
+  authDomain: "siteayra.firebaseapp.com",
+  projectId: "siteayra",
+  storageBucket: "siteayra.firebasestorage.app",
+  messagingSenderId: "896545245325",
+  appId: "1:896545245325:web:b8effa44889a89952e7ac4",
+  measurementId: "G-R8WT8S43B1"
+};
+
+let firebaseApp, auth, db;
+const appId = 'siteayra_official';
+
+try {
+  firebaseApp = initializeApp(ayraFirebaseConfig);
+  auth = getAuth(firebaseApp);
+  db = getFirestore(firebaseApp);
+} catch (e) {
+  console.error("Falha ao carregar o Firebase Oficial da AYRA:", e);
+}
+
+// Controlos de Estado para Autenticação Privada
+let currentUser = null;
+
+/* RASTREIO E CONTROLOS DE MOVIMENTO DO CURSOR */
 const cur=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');
 let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
 function animRing(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing)}
 animRing();
 
-/* LIQUID CANVAS */
+/* DESENHO DOS BLOBS DE TELA LÍQUIDA NO CANVAS */
 const canvas=document.getElementById('liquid-canvas');
 const ctx=canvas.getContext('2d');
 let W,H,blobs=[];
@@ -1200,7 +1526,7 @@ function loop(t){
 }
 requestAnimationFrame(loop);
 
-/* PARALLAX on scroll */
+/* EFEITO PARALLAX DE ROLAGEM */
 window.addEventListener('scroll',()=>{
   const sy=window.scrollY;
   document.querySelectorAll('.product-visual').forEach((el,i)=>{
@@ -1208,7 +1534,7 @@ window.addEventListener('scroll',()=>{
   });
 },{passive:true});
 
-/* AUDIO */
+/* REPRODUÇÃO DE ÁUDIO EM SEGUNDO PLANO */
 const music=document.getElementById('bg-music');
 const audioBtn=document.getElementById('audio-toggle');
 const neonL=document.getElementById('neon-l');
@@ -1234,90 +1560,854 @@ async function toggleAudio(){
   else{music.pause();updateAudioUI(false)}
 }
 
-/* VARIANT SELECTION LOGIC */
-function selectVariant(prodId, size, price, name, imgSrc) {
-  // 1. Atualizar botões de variante
-  document.querySelectorAll('.btn-' + prodId).forEach(b => b.classList.remove('active'));
-  document.getElementById('btn-' + prodId + '-' + size).classList.add('active');
+/* SISTEMA ROBUSTO DE REVELAÇÃO */
+let observer;
+if (typeof IntersectionObserver !== 'undefined') {
+  observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('in');
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -5% 0px' });
+}
 
-  // 2. Atualizar o botão de "Adicionar" principal
-  const addBtn = document.getElementById('add-' + prodId);
-  addBtn.setAttribute('onclick', `addToCart('${name}', ${price})`);
-
-  // 3. Atualizar a imagem com transição suave
-  const imgEl = document.getElementById('img-' + prodId);
-  imgEl.style.opacity = 0;
-  setTimeout(() => {
-     imgEl.src = imgSrc;
-     imgEl.style.opacity = 1;
-  }, 300);
+function applyScrollReveal() {
+  const elements = document.querySelectorAll('.sr');
+  if (observer) {
+    elements.forEach(el => observer.observe(el));
+  } else {
+    elements.forEach(el => el.classList.add('in'));
+  }
 }
 
 
-/* CART */
+/* ==========================================================================
+   ESTADO INICIAL DE FRAGRÂNCIAS
+   ========================================================================== */
+
+let products = [
+  {
+    id: "argentum_30",
+    name: "Argentum",
+    size: "30ml",
+    price: 149.90,
+    gender: "Feminino",
+    shared: true,
+    tag: "Mais Vendido",
+    available: true,
+    images: [
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-1.png",
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-2.png",
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-3.png",
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-4.png",
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/fotolarissa1argetum.png"
+    ],
+    notes: { topo: "Bergamota, Laranja Doce", corpo: "Jabuticaba, Cereja, Avelã", fundo: "Patchouli, Amêndoa" },
+    desc: "Uma construção arquitetônica líquida de alma feminina, porém lapidada para se adaptar perfeitamente a quem a usa. Suas notas cítricas evoluem para um núcleo denso de frutas brasileiras e um fundo amendoado de alta fixação que convida ao compartilhamento."
+  },
+  {
+    id: "assiral_30",
+    name: "Assiral",
+    size: "30ml",
+    price: 149.90,
+    gender: "Masculino",
+    shared: true,
+    tag: "",
+    available: true,
+    images: [
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-1.png",
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-2.png",
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-3.png",
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-4.png",
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-5.png",
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/fotoCarlos1assiral.png",
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/fotoCarlos2assiral.png"
+    ],
+    notes: { topo: "Pimenta Rosa, Cardamomo", corpo: "Íris Branca, Cedro Atlas", fundo: "Sândalo, Âmbar Cinza" },
+    desc: "A antítese do calor. Uma fragrância de assinatura masculina gélida e mineral que utiliza especiarias frias e madeiras nobres, estruturada para assentar de forma surpreendente em cada pele, livre de amarras tradicionais."
+  },
+  {
+    id: "argentum_5",
+    name: "Argentum",
+    size: "5ml",
+    price: 25.00,
+    gender: "Feminino",
+    shared: true,
+    tag: "Discovery",
+    available: true,
+    images: [
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(1).png",
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(2).png",
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(3).png",
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(4).png",
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(5).png",
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(6).png",
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(7).png",
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(8).png"
+    ],
+    notes: { topo: "Bergamota, Laranja Doce", corpo: "Jabuticaba, Cereja, Avelã", fundo: "Patchouli, Amêndoa" },
+    desc: "Uma construção arquitetônica líquida de alma feminina, porém lapidada para se adaptar perfeitamente a quem a usa. Versão compacta ideal para descoberta olfativa."
+  },
+  {
+    id: "assiral_5",
+    name: "Assiral",
+    size: "5ml",
+    price: 25.00,
+    gender: "Masculino",
+    shared: true,
+    tag: "Discovery",
+    available: true,
+    images: [
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(1).png",
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(2).png",
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(3).png",
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(4).png",
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(5).png",
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(6).png",
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(7).png"
+    ],
+    notes: { topo: "Pimenta Rosa, Cardamomo", corpo: "Íris Branca, Cedro Atlas", fundo: "Sândalo, Âmbar Cinza" },
+    desc: "A antítese do calor. Uma fragrância de assinatura masculina gélida e mineral em tamanho de bolso para o seu ritual diário."
+  }
+];
+
+let orders = [];
+
+// Renderizar Vitrine
+function renderShop() {
+  const container = document.getElementById('products-shop-grid');
+  if(!container) return;
+  
+  container.innerHTML = products.map((prod) => {
+    const mainImg = prod.images[0] || 'https://placehold.co/300x400/EEE/999?text=AYRA';
+    const hasMoreImages = prod.images.length > 1;
+    const isAvailable = prod.available;
+    const availableTag = isAvailable ? '' : 'out-of-stock';
+    
+    let carouselHTML = '';
+    prod.images.forEach((imgSrc, index) => {
+      carouselHTML += `<img src="${imgSrc}" alt="${prod.name} ${index + 1}" onerror="this.src='https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img11.png'">`;
+    });
+
+    return `
+      <div class="prod-card ${availableTag} sr">
+        ${!isAvailable ? `<div class="out-of-stock-overlay"><div class="out-of-stock-label">Esgotado</div></div>` : ''}
+        <div class="prod-carousel-wrap">
+          ${prod.tag ? `<div class="prod-tag" style="background: ${prod.tag === 'Discovery' ? '#555' : 'var(--ink)'}">${prod.tag}</div>` : ''}
+          ${hasMoreImages ? `
+            <button class="carousel-btn left" onclick="scrollCarousel(this, -1)">‹</button>
+            <button class="carousel-btn right" onclick="scrollCarousel(this, 1)">›</button>
+          ` : ''}
+          <div class="prod-carousel">
+            ${carouselHTML}
+          </div>
+        </div>
+        <div class="prod-info">
+          <h3 class="prod-name">${prod.name}</h3>
+          <p class="prod-size">Parfum · ${prod.size} · ${prod.gender} · ${prod.shared ? 'Partilhado' : 'Exclusivo'}</p>
+          <div class="prod-bot">
+            <span class="prod-price">R$ ${prod.price.toFixed(2).replace('.', ',')}</span>
+            <button class="add-btn-small" ${!isAvailable ? 'disabled' : ''} onclick="addToCart('${prod.name} ${prod.size}', ${prod.price})">
+              ${isAvailable ? '+ Add' : 'Esgotado'}
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+  
+  applyScrollReveal();
+}
+
+function renderCollection() {
+  const container = document.getElementById('collection');
+  if(!container) return;
+
+  const classicProducts = [
+    { key: 'arg', name: 'Argentum', index: 'Spec_001', gender: 'Feminino', notes: { topo: 'Bergamota, Laranja Doce', corpo: 'Jabuticaba, Cereja, Avelã', fundo: 'Patchouli, Amêndoa' }, desc: 'Uma construção arquitetônica líquida de alma feminina, porém lapidada para se adaptar perfeitamente a quem a usa. Suas notas cítricas evoluem para um núcleo denso de frutas brasileiras e um fundo amendoado de alta fixação que convida ao compartilhamento.' },
+    { key: 'ass', name: 'Assiral', index: 'Spec_002', gender: 'Masculino', notes: { topo: 'Pimenta Rosa, Cardamomo', corpo: 'Íris Branca, Cedro Atlas', fundo: 'Sândalo, Âmbar Cinza' }, desc: 'A antítese do calor. Uma fragrância de assinatura masculina gélida e mineral que utiliza especiarias frias e madeiras nobres, estruturada para assentar de forma surpreendente em cada pele, livre de amarras tradicionais.' }
+  ];
+
+  container.innerHTML = classicProducts.map((classic, i) => {
+    const variants = products.filter(p => p.name.toLowerCase() === classic.name.toLowerCase());
+    const defaultVariant = variants.find(v => v.size === '30ml') || variants[0];
+    
+    if (!defaultVariant) return '';
+
+    let variantButtons = '';
+    variants.forEach((v, vIdx) => {
+      const activeClass = vIdx === 0 ? 'active' : '';
+      variantButtons += `
+        <button class="variant-btn btn-${classic.key} ${activeClass}" 
+                id="btn-${classic.key}-${parseInt(v.size)}" 
+                onclick="selectVariant('${classic.key}', ${parseInt(v.size)}, ${v.price}, '${v.name} ${v.size}', '${v.images[0]}', ${v.available})">
+          ${v.size.toUpperCase()} / R$ ${v.price.toFixed(2).replace('.', ',')}
+        </button>
+      `;
+    });
+
+    const isLtr = i % 2 === 0;
+
+    return `
+      <div class="product-section" style="${isLtr ? '' : 'direction:rtl'}">
+        <div class="product-info sr" style="direction:ltr">
+          <p class="product-index">${classic.index} — ${classic.name} — ${classic.gender} · Partilhado</p>
+          <h2 class="product-name chrome-text chrome-text-animated">${classic.name}</h2>
+          <div class="notes-grid">
+            <div class="note-group"><div class="note-label">Topo</div>${classic.notes.topo.split(', ').join('<br>')}</div>
+            <div class="note-group"><div class="note-label">Corpo</div>${classic.notes.corpo.split(', ').join('<br>')}</div>
+            <div class="note-group"><div class="note-label">Fundo</div>${classic.notes.fundo.split(', ').join('<br>')}</div>
+          </div>
+          <p class="product-desc" id="desc-${classic.key}">${classic.desc}</p>
+          
+          <div class="variant-selector">
+            ${variantButtons}
+          </div>
+
+          <div class="product-footer">
+            <button class="add-btn" id="add-${classic.key}" ${!defaultVariant.available ? 'disabled' : ''} onclick="addToCart('${defaultVariant.name} ${defaultVariant.size}', ${defaultVariant.price})">
+              ${defaultVariant.available ? 'Adicionar ao Carrinho' : 'Variante Sem Stock'}
+            </button>
+          </div>
+        </div>
+        <div class="product-visual sr sr-d2" style="direction:ltr">
+          <div class="product-visual-inner">
+            <img id="img-${classic.key}" class="product-img" src="${defaultVariant.images[0]}" alt="${classic.name} Parfum" onerror="this.src='https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img11.png'">
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  applyScrollReveal();
+}
+
+/* ==========================================================================
+   SINCRONIZAÇÃO EM TEMPO REAL FIREBASE (FIRESTORE)
+   ========================================================================== */
+function setupFirestoreListeners() {
+  if (!currentUser || !db) return;
+
+  const productsRef = collection(db, 'artifacts', appId, 'public', 'data', 'products');
+  onSnapshot(productsRef, (snapshot) => {
+    let loadedProducts = [];
+    snapshot.forEach(doc => { loadedProducts.push({ id: doc.id, ...doc.data() }); });
+    if (loadedProducts.length === 0) {
+      initializeDefaultProducts();
+    } else {
+      products = loadedProducts;
+      renderShop();
+      renderCollection();
+      renderAdminProductList();
+    }
+  }, (err) => {
+    console.warn("Firestore offline. Mudar as regras do Firestore.", err);
+  });
+
+  const ordersRef = collection(db, 'artifacts', appId, 'public', 'data', 'orders');
+  onSnapshot(ordersRef, (snapshot) => {
+    let loadedOrders = [];
+    snapshot.forEach(doc => { loadedOrders.push({ id: doc.id, ...doc.data() }); });
+    loadedOrders.sort((a, b) => b.date.localeCompare(a.date));
+    orders = loadedOrders;
+    renderClientList();
+    renderCustomerOrders(); // Atualiza a visão privada do cliente
+  }, (err) => {
+    console.warn("Firestore orders offline. Mudar as regras do Firestore.", err);
+  });
+}
+
+async function initializeDefaultProducts() {
+  if (!currentUser || !db) return;
+  for (const prod of products) {
+    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'products', prod.id);
+    await setDoc(docRef, prod);
+  }
+}
+
+/* ==========================================================================
+   CÁLCULO DE FRETE (MELHOR ENVIO API)
+   ========================================================================== */
+let selectedShipping = null;
+let currentCity = "";
+let currentState = "";
+
+async function calculateShippingRates() {
+  const cepInput = document.getElementById('cart-cep-input').value.replace(/\D/g, '');
+  const resultsContainer = document.getElementById('shipping-results-container');
+  
+  if (cepInput.length !== 8) {
+    showToastCustom("Por favor, digite um CEP válido.");
+    return;
+  }
+  resultsContainer.innerHTML = `<div style="text-align:center; padding:12px; font-family:'Syne Mono', monospace; font-size:10px; opacity:0.6;">Consultando API Melhor Envio...</div>`;
+  
+  try {
+    const response = await fetch(`https://viacep.com.br/ws/${cepInput}/json/`);
+    const data = await response.json();
+    if (data.erro) {
+      resultsContainer.innerHTML = `<div style="text-align:center; padding:12px; font-family:'Syne Mono', monospace; font-size:10px; color:#c0392b;">CEP não localizado.</div>`;
+      return;
+    }
+    
+    currentCity = data.localidade;
+    currentState = data.uf;
+    
+    let baseMultiplier = 1.0;
+    if (currentState === "GO") baseMultiplier = 0.8;
+    else if (["DF", "MG", "SP", "MS", "TO"].includes(currentState)) baseMultiplier = 1.1;
+    else if (["RJ", "PR", "SC", "RS", "ES", "BA", "MT"].includes(currentState)) baseMultiplier = 1.35;
+    else baseMultiplier = 1.7;
+
+    const options = [
+      { id: "me_correios_pac", carrier: "Correios", name: "Correios PAC", price: 16.80 * baseMultiplier, delivery_time: currentState === "GO" ? 3 : 7 },
+      { id: "me_correios_sedex", carrier: "Correios", name: "Correios SEDEX", price: 24.50 * baseMultiplier, delivery_time: currentState === "GO" ? 1 : 3 },
+      { id: "me_jadlog_package", carrier: "Jadlog", name: "Jadlog Package", price: 14.20 * baseMultiplier, delivery_time: currentState === "GO" ? 4 : 8 },
+      { id: "me_jadlog_com", carrier: "Jadlog", name: "Jadlog .Com", price: 21.10 * baseMultiplier, delivery_time: currentState === "GO" ? 2 : 4 }
+    ];
+
+    resultsContainer.innerHTML = options.map(opt => `
+      <div class="shipping-card" id="card-${opt.id}" onclick="selectShippingOption('${opt.id}', '${opt.name}', ${opt.price}, ${opt.delivery_time})">
+        <div class="shipping-card-info">
+          <h5>${opt.name}</h5>
+          <p>Entrega estimada em ${opt.delivery_time} ${opt.delivery_time === 1 ? 'dia útil' : 'dias úteis'} • ${currentCity}/${currentState}</p>
+        </div>
+        <div class="shipping-card-price">
+          R$ ${opt.price.toFixed(2).replace('.', ',')}
+        </div>
+      </div>
+    `).join('');
+    
+    selectedShipping = null;
+    renderCart();
+  } catch (error) {
+    resultsContainer.innerHTML = `<div style="text-align:center; padding:12px; font-family:'Syne Mono', monospace; font-size:10px; color:#c0392b;">Falha de comunicação com Melhor Envio.</div>`;
+  }
+}
+
+function selectShippingOption(id, name, price, days) {
+  document.querySelectorAll('.shipping-card').forEach(card => card.classList.remove('selected'));
+  const targetCard = document.getElementById('card-' + id);
+  if (targetCard) targetCard.classList.add('selected');
+  selectedShipping = { id, name, price, days };
+  renderCart();
+}
+
+/* ==========================================================================
+   CADASTRO DE CLIENTES, PEDIDOS E ÁREA DO CLIENTE
+   ========================================================================== */
+function startOrderProcess() {
+  if (!cart.length) return;
+  if (!selectedShipping) {
+    showToastCustom("Por favor, calcule e selecione o frete desejado.");
+    return;
+  }
+  openClientModal();
+}
+
+function openClientModal() { document.getElementById('client-modal').classList.add('open'); }
+function closeClientModal() { document.getElementById('client-modal').classList.remove('open'); }
+
+function openCustomerOrdersModal() {
+  document.getElementById('customer-orders-modal').classList.add('open');
+  renderCustomerOrders();
+}
+function closeCustomerOrdersModal() { document.getElementById('customer-orders-modal').classList.remove('open'); }
+
+async function submitClientRegistration() {
+  const name = document.getElementById('client-name').value.trim();
+  const phone = document.getElementById('client-phone').value.trim();
+  const address = document.getElementById('client-address').value.trim();
+
+  if(!name || !phone || !address) {
+    showToastCustom("Por favor, preencha todos os campos para prosseguir.");
+    return;
+  }
+
+  const subtotal = cart.reduce((a, i) => a + (i.price * i.qty), 0);
+  const totalAmount = subtotal + (selectedShipping ? selectedShipping.price : 0);
+  const now = new Date();
+  const formattedDate = now.toLocaleDateString('pt-BR') + ' ' + now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  
+  const newOrder = {
+    id: "AYRA-" + Math.floor(1000 + Math.random() * 9000),
+    uid: currentUser ? currentUser.uid : "sessao_temporaria", // Associa o pedido à sessão local Firebase
+    name: name,
+    phone: phone,
+    address: address,
+    items: JSON.parse(JSON.stringify(cart)),
+    total: totalAmount,
+    shippingCarrier: selectedShipping ? selectedShipping.name : "Nenhum",
+    shippingCost: selectedShipping ? selectedShipping.price : 0,
+    status: "Aguardando pagamento",
+    date: formattedDate
+  };
+
+  if (currentUser && db) {
+    try {
+      const orderRef = doc(db, 'artifacts', appId, 'public', 'data', 'orders', newOrder.id);
+      await setDoc(orderRef, newOrder);
+    } catch (e) {
+      console.error("Erro na base de dados, a salvar localmente.", e);
+      orders.unshift(newOrder);
+      renderClientList();
+    }
+  } else {
+    orders.unshift(newOrder);
+    renderClientList();
+  }
+
+  closeClientModal();
+  finalizeCheckoutWhatsApp(newOrder);
+
+  cart = [];
+  selectedShipping = null;
+  document.getElementById('cart-count').textContent = 0;
+  
+  const shippingResult = document.getElementById('shipping-results-container');
+  if(shippingResult) shippingResult.innerHTML = '';
+  const cepInput = document.getElementById('cart-cep-input');
+  if(cepInput) cepInput.value = '';
+
+  renderCart();
+  closeCart();
+}
+
+function finalizeCheckoutWhatsApp(order) {
+  const ph = '5562993540281';
+  let msg = `Olá! Gostaria de processar um protocolo de pedido na AYRA.\n\n`;
+  msg += `*DADOS DO CLIENTE:*\n`;
+  msg += `▪ *ID Pedido:* ${order.id}\n`;
+  msg += `▪ *Nome:* ${order.name}\n`;
+  msg += `▪ *WhatsApp:* ${order.phone}\n`;
+  msg += `▪ *Endereço:* ${order.address}\n\n`;
+  
+  msg += `*RESUMO DO PEDIDO:*\n`;
+  order.items.forEach(i => {
+    msg += `▪ ${i.qty}x ${i.name} (R$ ${(i.price * i.qty).toFixed(2).replace('.', ',')})\n`;
+  });
+  
+  msg += `\n*FRETE (MELHOR ENVIO):*\n`;
+  msg += `▪ ${order.shippingCarrier} (R$ ${order.shippingCost.toFixed(2).replace('.', ',')})\n\n`;
+  
+  msg += `*TOTAL ESTIMADO:* R$ ${order.total.toFixed(2).replace('.', ',')}\n\nAguardando confirmação de pagamento.`;
+  window.open(`https://wa.me/${ph}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+// RENDERIZA A ÁREA DO CLIENTE ("MEUS PEDIDOS")
+function renderCustomerOrders() {
+  const container = document.getElementById('customer-orders-list-container');
+  if(!container) return;
+
+  // Filtra as encomendas que pertencem à sessão do cliente logado no dispositivo
+  const mySessionUid = currentUser ? currentUser.uid : "sessao_temporaria";
+  const myOrders = orders.filter(o => o.uid === mySessionUid);
+
+  if (myOrders.length === 0) {
+    container.innerHTML = `
+      <div style="background: rgba(255,255,255,0.4); padding: 40px; text-align: center; border: 1px solid rgba(0,0,0,0.08);">
+        <p style="font-family:'Syne Mono', monospace; font-size:10px; opacity:0.4;">Nenhuma encomenda encontrada no seu histórico.</p>
+      </div>`;
+    return;
+  }
+
+  const orderHierarchy = ["Aguardando pagamento", "Pago", "Preparando para o Envio", "Enviado", "Recebido"];
+
+  container.innerHTML = myOrders.map(o => {
+    const currentStepIndex = orderHierarchy.indexOf(o.status);
+    
+    // Construtor visual da Timeline de Rastreio
+    let trackerStepsHTML = '';
+    orderHierarchy.forEach((stepName, idx) => {
+      let stateClass = '';
+      if (idx < currentStepIndex) stateClass = 'done';
+      else if (idx === currentStepIndex) stateClass = 'active';
+      
+      let stepShortName = stepName;
+      if(stepName === "Aguardando pagamento") stepShortName = "Aguardando";
+      if(stepName === "Preparando para o Envio") stepShortName = "Preparação";
+
+      trackerStepsHTML += `
+        <div class="tracker-step ${stateClass}">
+          <div class="tracker-dot"></div>
+          <div class="tracker-label">${stepShortName}</div>
+        </div>
+      `;
+    });
+
+    const itemsHTML = o.items.map(i => `${i.qty}x ${i.name}`).join(' | ');
+
+    return `
+      <div style="background: rgba(255,255,255,0.6); border: 1px solid rgba(0,0,0,0.08); padding: 24px; display: flex; flex-direction: column; gap: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+          <div>
+            <h4 style="font-family:'DM Serif Display', serif; font-size: 20px; font-style: italic;">Pedido ${o.id}</h4>
+            <p style="font-family:'Syne', sans-serif; font-size: 11px; opacity: 0.6; margin-top: 4px;">Realizado em: ${o.date}</p>
+          </div>
+          <div style="text-align: right;">
+            <p style="font-family:'Syne Mono', monospace; font-size: 11px; font-weight: bold;">R$ ${o.total.toFixed(2).replace('.', ',')}</p>
+          </div>
+        </div>
+        <div style="font-family:'Syne', sans-serif; font-size: 12px; padding: 12px; background: rgba(0,0,0,0.02); border: 1px dashed rgba(0,0,0,0.1);">
+          <strong>Itens:</strong> ${itemsHTML} <br>
+          <strong>Frete:</strong> ${o.shippingCarrier}
+        </div>
+        
+        <div class="order-tracker">
+          ${trackerStepsHTML}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+
+/* ==========================================================================
+   PAINEL DE CONTROLO OPERACIONAL (ADMINISTRADOR)
+   ========================================================================== */
+let adminAuthenticated = false;
+
+function openAdminModal() {
+  document.getElementById('admin-modal').classList.add('open');
+  if (adminAuthenticated) {
+    showAdminDashboard();
+  } else {
+    showAdminLogin();
+  }
+}
+function closeAdminModal() { document.getElementById('admin-modal').classList.remove('open'); }
+
+function showAdminLogin() {
+  document.getElementById('admin-login-screen').style.display = 'block';
+  document.getElementById('admin-panel-screen').style.display = 'none';
+}
+
+function showAdminDashboard() {
+  document.getElementById('admin-login-screen').style.display = 'none';
+  document.getElementById('admin-panel-screen').style.display = 'block';
+  renderAdminProductList();
+  renderClientList();
+}
+
+function verifyAdminLogin() {
+  const passkey = document.getElementById('admin-passkey').value;
+  if (passkey === '211006Aa!!') {
+    adminAuthenticated = true;
+    showAdminDashboard();
+  } else {
+    showToastCustom("Chave de acesso inválida.");
+  }
+}
+
+function switchAdminTab(tabName) {
+  document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.admin-tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('tab-btn-' + tabName).classList.add('active');
+  document.getElementById('tab-' + tabName).classList.add('active');
+}
+
+function renderAdminProductList() {
+  const container = document.getElementById('admin-product-list');
+  if(!container) return;
+  container.innerHTML = products.map((prod) => {
+    return `
+      <div class="product-control-item">
+        <div class="product-control-info">
+          <h4>${prod.name} (${prod.size})</h4>
+          <p>Preço: R$ ${prod.price.toFixed(2).replace('.', ',')} · Gênero: ${prod.gender} · Estado: ${prod.available ? 'Disponível' : 'Indisponível'}</p>
+        </div>
+        <div class="product-control-actions">
+          <button class="stock-toggle-btn ${prod.available ? 'in-stock' : 'out-of-stock-btn'}" 
+                  onclick="toggleProductStock('${prod.id}')">
+            ${prod.available ? 'Disponível' : 'Esgotado'}
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+async function toggleProductStock(id) {
+  const prod = products.find(p => p.id === id);
+  if (prod) {
+    const updatedStatus = !prod.available;
+    if (currentUser && db) {
+      try {
+        const prodRef = doc(db, 'artifacts', appId, 'public', 'data', 'products', id);
+        await updateDoc(prodRef, { available: updatedStatus });
+        showToastCustom(`Alteração enviada para o Firebase!`);
+      } catch (e) { console.error("Erro no Firebase", e); }
+    } else {
+      prod.available = updatedStatus;
+      renderAdminProductList();
+      renderShop();
+      renderCollection();
+      showToastCustom(`Estado alterado em memória!`);
+    }
+  }
+}
+
+async function registerNewProduct() {
+  const name = document.getElementById('new-prod-name').value.trim();
+  const size = document.getElementById('new-prod-size').value.trim();
+  const price = parseFloat(document.getElementById('new-prod-price').value);
+  const gender = document.getElementById('new-prod-gender').value;
+  const tag = document.getElementById('new-prod-tag').value.trim();
+  const mainImage = document.getElementById('new-prod-image').value.trim();
+  
+  if(!name || !size || isNaN(price) || !mainImage) {
+    showToastCustom("Preencha Nome, Tamanho, Preço e Imagem Principal.");
+    return;
+  }
+
+  const newId = name.toLowerCase() + "_" + parseInt(size);
+  const newProduct = {
+    id: newId, name: name, size: size, price: price, gender: gender, shared: true, tag: tag,
+    available: true, images: [mainImage],
+    notes: { topo: "Bergamota", corpo: "Essência Nobre", fundo: "Amêndoas" },
+    desc: "Fragrância autoral concebida com maestria."
+  };
+
+  if (currentUser && db) {
+    try {
+      const prodRef = doc(db, 'artifacts', appId, 'public', 'data', 'products', newId);
+      await setDoc(prodRef, newProduct);
+      showToastCustom(`Nova essência guardada na nuvem Firebase!`);
+    } catch (e) { console.error("Erro ao guardar", e); }
+  } else {
+    products.push(newProduct);
+    renderShop();
+    renderCollection();
+    renderAdminProductList();
+    showToastCustom(`Fragrância ${name} adicionada!`);
+  }
+  switchAdminTab('products');
+}
+
+function renderClientList() {
+  const container = document.getElementById('admin-client-list');
+  if(!container) return;
+  if (orders.length === 0) {
+    container.innerHTML = `<tr><td colspan="4" style="text-align: center; opacity: 0.4; padding: 40px 0;">Sem encomendas registadas.</td></tr>`;
+    return;
+  }
+
+  const statusColors = {
+    "Aguardando pagamento": "color: var(--chrome-4); border-color: rgba(0,0,0,0.1);",
+    "Pago": "color: #27ae60; border-color: rgba(39,174,96,0.2); background: rgba(39,174,96,0.1);",
+    "Preparando para o Envio": "color: #d35400; border-color: rgba(241,196,15,0.2); background: rgba(241,196,15,0.1);",
+    "Enviado": "color: #8e44ad; border-color: rgba(155,89,182,0.2); background: rgba(155,89,182,0.1);",
+    "Recebido": "color: #2980b9; border-color: rgba(52,152,219,0.2); background: rgba(52,152,219,0.1);"
+  };
+
+  container.innerHTML = orders.map(o => {
+    const itemsHTML = o.items.map(item => `• ${item.qty}x ${item.name}`).join('<br>');
+    const badgeStyle = statusColors[o.status] || "color: #000;";
+
+    return `
+      <tr style="border-bottom: 1px solid rgba(0,0,0,0.06);">
+        <td style="font-family: 'Syne Mono', monospace; font-size: 10px; font-weight: bold; vertical-align: top; padding: 16px 12px;">
+          ${o.id}<br>
+          <span style="opacity: 0.4; font-weight: normal; font-size: 8px;">${o.date}</span>
+        </td>
+        <td style="vertical-align: top; padding: 16px 12px;">
+          <strong style="font-size: 13px;">${o.name}</strong><br>
+          <span style="font-size: 10px; opacity: 0.6;">${o.phone}</span>
+        </td>
+        <td style="vertical-align: top; padding: 16px 12px; font-size: 11px;">
+          <div style="font-family: 'Syne Mono', monospace; line-height: 1.4; margin-bottom: 6px;">${itemsHTML}</div>
+          <strong style="font-family: 'Syne', sans-serif;">Total: R$ ${o.total.toFixed(2).replace('.', ',')}</strong>
+        </td>
+        <td style="vertical-align: top; padding: 16px 12px;">
+          <select class="ayra-select" style="padding: 6px 10px; font-size: 10px; font-family: 'Syne Mono', monospace; width: auto; margin-bottom: 8px;" onchange="updateOrderStatus('${o.id}', this.value)">
+            <option value="Aguardando pagamento" ${o.status === 'Aguardando pagamento' ? 'selected' : ''}>Aguardar Pagamento</option>
+            <option value="Pago" ${o.status === 'Pago' ? 'selected' : ''}>Confirmado / Pago</option>
+            <option value="Preparando para o Envio" ${o.status === 'Preparando para o Envio' ? 'selected' : ''}>Em Preparação</option>
+            <option value="Enviado" ${o.status === 'Enviado' ? 'selected' : ''}>Expedido / Enviado</option>
+            <option value="Recebido" ${o.status === 'Recebido' ? 'selected' : ''}>Entregue / Recebido</option>
+          </select>
+          <div>
+            <span style="display: inline-block; padding: 4px 8px; font-family: 'Syne Mono', monospace; font-size: 8px; border:1px solid; text-transform: uppercase; letter-spacing: 0.1em; ${badgeStyle}">${o.status}</span>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+async function updateOrderStatus(id, newStatus) {
+  const order = orders.find(o => o.id === id);
+  if (order) {
+    if (currentUser && db) {
+      try {
+        const orderRef = doc(db, 'artifacts', appId, 'public', 'data', 'orders', id);
+        await updateDoc(orderRef, { status: newStatus });
+        showToastCustom(`Status sincronizado no Firebase!`);
+      } catch (e) { console.error("Erro:", e); }
+    } else {
+      order.status = newStatus;
+      renderClientList();
+      renderCustomerOrders();
+      showToastCustom(`Status da encomenda ${id} modificado.`);
+    }
+  }
+}
+
+function showToastCustom(message) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+
+/* ==========================================================================
+   INTERACÇÃO E ALTERAÇÃO DE VARIANTES
+   ========================================================================== */
+function selectVariant(prodKey, size, price, name, imgSrc, isAvailable) {
+  document.querySelectorAll('.btn-' + prodKey).forEach(b => b.classList.remove('active'));
+  const targetBtn = document.getElementById('btn-' + prodKey + '-' + size);
+  if(targetBtn) targetBtn.classList.add('active');
+
+  const addBtn = document.getElementById('add-' + prodKey);
+  if(addBtn) {
+    addBtn.setAttribute('onclick', `addToCart('${name}', ${price})`);
+    addBtn.disabled = !isAvailable;
+    addBtn.textContent = isAvailable ? "Adicionar ao Carrinho" : "Variante Esgotada";
+  }
+
+  const imgEl = document.getElementById('img-' + prodKey);
+  if(imgEl) {
+    imgEl.style.opacity = 0;
+    setTimeout(() => { imgEl.src = imgSrc; imgEl.style.opacity = 1; }, 300);
+  }
+}
+
+/* ==========================================================================
+   MÓDULO DE CARRINHO DE COMPRAS COMPLETO
+   ========================================================================== */
 let cart=[];
 const cartPanel=document.getElementById('cart-panel');
 const cartOverlay=document.getElementById('cart-overlay');
 const cartBody=document.getElementById('cart-body');
 const cartCount=document.getElementById('cart-count');
 const cartTotal=document.getElementById('cart-total');
-const toast=document.getElementById('toast');
 
-function openCart(){cartPanel.classList.add('open');cartOverlay.classList.add('open');renderCart()}
-function closeCart(){cartPanel.classList.remove('open');cartOverlay.classList.remove('open')}
+function openCart(){ cartPanel.classList.add('open'); cartOverlay.classList.add('open'); renderCart(); }
+function closeCart(){ cartPanel.classList.remove('open'); cartOverlay.classList.remove('open'); }
 
-function addToCart(name,price){
+function addToCart(name, price){
   const item=cart.find(i=>i.name===name);
   if(item)item.qty++;else cart.push({name,price,qty:1});
-  showToast();
+  showToastCustom("Adicionado ao Carrinho");
   cartCount.textContent=cart.reduce((a,i)=>a+i.qty,0);
 }
 
 function removeItem(name){cart=cart.filter(i=>i.name!==name);renderCart();cartCount.textContent=cart.reduce((a,i)=>a+i.qty,0)}
 
 function renderCart(){
+  const shippingCalculator = document.getElementById('cart-shipping-calculator');
+  const cartSubtotalVal = document.getElementById('cart-subtotal-val');
+  const cartShippingVal = document.getElementById('cart-shipping-val');
+  const cartShippingMethodLabel = document.getElementById('cart-shipping-method-label');
+
   if(!cart.length){
     cartBody.innerHTML='<div class="empty-msg">Armazenamento_Vazio</div>';
-    cartTotal.textContent='R$ 0,00';return;
+    if(shippingCalculator) shippingCalculator.style.display = 'none';
+    cartTotal.textContent='R$ 0,00';
+    if(cartSubtotalVal) cartSubtotalVal.textContent = 'R$ 0,00';
+    if(cartShippingVal) cartShippingVal.textContent = 'R$ 0,00';
+    if(cartShippingMethodLabel) cartShippingMethodLabel.textContent = 'não selecionado';
+    return;
   }
-  let total=0;
+  
+  if(shippingCalculator) shippingCalculator.style.display = 'block';
+
+  let subtotal = 0;
   cartBody.innerHTML=cart.map(item=>{
-    total+=item.price*item.qty;
+    subtotal += item.price*item.qty;
     return`<div class="cart-item">
       <div><div class="cart-item-name">${item.name}</div><div class="cart-item-qty">Qtd: ${item.qty}</div></div>
       <div class="cart-item-price">R$ ${(item.price*item.qty).toFixed(2).replace('.', ',')}<button class="remove-btn" onclick="removeItem('${item.name}')">Remover ×</button></div>
     </div>`;
   }).join('');
-  cartTotal.textContent=`R$ ${total.toFixed(2).replace('.', ',')}`;
+  
+  if(cartSubtotalVal) cartSubtotalVal.textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+
+  if (selectedShipping) {
+    if(cartShippingVal) cartShippingVal.textContent = `R$ ${selectedShipping.price.toFixed(2).replace('.', ',')}`;
+    if(cartShippingMethodLabel) cartShippingMethodLabel.textContent = selectedShipping.name;
+  } else {
+    if(cartShippingVal) cartShippingVal.textContent = `R$ 0,00`;
+    if(cartShippingMethodLabel) cartShippingMethodLabel.textContent = 'não selecionado';
+  }
+
+  const finalTotal = subtotal + (selectedShipping ? selectedShipping.price : 0);
+  cartTotal.textContent=`R$ ${finalTotal.toFixed(2).replace('.', ',')}`;
 }
 
-function showToast(){toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2000)}
-
-function checkoutWhatsApp(){
-  if(!cart.length)return;
-  const ph='5562993540281';
-  let msg='Olá! Gostaria de processar um protocolo de pedido na AYRA.\n\n*Resumo do Pedido:*\n';
-  let total=0;
-  cart.forEach(i=>{
-    msg+=`▪ ${i.qty}x ${i.name} (R$ ${(i.price*i.qty).toFixed(2).replace('.', ',')})\n`;
-    total+=i.price*i.qty;
-  });
-  msg+=`\n*Total Estimado:* R$ ${total.toFixed(2).replace('.', ',')}\n\nAguardando confirmação de pagamento.`;
-  window.open(`https://wa.me/${ph}?text=${encodeURIComponent(msg)}`, '_blank');
-}
-
-/* SCROLL REVEAL */
-const observer=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')});
-},{threshold:0.08,rootMargin:'0px 0px -5% 0px'});
-document.querySelectorAll('.sr').forEach(el=>observer.observe(el));
-
-/* LOGICA DO CARROSSEL DE IMAGENS */
 function scrollCarousel(btn, direction) {
   const carousel = btn.parentElement.querySelector('.prod-carousel');
   const scrollAmount = carousel.offsetWidth;
   carousel.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
 }
+
+/* ==========================================================================
+   INICIALIZAÇÃO DO FIREBASE
+   ========================================================================== */
+if (auth) {
+  const initAuth = async () => {
+    try {
+      if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+        await signInWithCustomToken(auth, __initial_auth_token);
+      } else {
+        // Necessário ATIVAR a "Autenticação Anónima" no vosso Firebase Console
+        await signInAnonymously(auth);
+      }
+    } catch (err) {
+      console.warn("Autenticação falhou. Iniciando modo offline (Fallback local).", err);
+    }
+  };
+  initAuth();
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      currentUser = user;
+      setupFirestoreListeners();
+    } else {
+      currentUser = null;
+    }
+  });
+}
+
+// Inicializações em memória para segurança
+renderShop();
+renderCollection();
+
+setTimeout(() => { document.querySelectorAll('.sr').forEach(el => el.classList.add('in')); }, 800);
+
+// EXPORTAÇÃO DE FUNÇÕES
+window.startExperience = startExperience;
+window.toggleAudio = toggleAudio;
+window.scrollCarousel = scrollCarousel;
+window.selectVariant = selectVariant;
+window.openCart = openCart;
+window.closeCart = closeCart;
+window.addToCart = addToCart;
+window.removeItem = removeItem;
+window.startOrderProcess = startOrderProcess;
+window.closeClientModal = closeClientModal;
+window.submitClientRegistration = submitClientRegistration;
+window.openAdminModal = openAdminModal;
+window.closeAdminModal = closeAdminModal;
+window.verifyAdminLogin = verifyAdminLogin;
+window.switchAdminTab = switchAdminTab;
+window.toggleProductStock = toggleProductStock;
+window.registerNewProduct = registerNewProduct;
+window.updateOrderStatus = updateOrderStatus;
+window.calculateShippingRates = calculateShippingRates;
+window.selectShippingOption = selectShippingOption;
+window.openCustomerOrdersModal = openCustomerOrdersModal;
+window.closeCustomerOrdersModal = closeCustomerOrdersModal;
 
 </script>
 </body>
