@@ -476,14 +476,31 @@ section{position:relative;overflow:hidden}
 }
 @media(max-width:900px){.product-visual{min-height:400px}}
 
-.product-visual-inner{
-  position:relative;
-  padding:40px;
-  width:100%;max-width:400px;
+.collection-carousel-wrap {
+  position: relative; width: 100%; max-width: 480px; padding: 40px;
 }
+.collection-carousel {
+  display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+  scroll-behavior: smooth; transition: opacity 0.3s ease;
+  width: 100%;
+}
+.collection-carousel::-webkit-scrollbar { display: none; }
+
+.col-carousel-btn {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: rgba(255,255,255,0.8); border: 1px solid rgba(0,0,0,0.1);
+  color: var(--ink); width: 40px; height: 40px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: none; z-index: 10; font-family: sans-serif; font-size: 20px;
+  transition: all 0.3s; opacity: 0;
+}
+.product-visual:hover .col-carousel-btn { opacity: 1; }
+.col-carousel-btn:hover { background: var(--ink); color: var(--paper); }
+.col-carousel-btn.left { left: 16px; }
+.col-carousel-btn.right { right: 16px; }
 
 .product-img{
-  width:100%;height:auto;
+  flex: 0 0 100%; width:100%; height:auto; object-fit: contain; scroll-snap-align: start;
   display:block;
   position:relative;z-index:2;
   transition:transform 2s cubic-bezier(0.2,1,0.2,1), opacity 0.4s ease;
@@ -1115,8 +1132,10 @@ body.js-enabled .sr.in {
 <div class="gallery-strip-container">
   <div class="gallery-track">
     <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-2.png" alt="Galeria de Produto"></div>
+    <div class="gallery-item"><img src="https://github.com/carlossandressantos-cmyk/ayrra/blob/main/familiaolfativaargentum.png?raw=true" alt="Galeria de Produto"></div>
     <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(2).png" alt="Galeria de Produto"></div>
     <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(3).png" alt="Galeria de Produto"></div>
+    <div class="gallery-item"><img src="https://github.com/carlossandressantos-cmyk/ayrra/blob/main/familiaolfativaassiral.png?raw=true" alt="Galeria de Produto"></div>
     <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-3.png" alt="Galeria de Produto"></div>
     <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-4.png" alt="Galeria de Produto"></div>
     <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(5).png" alt="Galeria de Produto"></div>
@@ -1124,8 +1143,10 @@ body.js-enabled .sr.in {
     <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-2.png" alt="Galeria de Produto"></div>
     <!-- Loop contínuo -->
     <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-2.png" alt="Galeria de Produto"></div>
+    <div class="gallery-item"><img src="https://github.com/carlossandressantos-cmyk/ayrra/blob/main/familiaolfativaargentum.png?raw=true" alt="Galeria de Produto"></div>
     <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(2).png" alt="Galeria de Produto"></div>
     <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(3).png" alt="Galeria de Produto"></div>
+    <div class="gallery-item"><img src="https://github.com/carlossandressantos-cmyk/ayrra/blob/main/familiaolfativaassiral.png?raw=true" alt="Galeria de Produto"></div>
     <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-3.png" alt="Galeria de Produto"></div>
     <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-4.png" alt="Galeria de Produto"></div>
     <div class="gallery-item"><img src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(5).png" alt="Galeria de Produto"></div>
@@ -1631,7 +1652,8 @@ let products = [
       "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-2.png",
       "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-3.png",
       "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-4.png",
-      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/fotolarissa1argetum.png"
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/fotolarissa1argetum.png",
+      "https://github.com/carlossandressantos-cmyk/ayrra/blob/main/familiaolfativaargentum.png?raw=true"
     ],
     notes: { topo: "Bergamota, Laranja Doce", corpo: "Jabuticaba, Cereja, Avelã", fundo: "Patchouli, Amêndoa" },
     desc: "Uma construção arquitetônica líquida de alma feminina, porém lapidada para se adaptar perfeitamente a quem a usa."
@@ -1644,7 +1666,8 @@ let products = [
       "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-2.png",
       "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-3.png",
       "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-4.png",
-      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-5.png"
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral30mL-5.png",
+      "https://github.com/carlossandressantos-cmyk/ayrra/blob/main/familiaolfativaassiral.png?raw=true"
     ],
     notes: { topo: "Pimenta Rosa, Cardamomo", corpo: "Íris Branca, Cedro Atlas", fundo: "Sândalo, Âmbar Cinza" },
     desc: "A antítese do calor. Uma fragrância de assinatura masculina gélida e mineral."
@@ -1652,14 +1675,20 @@ let products = [
   {
     id: "argentum_5", name: "Argentum", size: "5ml", price: 25.00, gender: "Feminino", shared: true,
     tag: "Discovery", available: true,
-    images: ["https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(1).png"],
+    images: [
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/Argetum%20(1).png",
+      "https://github.com/carlossandressantos-cmyk/ayrra/blob/main/familiaolfativaargentum.png?raw=true"
+    ],
     notes: { topo: "Bergamota, Laranja Doce", corpo: "Jabuticaba, Cereja, Avelã", fundo: "Patchouli, Amêndoa" },
     desc: "Versão compacta ideal para descoberta olfativa."
   },
   {
     id: "assiral_5", name: "Assiral", size: "5ml", price: 25.00, gender: "Masculino", shared: true,
     tag: "Discovery", available: true,
-    images: ["https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(1).png"],
+    images: [
+      "https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/assiral%20(1).png",
+      "https://github.com/carlossandressantos-cmyk/ayrra/blob/main/familiaolfativaassiral.png?raw=true"
+    ],
     notes: { topo: "Pimenta Rosa, Cardamomo", corpo: "Íris Branca, Cedro Atlas", fundo: "Sândalo, Âmbar Cinza" },
     desc: "A antítese do calor em tamanho de bolso para o seu ritual diário."
   }
@@ -1731,11 +1760,13 @@ function renderCollection() {
       variantButtons += `
         <button class="variant-btn btn-${classic.key} ${activeClass}" 
                 id="btn-${classic.key}-${parseInt(v.size)}" 
-                onclick="selectVariant('${classic.key}', ${parseInt(v.size)}, ${v.price}, '${v.name} ${v.size}', '${v.images[0]}', ${v.available})">
+                onclick="selectVariant('${classic.key}', '${v.id}')">
           ${v.size.toUpperCase()} / R$ ${v.price.toFixed(2).replace('.', ',')}
         </button>
       `;
     });
+    
+    let carouselHTML = defaultVariant.images.map(imgSrc => `<img class="product-img" src="${imgSrc}" alt="${classic.name} Parfum" onerror="this.src='https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img11.png'">`).join('');
 
     return `
       <div class="product-section" style="${i % 2 === 0 ? '' : 'direction:rtl'}">
@@ -1758,8 +1789,12 @@ function renderCollection() {
           </div>
         </div>
         <div class="product-visual sr sr-d2" style="direction:ltr">
-          <div class="product-visual-inner">
-            <img id="img-${classic.key}" class="product-img" src="${defaultVariant.images[0]}" alt="${classic.name} Parfum" onerror="this.src='https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img11.png'">
+          <div class="collection-carousel-wrap">
+            <button class="col-carousel-btn left" onclick="scrollColCarousel(this, -1)">‹</button>
+            <button class="col-carousel-btn right" onclick="scrollColCarousel(this, 1)">›</button>
+            <div class="collection-carousel" id="carousel-${classic.key}">
+              ${carouselHTML}
+            </div>
           </div>
         </div>
       </div>
@@ -1777,7 +1812,12 @@ function setupFirestoreListeners() {
   onSnapshot(productsRef, (snapshot) => {
     let loadedProducts = [];
     snapshot.forEach(doc => { loadedProducts.push({ id: doc.id, ...doc.data() }); });
-    if (loadedProducts.length === 0) {
+    
+    // Verifica se a base de dados tem as imagens novas. Se não tiver, força a atualização no Firebase.
+    const hasNewImage = loadedProducts.find(p => p.id === 'argentum_30')?.images.includes("https://github.com/carlossandressantos-cmyk/ayrra/blob/main/familiaolfativaargentum.png?raw=true");
+    
+    if (loadedProducts.length === 0 || !hasNewImage) {
+      console.log("Sincronizando novas imagens com o banco de dados Firebase...");
       initializeDefaultProducts();
     } else {
       products = loadedProducts;
@@ -2155,20 +2195,36 @@ function showToastCustom(message) {
   setTimeout(() => toast.classList.remove('show'), 2500);
 }
 
-function selectVariant(prodKey, size, price, name, imgSrc, isAvailable) {
+function selectVariant(prodKey, variantId) {
+  const variant = products.find(p => p.id === variantId);
+  if(!variant) return;
+
   document.querySelectorAll('.btn-' + prodKey).forEach(b => b.classList.remove('active'));
-  const targetBtn = document.getElementById('btn-' + prodKey + '-' + size);
+  const targetBtn = document.getElementById('btn-' + prodKey + '-' + parseInt(variant.size));
   if(targetBtn) targetBtn.classList.add('active');
 
   const addBtn = document.getElementById('add-' + prodKey);
   if(addBtn) {
-    addBtn.setAttribute('onclick', `addToCart('${name}', ${price})`);
-    addBtn.disabled = !isAvailable;
-    addBtn.textContent = isAvailable ? "Adicionar ao Carrinho" : "Variante Esgotada";
+    addBtn.setAttribute('onclick', `addToCart('${variant.name} ${variant.size}', ${variant.price})`);
+    addBtn.disabled = !variant.available;
+    addBtn.textContent = variant.available ? "Adicionar ao Carrinho" : "Variante Esgotada";
   }
 
-  const imgEl = document.getElementById('img-' + prodKey);
-  if(imgEl) { imgEl.style.opacity = 0; setTimeout(() => { imgEl.src = imgSrc; imgEl.style.opacity = 1; }, 300); }
+  const carousel = document.getElementById('carousel-' + prodKey);
+  if(carousel) { 
+    carousel.style.opacity = 0; 
+    setTimeout(() => { 
+      carousel.innerHTML = variant.images.map(imgSrc => `<img class="product-img" src="${imgSrc}" alt="${variant.name} Parfum" onerror="this.src='https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img11.png'">`).join('');
+      carousel.scrollLeft = 0;
+      carousel.style.opacity = 1; 
+    }, 300); 
+  }
+}
+
+function scrollColCarousel(btn, direction) {
+  const carousel = btn.parentElement.querySelector('.collection-carousel');
+  const scrollAmount = carousel.offsetWidth;
+  carousel.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
 }
 
 let cart=[];
@@ -2280,6 +2336,7 @@ setTimeout(() => { document.querySelectorAll('.sr').forEach(el => el.classList.a
 window.startExperience = startExperience; window.toggleAudio = toggleAudio;
 window.scrollCarousel = scrollCarousel; window.selectVariant = selectVariant;
 window.openCart = openCart; window.closeCart = closeCart;
+window.scrollColCarousel = scrollColCarousel;
 window.addToCart = addToCart; window.removeItem = removeItem;
 window.startOrderProcess = startOrderProcess; window.closeClientModal = closeClientModal;
 window.submitClientRegistration = submitClientRegistration;
