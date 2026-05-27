@@ -1142,7 +1142,7 @@ body.js-enabled .sr.in {
 <section id="protocol" class="ritual-section">
   <div class="sr">
     <p class="ritual-eyebrow">Protocolo_V.01</p>
-    <h3 class="ritual-title chrome-text chrome-text-animated">Ritual<br>da<br>Forma</h3>
+    <h3 class="ritual-title chrome-text chrome-text-animated">Ritual<br>de<br>Uso</h3>
     <div class="ritual-image-wrap">
       <img class="ritual-img sr sr-d2" src="https://raw.githubusercontent.com/umvelhonoob/ayrra/main/img13.png" alt="Ritual" onerror="this.src='https://placehold.co/300x400/EEE/999?text=Ritual'">
     </div>
@@ -1151,12 +1151,13 @@ body.js-enabled .sr.in {
     <div class="ritual-step">
       <div class="step-num">01</div>
       <h4 class="step-title">Projeção</h4>
-      <p class="step-desc">Vaporize a 15cm dos pontos de pulsação. Permita a ativação sob a luz ambiente.</p>
+      <p class="step-desc">Prepare a pele com hidratação
+O perfume precisa de uma base para se fixar. Peles secas absorvem e evaporam os óleos essenciais muito mais rápido. A regra de ouro é aplicar a fragrância sobre a pele limpa e bem hidratada, de preferência usando um creme neutro (sem cheiro) logo após o banho. Isso cria uma película que "trava" as moléculas de fundo na pele por muito mais tempo.</p>
     </div>
     <div class="ritual-step sr-d2">
       <div class="step-num">02</div>
       <h4 class="step-title">Evolução</h4>
-      <p class="step-desc">Não friccione os pulsos. Deixe que a arquitetura das notas decante organicamente sobre a pele.</p>
+      <p class="step-desc">Borrife a fragrância nos pontos de maior circulação sanguínea, como pescoço, nuca, parte interna dos pulsos e dobras dos braços. O calor natural dessas áreas funciona como um motor que impulsiona o cheiro para o ambiente. O detalhe crucial: após borrifar, deixe secar naturalmente. Esfregar os pulsos um no outro destrói as notas cítricas e refrescantes da saída, alterando a evolução perfeita que você planejou para o perfume.</p>
     </div>
   </div>
 </section>
@@ -1166,7 +1167,7 @@ body.js-enabled .sr.in {
   <div class="origin-header sr">
     <p class="origin-eyebrow">Log_Legado_Brasil</p>
     <h2 class="origin-title chrome-text chrome-text-animated">Origem</h2>
-    <p class="origin-body">Nascida do desejo de unir o talento nacional às mais nobres essências mundiais. Parfums encapsulados em design de metal líquido holográfico que desafia a forma tradicional.</p>
+    <p class="origin-body">Nossa história começou com uma vontade muito simples: mostrar que a nossa alma e o nosso talento sabem fazer perfumaria lado a lado com os melhores ingredientes do mundo. Para nós, um perfume não é algo estático, ele ganha vida na pele.</p>
   </div>
   <div class="stats-row">
     <div class="stat-cell sr">
@@ -1639,7 +1640,7 @@ let products = [
       "https://github.com/carlossandressantos-cmyk/ayrra/blob/main/familiaolfativaargentum.png?raw=true"
     ],
     notes: { topo: "Bergamota, Laranja Doce", corpo: "Jabuticaba, Cereja, Avelã", fundo: "Patchouli, Amêndoa" },
-    desc: "Uma construção arquitetônica líquida de alma feminina, porém lapidada para se adaptar perfeitamente a quem a usa."
+    desc: "Uma fragrância magnética e profundamente sofisticada que anuncia a sua chegada antes mesmo de você falar. O Argentum Purpure celebra o encontro perfeito entre o brilho radiante dos cítricos e a doçura noturna da jabuticaba e da cereja licorosa. Conforme evolui na pele, ele deixa de ser apenas frutal e revela uma aura quente, aveludada e envolvente, abraçada por resinas nobres e madeiras densas. É um perfume que seduz, conforta e deixa um rastro inesquecível, ideal para quem gosta de marcar presença com pura elegância e modernidade."
   },
   {
     id: "assiral_30", name: "Assiral", size: "30ml", price: 149.90, gender: "Masculino", shared: true,
@@ -1655,7 +1656,7 @@ let products = [
       "https://github.com/carlossandressantos-cmyk/ayrra/blob/main/familiaolfativaassiral.png?raw=true"
     ],
     notes: { topo: "Limão Siciliano, Petitgrain", corpo: "Gerânio, Neroli", fundo: "Cedro, Âmbar, Patchouli" },
-    desc: "A antítese do calor. Uma fragrância de assinatura masculina gélida e mineral."
+    desc: "Sabe aquele perfume que transmite confiança imediata e atitude? O Assiral foi pensado para quem marca presença com uma elegância inquestionável. Ele abre com um choque gelado e cortante de menta e limão, despertando os sentidos com uma energia afiada. Mas não se engane pelo frescor inicial: conforme seca na pele, a elegância clássica da lavanda se une à força das madeiras densas, do patchouli terroso e de especiarias quentes, criando uma aura de masculinidade moderna e magnética. É o frescor de um homem decidido, com um rastro de puro poder e sedução que dura o dia todo."
   },
   {
     id: "argentum_5", name: "Argentum", size: "5ml", price: 25.00, gender: "Feminino", shared: true,
@@ -1730,8 +1731,8 @@ function renderCollection() {
   if(!container) return;
 
   const classicProducts = [
-    { key: 'arg', name: 'Argentum', index: 'Spec_001', gender: 'Feminino', notes: { topo: 'Bergamota, Laranja Doce', corpo: 'Jabuticaba, Cereja, Avelã', fundo: 'Patchouli, Amêndoa' }, desc: 'Uma construção arquitetônica líquida de alma feminina, porém lapidada para se adaptar perfeitamente a quem a usa.' },
-    { key: 'ass', name: 'Assiral', index: 'Spec_002', gender: 'Masculino', notes: { topo: 'Limão Siciliano, Petitgrain', corpo: 'Gerânio, Neroli', fundo: 'Cedro, Âmbar, Patchouli' }, desc: 'A antítese do calor. Uma fragrância de assinatura masculina gélida e mineral.' }
+    { key: 'arg', name: 'Argentum', index: 'Spec_001', gender: 'Feminino', notes: { topo: 'Bergamota, Laranja Doce', corpo: 'Jabuticaba, Cereja, Avelã', fundo: 'Patchouli, Amêndoa' }, desc: 'Uma fragrância magnética e profundamente sofisticada que anuncia a sua chegada antes mesmo de você falar. O Argentum Purpure celebra o encontro perfeito entre o brilho radiante dos cítricos e a doçura noturna da jabuticaba e da cereja licorosa. Conforme evolui na pele, ele deixa de ser apenas frutal e revela uma aura quente, aveludada e envolvente, abraçada por resinas nobres e madeiras densas. É um perfume que seduz, conforta e deixa um rastro inesquecível, ideal para quem gosta de marcar presença com pura elegância e modernidade.' },
+    { key: 'ass', name: 'Assiral', index: 'Spec_002', gender: 'Masculino', notes: { topo: 'Limão Siciliano, Petitgrain', corpo: 'Gerânio, Neroli', fundo: 'Cedro, Âmbar, Patchouli' }, desc: 'Sabe aquele perfume que transmite confiança imediata e atitude? O Assiral foi pensado para quem marca presença com uma elegância inquestionável. Ele abre com um choque gelado e cortante de menta e limão, despertando os sentidos com uma energia afiada. Mas não se engane pelo frescor inicial: conforme seca na pele, a elegância clássica da lavanda se une à força das madeiras densas, do patchouli terroso e de especiarias quentes, criando uma aura de masculinidade moderna e magnética. É o frescor de um homem decidido, com um rastro de puro poder e sedução que dura o dia todo.' }
   ];
 
   container.innerHTML = classicProducts.map((classic, i) => {
