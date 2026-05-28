@@ -243,6 +243,38 @@ header{
 }
 .hero-cta:hover{background:var(--ink);color:var(--paper)}
 
+/* HERO MEDIA: imagem estática + vídeo */
+.hero-media{position:absolute;inset:0;width:100%;height:100%;z-index:-3;overflow:hidden;display:block}
+.hero-media img,.hero-media video{position:absolute;top:0;right:0;height:100%;object-position:right center;transition:opacity 0.45s ease}
+.hero-media img{opacity:1;max-width:35%;width:auto;z-index:-3;object-fit:contain}
+.hero-media video{opacity:0;pointer-events:none;max-width:65%;width:auto;height:100%;object-fit:cover;z-index:-3;
+  -webkit-mask-image: linear-gradient(to left, black 0%, black 40%, transparent 75%);
+  mask-image: linear-gradient(to left, black 0%, black 40%, transparent 75%);
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+}
+.hero-media.playing video{opacity:1}
+.hero-media.playing img{opacity:0}
+
+@media(max-width:768px){
+  .hero-media img{max-width:100%;object-position:center}
+  .hero-media video{width:100%;height:100%;object-fit:cover}
+}
+
+/* Gradiente de transição para suavizar o corte à direita da imagem */
+.hero-fade{position:absolute;top:0;right:0;bottom:0;left:0;pointer-events:none;z-index:-2;
+  background: linear-gradient(to left, rgba(245,242,237,0) 45%, var(--paper) 75%);
+}
+
+/* Overlay branco com degradê sobre o vídeo (direita → esquerda) */
+.hero-video-overlay{position:absolute;top:0;right:0;bottom:0;width:65%;pointer-events:none;z-index:-1;
+  background: linear-gradient(to left, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.18) 20%, rgba(255,255,255,0) 60%);
+  transition:background 0.3s ease, opacity 0.3s ease;
+  backdrop-filter: blur(0.6px);
+}
+@media(max-width:768px){
+  .hero-video-overlay{width:100%;background: linear-gradient(to left, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 60%);} 
+}
+
 /* EFEITO MARQUEE CORRIDO */
 .marquee-section{
   border-top:1px solid rgba(0,0,0,0.06);
@@ -1055,6 +1087,12 @@ body.js-enabled .sr.in {
 
 <!-- HERO PRINCIPAL -->
 <header>
+  <div class="hero-media" id="hero-media">
+    <img id="hero-image" src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/argetum30mL-1.png" alt="Argentum">
+    <video id="hero-video" muted playsinline preload="metadata" loop src="https://raw.githubusercontent.com/carlossandressantos-cmyk/ayrra/main/video.mp4"></video>
+    <div class="hero-video-overlay" aria-hidden="true"></div>
+  </div>
+  <div class="hero-fade" aria-hidden="true"></div>
   <div class="hero-eyebrow">
     <span>Brasil</span>
     <span>Est. 2026</span>
@@ -2337,6 +2375,31 @@ window.closeCustomerOrdersModal = closeCustomerOrdersModal;
 window.openAuthModal = openAuthModal; window.closeAuthModal = closeAuthModal;
 window.switchAuthTab = switchAuthTab; window.registerUser = registerUser;
 window.loginUser = loginUser; window.logoutUser = logoutUser;
+
+// HERO: play vídeo ao rolar para baixo, voltar para imagem ao rolar para cima
+(function(){
+  const heroMediaEl = document.getElementById('hero-media');
+  const heroVideo = document.getElementById('hero-video');
+  if(!heroMediaEl || !heroVideo) return;
+
+  let lastWheelTime = 0;
+  window.addEventListener('wheel', (e) => {
+    const now = Date.now();
+    if (now - lastWheelTime < 150) return; // throttle
+    lastWheelTime = now;
+    if (e.deltaY > 0) {
+      // scroll para baixo: iniciar vídeo
+      heroVideo.muted = true;
+      const p = heroVideo.play();
+      if (p && p.then) p.then(()=> heroMediaEl.classList.add('playing')).catch(()=> heroMediaEl.classList.add('playing'));
+      else heroMediaEl.classList.add('playing');
+    } else if (e.deltaY < 0) {
+      // scroll para cima: pausar e voltar para imagem
+      try { heroVideo.pause(); heroVideo.currentTime = 0; } catch(e){}
+      heroMediaEl.classList.remove('playing');
+    }
+  }, { passive: true });
+})();
 
 </script>
 </body>
